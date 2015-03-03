@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="tile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="properties" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:string" />
+                  <xs:attribute name="value" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="image" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:int" />
+      <xs:attribute name="gid" type="xs:int" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="image">
+    <xs:complexType>
+      <xs:attribute name="width" type="xs:int" />
+      <xs:attribute name="height" type="xs:int" />
+      <xs:attribute name="source" type="xs:int" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="map">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="tileset" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="tile" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="firstgid" type="xs:int" />
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="tilewidth" type="xs:int" />
+            <xs:attribute name="tileheight" type="xs:int" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="imagelayer" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="image" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="x" type="xs:int" />
+            <xs:attribute name="y" type="xs:int" />
+            <xs:attribute name="visible" type="xs:decimal" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="layer" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="data" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ref="tile" minOccurs="0" maxOccurs="unbounded" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="width" type="xs:int" />
+            <xs:attribute name="height" type="xs:int" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute name="orientation" type="xs:string" />
+      <xs:attribute name="renderorder" type="xs:string" />
+      <xs:attribute name="width" type="xs:string" />
+      <xs:attribute name="height" type="xs:string" />
+      <xs:attribute name="tilewidth" type="xs:string" />
+      <xs:attribute name="tileheight" type="xs:string" />
+      <xs:attribute name="nextobjectid" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="tile" />
+        <xs:element ref="image" />
+        <xs:element ref="map" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Entities version="1.0">
+    <Enemy name="Sentinel" description="Corporate data minion" string="sentinel_1" movement="1" maxsize="3">
+        <Attacks>
+            <BasicAttack name="Swing" range="1" damage="2"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Watchman" description="Corporate first-contact enforcer" string_id="watchman_1" movement="1" maxsize="2">
+        <Attacks>
+            <BasicAttack name="poke" range="3" damage="1"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Guard Pup" description="No bark, some bite" string_id="dog_1" movement="3" maxsize="2">
+        <Attacks>
+            <BasicAttack name="Nibble" range="1" damage="2"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Warden" description="Slow and steady corporate thug" string_id="warden_1" movement="1" maxsize="5">>
+        <Attacks>
+            <BasicAttack name="Thump" range="1" damage="3">
+        </Attacks>
+    </Enemy>
+    <Enemy name="Sentinel v2" description="Corporate data soldier" string_id="sentinel_2"  movement="2" maxsize="4">
+        <Attacks>
+        		<BasicAttack name="Cut" range="1" damage="2"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Watchman X" description="Faster, stronger first-contact striker" string_id="watchman_2"  movement="2" maxsize="4">
+        <Attacks>
+        		<BasicAttack name="Probe" range="3" damage="2"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Guard Dog" description="Thorough-bred for eliminating intruders" string_id="dog_2"  movement="3" maxsize="3">
+        <Attacks>
+            <BasicAttack name="Byte" range="1" damage="2"/>
+        </Attacks>
+    </Enemy>
+    <Enemy  name="Sensor" description="Long range program eradicator" string_id="sensor_1"  movement="0" maxsize="1">
+        <Attacks>
+            <BasicAttack name="Ping" range="5" damage="1"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Warden++" description="'Can I speak to you, sir?'" string_id="warden_2"  movement="2" maxsize="6">
+        <Attacks>
+            <BasicAttack name="Bash" range="1" damage="5"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Attack Dog" description="It'll be over, quickly" string_id="dog_3"  movement="4" maxsize="7">
+        <Attacks>
+            <BasicAttack name="Megabyte" range="1" damage="3"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Firewall" description="Defends corporate memory space" string_id="firewall_1"  movement="2" maxsize="20">
+        <Attacks>
+        		<BasicAttack name="Burn" range="1" damage="1"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Sentinel v3" description="ACCESS IS DENIED" string_id="sentinel_3"  movement="2" maxsize="4">
+        <Attacks>
+        		<BasicAttack name="Taser" range="1" damage="4"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Warden_ALPHA" description="Puts the 'force' in enforcement"  string_id="warden_3"  movement="3" maxsize="7">
+        <Attacks>
+        		<BasicAttack name="Crash" range="1" damage="7"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Sonar" description="Longer range program eradicator" string_id="sensor_2"  movement="0" maxsize="1">
+        <Attacks>
+        		<BasicAttack name="Scan" range="8" damage="1"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Watchman SP" description="Qui Custodiet Ipsos Custodes?" string_id="watchman_3"  movement="2" maxsize="4">
+        <Attacks>
+        		<BasicAttack name="Snipe" range="3" damage="3"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Sumo" description="A massive, slow moving powerhouse" string_id="sumo_1"  movement="12" maxsize="2">
+        <Attacks>
+        		<BasicAttack name="Dataslam" range="1" damage="6" minsize="6" />
+        </Attacks>
+    </Enemy>
+    <Enemy name="Radar" description="If you can read this, you're probably in range" string_id="radar_1"  movement="0" maxsize="1">
+        <Attacks>
+        		<BasicAttack name="Phase" range="5" damage="2"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="MandelBug" description="-Details not disclosed-" string_id="bug_2"  movement="5" maxsize="1">
+        <Attacks>
+        		<BasicAttack name="zer0 day" range="1" damage="4"/>
+        </Attacks>
+    </Enemy>
+    <Enemy name="Boss" description="root@localhost #" string_id="boss_1"  movement="6" maxsize="25">
+        <Attacks>
+        		<BasicAttack name="kill -9" range="5" damage="5"/>
+        </Attacks>
+    </Enemy>
+</Entities>
