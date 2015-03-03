@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Entities version="1.0">
+    <MapFeature>
+        <name>Credit</name>
+        <description>You could sell this data for a pretty penny on the market</description>
+        <sprite>credit</sprite>
+        <required>false</required>
+        <action>reward</action>
+    </MapFeature>
+    <MapFeature>
+        <name>Log Files</name>
+        <description>This information is vital to your mission's success.</description>
+        <sprite>intel</sprite>
+        <required>true</required>
+    </MapFeature>
+</Entities>

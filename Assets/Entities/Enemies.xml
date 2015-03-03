@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Entities version="1.0">
+    <Enemy>
+        <name>Sentinel</name>
+        <description>Corporate data minion</description>
+        <sprite>sentinel_1</sprite>
+        <movement>1</movement>
+        <maxsize>3</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Swing</name>
+                <range>1</range>
+                <damage>2</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Watchman</name>
+        <description>Corporate first-contact enforcer</description>
+        <sprite>watchman_1</sprite>
+        <movement>1</movement>
+        <maxsize>2</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Poke</name>
+                <range>3</range>
+                <damage>1</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Guard Pup</name>
+        <description>No bark, very little bite</description>
+        <sprite>dog_1</sprite>
+        <movement>3</movement>
+        <maxsize>2</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Nibble</name>
+                <range>1</range>
+                <damage>2</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Warden</name>
+        <description>Slow and steady corporate thug</description>
+        <sprite>warden_1</sprite>
+        <movement>1</movement>
+        <maxsize>5</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Thump</name>
+                <range>1</range>
+                <damage>3</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Sentinel v2</name>
+        <description>Corporate data soldier</description>
+        <sprite>sentinel_2</sprite>
+        <movement>2</movement>
+        <maxsize>4</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Cut</name>
+                <range>1</range>
+                <damage>2</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Watchman X</name>
+        <description>Faster, stronger first-contact striker</description>
+        <sprite>watchman_2</sprite>
+        <movement>2</movement>
+        <maxsize>4</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Probe</name>
+                <range>3</range>
+                <damage>2</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Guard Dog</name>
+        <description>Thorough-bred for bringing intruders down</description>
+        <sprite>dog_2</sprite>
+        <movement>3</movement>
+        <maxsize>3</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Byte</name>
+                <range>1</range>
+                <damage>2</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Sensor</name>
+        <description>Long range program eradicator</description>
+        <sprite>sensor_1</sprite>
+        <movement>0</movement>
+        <maxsize>1</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Ping</name>
+                <range>5</range>
+                <damage>1</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Warden++</name>
+        <description>"Can I speak to you, sir?"</description>
+        <sprite>warden_2</sprite>
+        <movement>2</movement>
+        <maxsize>6</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Bash</name>
+                <range>1</range>
+                <damage>5</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Attack Dog</name>
+        <description>Rabid, fierce and goes for the throat</description>
+        <sprite>dog_3</sprite>
+        <movement>4</movement>
+        <maxsize>7</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Megabyte</name>
+                <range>1</range>
+                <damage>3</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Firewall</name>
+        <description>Defends corporate memory</description>
+        <sprite>firewall</sprite>
+        <movement>2</movement>
+        <maxsize>20</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Burn</name>
+                <range>1</range>
+                <damage>1</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Sentinel v3</name>
+        <description>HALT</description>
+        <sprite>sentinel_3</sprite>
+        <movement>2</movement>
+        <maxsize>4</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Taser</name>
+                <range>1</range>
+                <damage>4</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Warden_ALPHA</name>
+        <description>Puts the 'force' in enforcement</description>
+        <sprite>warden_3</sprite>
+        <movement>3</movement>
+        <maxsize>7</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Crash</name>
+                <range>1</range>
+                <damage>7</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Sonar</name>
+        <description>Longer range program eradicator</description>
+        <sprite>sensor_2</sprite>
+        <movement>0</movement>
+        <maxsize>1</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Scan</name>
+                <range>8</range>
+                <damage>1</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+    <Enemy>
+        <name>Watchman SP</name>
+        <description>Qui Custodiet Ipsos Custodes?</description>
+        <sprite>watchman_3</sprite>
+        <movement>2</movement>
+        <maxsize>4</maxsize>
+        <Attacks>
+            <BasicAttack>
+                <name>Hunt</name>
+                <range>3</range>
+                <damage>3</damage>
+            </BasicAttack>
+        </Attacks>
+    </Enemy>
+</Entities>
