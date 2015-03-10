@@ -1,238 +1,227 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Entities version="1.0">
-    <Tool name="" description="Comes with the hacking starter kit" string_id="hack_1" movement="2" maxsize="4">
-        <Attacks>
-            <BasicAttack>
-                <name>Slice</name>
-                <range>1</range>
-                <damage>2</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>500</cost>
-    </Tool>
-    <Tool name="Bug" description="Currently unpatched" string_id="bug_1" movement="5" maxsize="1">
-        <Attacks>
-            <BasicAttack>
-                <name>Glitch</name>
-                <range>1</range>
-                <damage>2</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>750</cost>
-    </Tool>
-    <Tool name="Slingshot" description="Basic ranged attack program" string_id="slingshot_1" movement="2" maxsize="2">
-        <Attacks>
-            <BasicAttack>
-                <name>Stone</name>
-                <range>3</range>
-                <damage>1</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>750</cost>
-    </Tool>
-    <Tool name="Data Doctor" description="This may sting a little" string_id="doctor_1" movement="4" maxsize="5">
-        <Attacks>
-            <AttributeModifier>
-                <name>Grow</name>
-                <type>help</type>
-                <range>1</range>
-                <Attributes>
-                		<attribute name="current_size" value="2" />
-                </Attributes>
-            </AttributeModifier>
-        </Attacks>
-        <cost>500</cost>
-    </Tool>
-    <Tool name="Bit-man" description="Create, or destroy, the map to your advantage" string_id="bitman_1" movement="3" maxsize="3">
-        <Attacks>
-        		<MapModifier name="Zero" value="0" />
-        		<MapModifier name="One" value="1" />
-        </Attacks>
-        <cost>250</cost>
-    </Tool>
-    <Tool name="Hack 2.0" description="Now with extra slice!" string_id="hack_2" movement="2" maxsize="4">
-        <Attacks>
-            <BasicAttack>
-                <name>Slice</name>
-                <range>1</range>
-                <damage>2</damage>
-            </BasicAttack>
-            <BasicAttack>
-            		<name>Dice</name>
-            		<range>1</range>
-            		<damage>3</damage>
-            		<requirements>
-                		<minsize>3</minsize>
-            		</requirements>
-            </BasicAttack>
-        </Attacks>
-        <cost>1500</cost>
-    </Tool>
-    <Tool name="Golem.MUD" description="Slow, but steady" string_id="golem_1" movement="1" maxsize="5">
-        <Attacks>
-            <BasicAttack>
-                <name>Thump</name>
-                <range>1</range>
-                <damage>3</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>1200</cost>
-    </Tool>
-    <Tool name="Wolf Spider" description="Web crawler that finds vulnerabilities" string_id="spider_1" movement="3" maxsize="3">
-        <Attacks>
-            <BasicAttack>
-                <name>Nibble</name>
-                <range>1</range>
-                <damage>2</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>750</cost>
-    </Tool>
-    <Tool name="" description="Solid distance attack program" string_id="seeker_1" movement="3" maxsize="3">
-        <Attacks>
-            <BasicAttack>
-                <name>Beam</name>
-                <range>2</range>
-                <damage>2</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>1000</cost>
-    </Tool>
-    <Tool name="Tower" description="Immobile defence platform" string_id="tower_1" movement="0" maxsize="1">
-        <Attacks>
-            <BasicAttack>
-                <name>Spot</name>
-                <range>2</range>
-                <damage>2</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>1000</cost>
-    </Tool>
-    <Tool name="Medic" description="Data Doctor's ranged associate" string_id="medic_1" movement="3" maxsize="3">
-        <Attacks>
-            <AttributeModifier>
-                <name>Syringe</name>
-                <type>help</type>
-                <range>3</range>
-                <Attributes>
-                		<attribute name="current_size" value="2" />
-                </Attributes>
-            </AttributeModifier>
-        </Attacks>
-        <cost>1000</cost>
-    </Tool>
-    <Tool name="Turbo" description="Speeds up your program" string_id="turbo_1" movement="3" maxsize="3">
-        <Attacks>
-            <AttributeModifier>
-                <name>Boost</name>
-                <type>help</type>
-                <range>3</range>
-                <Attributes>
-                		<attribute name="movement" value="2" />
-                </Attributes>
-            </AttributeModifier>
-        </Attacks>
-        <cost>1000</cost>
-    </Tool>
-    <Tool name="Hack 3.0" description="The last and finest of the hack series" string_id="hack_3" movement="4" maxsize="4">
-        <Attacks>
-            <BasicAttack>
-                <name>Slice</name>
-                <range>1</range>
-                <damage>2</damage>
-            </BasicAttack>
-            <BasicAttack>
-            		<name>Dice</name>
-            		<range>1</range>
-            		<damage>4</damage>
-            		<requirements>
-                		<minsize>4</minsize>
-            		</requirements>
-            </BasicAttack>
-        </Attacks>
-        <cost>3500</cost>
-    </Tool>
-    <Tool name="Golem.CLAY" description="Clay is stronger than mud" string_id="golem_2" movement="2" maxsize="6">
-        <Attacks>
-            <BasicAttack>
-                <name>Slice</name>
-                <range>1</range>
-                <damage>5</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>3000</cost>
-    </Tool>
-    <Tool name="Black Widow" description="Somehow, creepier and faster" string_id="spider_2" movement="4" maxsize="3">
-        <Attacks>
-            <BasicAttack>
-                <name>Byte</name>
-                <range>1</range>
-                <damage>2</damage>
-            </BasicAttack>
-            <AttributeModifier>
-                <name>Paralyse</name>
-                <type>harm</type>
-                <range>1</range>
-                <Attributes>
-                		<attribute name="movement" value="-3" />
-                </Attributes>
-            </AttributeModifier>
-        </Attacks>
-        <cost>3500</cost>
-    </Tool>
-    <Tool name="MandelBug" description="-Details not disclosed-" string_id="bug_2" movement="5" maxsize="1">
-        <Attacks>
-            <BasicAttack>
-                <name>Fractal Glitch</name>
-                <range>1</range>
-                <damage>4</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>3000</cost>
-    </Tool>
-    <Tool name="BuzzBomb" description="Fast and annoying" string_id="buzz_1" movement="8" maxsize="2">
-        <Attacks>
-            <BasicAttack>
-                <name>Sting</name>
-                <range>1</range>
-                <damage>1</damage>
-            </BasicAttack>
-            <BasicAttack result="suicide">
-                <name>Kamikazee</name>
-                <range>1</range>
-                <damage>5</damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>3500</cost>
-    </Tool>
-    <Tool name="Fiddle" description="" string_id="" movement="3" maxsize="3">
-        <name>Fiddle</name>
-        <description></description>
-        <string_id></string_id>
-        <movement></movement>
-        <maxsize></maxsize>
-        <Attacks>
-            <BasicAttack>
-                <name></name>
-                <range></range>
-                <damage></damage>
-            </BasicAttack>
-        </Attacks>
-        <cost>2400</cost>
-    </Tool>
-    <Tool>
-        <name></name>
-        <description></description>
-        <string_id></string_id>
-        <movement></movement>
-        <maxsize></maxsize>
-        <Attacks>
-            <BasicAttack>
-                <name></name>
-                <range></range>
-                <damage></damage>
-            </BasicAttack>
-        </Attacks>
-        <cost></cost>
-    </Tool>
-</Entities>
+<entities version="1.0">
+
+    <!-- The hack series -->
+
+    <tool name="Hack" description="Comes with the hacking starter kit" string_id="hack_1" movement="2" maxsize="4" cost="500" level="1">
+        <attacks>
+            <basicattack name="Slice" damage="2"/>
+        </attacks>
+    </tool>
+
+    <tool name="Hack 2.0" description="Now with extra slice!" string_id="hack_2" movement="2" maxsize="4" cost="1500" level="2">
+        <attacks>
+            <basicattack name="Slice" damage="2" />
+            <basicattack name="Dice" damage="3" self-minsize="3" />
+        </attacks>
+    </tool>
+
+    <tool name="Hack 3.0" description="The last and finest of the hack series" string_id="hack_3" movement="4" maxsize="4" cost="3500" level="3">
+        <attacks>
+            <basicattack name="Slice" damage="2" />
+            <basicattack name="Dice" damage="4" self-minsize="4" />
+        </attacks>
+    </tool>
+
+
+    <!-- Bugs and exploits -->
+
+    <tool name="Bug" description="Fixed in the nightly build" string_id="bug_1" movement="5" maxsize="1" cost="750" level="1">
+        <attacks>
+            <basicattack name="Glitch" damage="2"/>
+        </attacks>
+    </tool>
+
+    <tool name="MandelBug" description="Details of vulnerability not disclosed" string_id="bug_2" movement="5" maxsize="1" cost="3000" level="3">
+        <attacks>
+            <basicattack name="Exploit" damage="4"/>
+        </attacks>
+    </tool>
+
+    <tool name="Heisenbug" description="@~[^7$2!¬|^###" string_id="bug_3" movement="5" maxsize="1" cost="3000" level="4">
+        <attacks>
+            <basicattack name="Zer0 day" damage="6" />
+        </attacks>
+    </tool>
+
+
+    <!-- Ranged -->
+
+    <tool name="Slingshot" description="Basic ranged attack program" string_id="seeker_1" movement="2" maxsize="2" cost="750" level="1">
+        <attacks>
+            <basicattack name="Stone" range="3" damage="1"/>
+        </attacks>
+    </tool>
+
+    <tool name="Seeker" description="Solid distance attack program" string_id="seeker_2" movement="3" maxsize="3" cost="1000" level="2">
+        <attacks>
+            <basicattack name="Beam" range="2" damage="2"/>
+        </attacks>
+    </tool>
+
+    <tool name="Seeker 1.1" description="33% further distance, 25% bigger size." string_id="seeker_3" movement="3" maxsize="4" cost="2500" level="3">
+        <attacks>
+            <basicattack name="Ray" range="3" damage="2"/>
+        </attacks>
+    </tool>
+
+    <tool name="Seeker 1.2" description="" string_id="seeker_4" movement="4" maxsize="5" cost="4500" level="4">
+        <attacks>
+            <basicattack name="Ray" range="3" damage="2"/>
+            <basicattack name="Search &amp; Destroy" range="2" self-minsize="5" self-size="-2" damage="5"/>
+        </attacks>
+    </tool>
+
+    <tool name="Tower" description="Immobile defence platform" string_id="tower_1" movement="0" maxsize="1" cost="1000" level="2">
+        <attacks>
+            <basicattack name="Spot" range="3" damage="3"/>
+        </attacks>
+    </tool>
+
+    <tool name="1" description="" string_id="" movement="" maxsize="" cost="" level="">
+        <attacks>
+            <basicattack name="" range="" damage="" />
+        </attacks>
+    </tool>
+
+
+    <!-- CLOGs -->
+
+    <tool name="CLOG.01" description="README: This program is meant for development or education use only." string_id="clog_1" movement="2" maxsize="4" cost="-1" level="1">
+        <attacks>
+            <attributemodifier name="Lag" type="harm" range="3">
+                <attribute name="movement" value="-1" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <tool name="CLOG.02" description="Thank you for purchasing a professional license for CLOG" string_id="clog_2" movement="2" maxsize="4" cost="2000" level="3">
+        <attacks>
+            <attributemodifier name="Chug" type="harm" range="3">
+                <attribute name="movement" value="-2" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <tool name="CLOG.03" description="This program comes with absolutely no warranty, and PENETRATION TESTING TOOLS LLD is not responsible for any harm that is caused." string_id="clog_3" movement="2" maxsize="4" cost="3500" level="4">
+        <attacks>
+            <attributemodifier name="Chug" type="harm" range="3">
+                <attribute name="movement" value="-2" />
+            </attributemodifier>
+            <attributemodifier name="Hang" type="harm" range="3" self-minsize="4">
+                <attribute name="movement" value="0" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <!-- Medic and doctors -->
+
+    <tool name="Data Doctor" description="This may sting a little" string_id="doctor_1" movement="4" maxsize="5" cost="500" level="1">
+        <attacks>
+            <attributemodifier name="Grow" type="help">
+                <attribute name="current_size" value="2" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <tool name="Medic" description="Data Doctor's ranged associate" string_id="medic_1" movement="3" maxsize="3" cost="1000">
+        <attacks>
+            <attributemodifier name="Syringe" type="help" range="3">
+                <attribute name="current_size" value="2" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <tool name="" description="" string_id="" movement="3" maxsize="3" cost="2400">
+        <attacks>
+            <basicattack/>
+        </attacks>
+    </tool>
+
+
+    <!-- Golems -->
+
+    <tool name="Golem.MUD" description="Slow, but steady" string_id="golem_1" movement="1" maxsize="5" cost="1200" level="2">
+        <attacks>
+            <basicattack name="Thump" damage="3"/>
+        </attacks>
+    </tool>
+
+    <tool name="Golem.CLAY" description="Clay is stronger than mud" string_id="golem_2" movement="2" maxsize="6" cost="3000" level="3">
+        <attacks>
+            <basicattack name="Bash" damage="5"/>
+        </attacks>
+    </tool>
+
+    <tool name="Golem.STONE" description="Nothing stands in the way of Golem.STONE" string_id="golem_3" movement="3" maxsize="7" cost="5000" level="4">
+        <attacks>
+            <basicattack name="Crash" damage="7" />
+        </attacks>
+    </tool>
+
+
+    <!-- Spiders -->
+
+    <tool name="Wolf Spider" description="Web crawler that finds vulnerabilities" string_id="spider_1" movement="3" maxsize="3" cost="750" level="2">
+        <attacks>
+            <basicattack name="Nibble" damage="2"/>
+        </attacks>
+    </tool>
+
+    <tool name="Black Widow" description="Creepier and faster" string_id="spider_2" movement="4" maxsize="3" cost="2000" level="3">
+        <attacks>
+            <basicattack name="Byte" damage="2"/>
+            <attributemodifier name="Paralyse" type="harm">
+                <attribute name="movement" value="-2" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <tool name="Tarantula" description="" string_id="" movement="5" maxsize="3" cost="3500">
+        <attacks>
+            <basicattack name="MegaByte" damage="3"/>
+            <attributemodifier name="Paralyse" type="harm">
+                <attribute name="movement" value="-3" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <!-- Miscellaneous -->
+
+    <tool name="Bit-man" description="Create, or destroy, the map to your advantage" string_id="bitman_1" movement="3" maxsize="3" cost="250" level="1">
+        <attacks>
+        	<mapmodifier name="Zero" value="0" />
+        	<mapmodifier name="One" value="1" />
+        </attacks>
+    </tool>
+
+    <tool name="Fiddle" description="" string_id="" movement="3" maxsize="3" cost="2400">
+        <attacks>
+            <basicattack />
+        </attacks>
+    </tool>
+
+    <tool name="Turbo" description="Speeds up your programs" string_id="turbo_1" movement="3" maxsize="3" cost="1000">
+        <attacks>
+            <attributemodifier name="Boost" type="help" range="3">
+                <attribute name="movement" value="2" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+
+
+
+    <tool name="BuzzBomb" description="Fast and annoying" string_id="buzz_1" movement="8" maxsize="2" cost="3500">
+        <attacks>
+            <basicattack name="Sting" damage="1"/>
+            <basicattack name="Kamikazee" damage="5" self-result="suicide" />
+        </attacks>
+    </tool>
+
+    <tool name="" description="" string_id="" movement="3" maxsize="3" cost="2400">
+        <attacks>
+            <basicattack/>
+        </attacks>
+    </tool>
+</entities>

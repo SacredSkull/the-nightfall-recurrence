@@ -1,0 +1,68 @@
+<?xml version="1.0" standalone="yes"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="entities">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="tool" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="attacks" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="attributemodifier" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="attribute" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="name" type="xs:string" />
+                              <xs:attribute name="value" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" />
+                        <xs:attribute name="type" type="xs:string" />
+                        <xs:attribute name="range" type="xs:string" />
+                        <xs:attribute name="self-minsize" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="basicattack" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" />
+                        <xs:attribute name="damage" type="xs:string" />
+                        <xs:attribute name="self-minsize" type="xs:string" />
+                        <xs:attribute name="range" type="xs:string" />
+                        <xs:attribute name="self-size" type="xs:string" />
+                        <xs:attribute name="self-result" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="mapmodifier" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" />
+                        <xs:attribute name="value" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="description" type="xs:string" />
+            <xs:attribute name="string_id" type="xs:string" />
+            <xs:attribute name="movement" type="xs:short" />
+            <xs:attribute name="maxsize" type="xs:short" />
+            <xs:attribute name="cost" type="xs:short" />
+            <xs:attribute name="level" type="xs:short" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="entities" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
