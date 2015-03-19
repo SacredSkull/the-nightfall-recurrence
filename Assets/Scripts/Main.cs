@@ -5,16 +5,23 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using SacredSkull.Software;
 
-public class ParseXMLTest : MonoBehaviour {
+public class Main : MonoBehaviour {
     Map map;
 
 	public bool dumpLevelXML;
 	public bool dumpEntityXML;
+	public bool dumpProgramXML;
+	public bool dumpEnemyXML;
 	public bool dumpGeometry;
 	public bool dumpEntities;
 	public bool dumpTileSets;
 	public bool dumpEntityRasters;
+
+    private Dictionary<int, softwareTool> entityIDs = new Dictionary<int, softwareTool>();
+    private List<List<int>> geometryRow = new List<List<int>>();
+    private List<List<int>> entityRow = new List<List<int>>();
 
 	// Use this for initialization
 	void Start () {
@@ -35,27 +42,24 @@ public class ParseXMLTest : MonoBehaviour {
 		}
 
 		//Sprite[] sprites = Resources.LoadAll<Sprite>();
-		
-		EntityList entities;
-		
-		XmlSerializer deserializerEntity = new XmlSerializer(typeof(EntityList));
-		TextReader readerEntity = new StreamReader("./Assets/Entities/Credit.xml");
-		object objEntity = deserializerEntity.Deserialize(readerEntity);
-		entities = (EntityList)objEntity;
-		readerEntity.Close();
 
-		if (Utility.level == LogLevels.DEBUG && dumpEntityXML) {
-			XmlSerializer serializer = new XmlSerializer (typeof(EntityList)); 
-			using (TextWriter writer = new StreamWriter(@"./XML_Entity_Serialised.xml")) {
-				serializer.Serialize (writer, entities); 
-			} 
-		}
+        software tools = software.LoadFromFile(@"./Assets/Entities/Tools.xml");
+        software sentries = software.LoadFromFile(@"./Assets/Entities/Sentries.xml");
 
-		Dictionary<int, string> entityIDs = new Dictionary<int, string>();
+        foreach(softwareTool tool in tools.tool){
+            Utility.UnityLog(tool.string_id);
+        }
+
+        if (Utility.level == LogLevels.DEBUG && dumpProgramXML) {
+            tools.SaveToFile(@"./XML_Tools_Serialised.xml");
+            sentries.SaveToFile(@"./XML_Sentries_Serialised.xml");
+        }
+
+        
 
         Utility.UnityLog("Starting to parse Tilesets", LogLevels.INFO);
 
-		entityIDs.Add (0, "empty");
+		//entityIDs.Add (0, "empty");
 
         foreach (TileSet ts in map.tilesets) {
 			Utility.UnityLog("Currently working on the TS " + ts.name, LogLevels.DEBUG);
@@ -69,16 +73,12 @@ public class ParseXMLTest : MonoBehaviour {
 					if(property.name == "id"){
 						if(dumpTileSets)
 							Utility.UnityLog("This tile's "+ property.name + " is '" + property.value + "'", LogLevels.DEBUG);
-						entityIDs.Add(tileFirstGID + tl.id,property.value);
 					}
 				}
             }
         }
 
 		Utility.UnityLog("Finished parsing Tilesets", LogLevels.INFO);
-
-        List<List<int>> geometryRow = new List<List<int>>();
-        List<List<int>> entityRow = new List<List<int>>();
 
         foreach (Layer l in map.layers) {
             if (l.name == "Geometry") {
@@ -104,12 +104,13 @@ public class ParseXMLTest : MonoBehaviour {
 	                Utility.UnityLog("Printing all Geometry values", LogLevels.DEBUG);
 	                for (int row = 0; row < geometryRow.Count; row++) {
 	                    int pleasantRow = row + 1;
-	                    Utility.UnityLog("Geo. Row " + pleasantRow.ToString(), LogLevels.DEBUG);
+	                    //Utility.UnityLog("Geo. Row " + pleasantRow.ToString(), LogLevels.DEBUG);
 	                    for (int column = 0; column < geometryRow[row].Count; column++) {
-	                        Utility.UnityLog("Geo. " + geometryRow[row][column].ToString(), LogLevels.DEBUG);
+	                        Utility.UnityLog("Geo. ("+ pleasantRow.ToString() + ", " + (column+1).ToString()+ ") " + geometryRow[row][column].ToString(), LogLevels.DEBUG);
 	                    }
 	                }
 				}
+                
 
                 Utility.UnityLog("Finished parsing Geometry layer", LogLevels.INFO);
             } else if (l.name == "Entities") {
@@ -156,8 +157,33 @@ public class ParseXMLTest : MonoBehaviour {
 			}
 		}
 
+        Sprite path = Resources.Load<Sprite>("Sprites/map_features/wall");
+        Sprite wall = Resources.Load<Sprite>("Sprites/map_features/wall");
+
+        for (int row = 0; row < geometryRow.Count; row++)
+        {
+            for (int column = 0; column < geometryRow[1].Count; column++)
+            {
+                Utility.UnityLog("(" + (row+1).ToString() + "," + (column+1) + ") id is "+ GetEntityByCoords(row, column));
+
+
+
+                SpriteRenderer rendered_tile;
+                rendered_tile = new GameObject().AddComponent<SpriteRenderer>();
+
+                rendered_tile.sprite = path;
+                rendered_tile.name = "Grid Path";
+                rendered_tile.transform.localScale += new Vector3(2f, 2f, 2f);
+            }
+        }
 
 	}
+
+    string GetEntityByCoords(int x, int y)
+    {
+        int id = geometryRow[x][y];
+        return entityIDs[id];
+    }
 	
 	// Update is called once per frame
 	void Update () {
