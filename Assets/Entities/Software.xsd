@@ -1,21 +1,21 @@
-<?xml version="1.0" standalone="yes"?>
-<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-  <xs:element name="entities">
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns="" id="NewDataSet" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="software">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="enemy" minOccurs="0" maxOccurs="unbounded">
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="tool">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="attacks" minOccurs="0" maxOccurs="unbounded">
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="attacks">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element minOccurs="0" maxOccurs="unbounded" name="basicattack">
                       <xs:complexType>
                         <xs:attribute name="name" type="xs:string" use="required" />
-                        <xs:attribute name="damage" type="xs:string" use="required" />
-                        <xs:attribute name="self-minsize" type="xs:string" />
-                        <xs:attribute default="1" name="range" type="xs:string" />
-                        <xs:attribute name="self-size" type="xs:short" />
+                        <xs:attribute name="damage" type="xs:short" use="required" />
+                        <xs:attribute name="self-minsize" type="xs:short" />
+                        <xs:attribute default="1" name="range" type="xs:short" />
+                        <xs:attribute name="self-health" type="xs:short" />
                         <xs:attribute name="self-result" type="xs:string" />
                       </xs:complexType>
                     </xs:element>
@@ -25,43 +25,48 @@
                           <xs:element minOccurs="1" maxOccurs="unbounded" name="attribute">
                             <xs:complexType>
                               <xs:attribute name="name" type="xs:string" use="required" />
-                              <xs:attribute name="value" type="xs:string" use="required" />
+                              <xs:attribute name="value" type="xs:short" use="required" />
                             </xs:complexType>
                           </xs:element>
                         </xs:sequence>
                         <xs:attribute name="name" type="xs:string" use="required" />
                         <xs:attribute name="type" type="xs:string" use="required" />
+                        <xs:attribute name="description" type="xs:string" />
                         <xs:attribute name="range" type="xs:string" default="1" />
-                        <xs:attribute name="self-minsize" type="xs:string" />
+                        <xs:attribute name="self-minsize" type="xs:short" />
+                        <xs:attribute name="self-health" type="xs:short" />
                         <xs:attribute name="self-result" type="xs:string" />
                       </xs:complexType>
                     </xs:element>
                     <xs:element minOccurs="0" maxOccurs="unbounded" name="mapmodifier">
                       <xs:complexType>
                         <xs:attribute name="name" type="xs:string" use="required" />
-                        <xs:attribute name="value" type="xs:string" use="required" />
+                        <xs:attribute name="value" type="xs:short" use="required" />
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
-            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="name" type="xs:string" use="required" />
             <xs:attribute name="description" type="xs:string" />
-            <xs:attribute name="string_id" type="xs:string" />
-            <xs:attribute name="movement" type="xs:string" />
-            <xs:attribute name="maxsize" type="xs:string" />
-            <xs:attribute name="level" type="xs:string" />
+            <xs:attribute name="string_id" type="xs:string" use="required" />
+            <xs:attribute default="1" name="movement" type="xs:short" />
+            <xs:attribute default="1" name="maxsize" type="xs:short" />
+            <xs:attribute default="100" name="cost" type="xs:short" />
+            <xs:attribute default="1" name="level" type="xs:short" />
+            <xs:attribute name="governor" type="xs:string" />
+            <xs:attribute default="false" name="isEnemy" type="xs:boolean" />
           </xs:complexType>
         </xs:element>
       </xs:sequence>
       <xs:attribute name="version" type="xs:string" />
     </xs:complexType>
   </xs:element>
-  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+  <xs:element msdata:IsDataSet="true" msdata:UseCurrentLocale="true" name="NewDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="entities" />
+        <xs:element ref="software" />
       </xs:choice>
     </xs:complexType>
   </xs:element>

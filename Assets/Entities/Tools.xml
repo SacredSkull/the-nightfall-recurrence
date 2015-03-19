@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<entities version="1.0">
+<software version="1.0" xsi:noNamespaceSchemaLocation="Software.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <!-- The hack series -->
 
@@ -38,7 +38,7 @@
         </attacks>
     </tool>
 
-    <tool name="Heisenbug" description="@~[^7$2!¬|^###" string_id="bug_3" movement="5" maxsize="1" cost="3000" level="4">
+    <tool name="Heisenbug" description="Entry corrupte#2^*$_ __" string_id="bug_3" movement="5" maxsize="1" cost="3000" level="4">
         <attacks>
             <basicattack name="Zer0 day" damage="6" />
         </attacks>
@@ -47,43 +47,60 @@
 
     <!-- Ranged -->
 
-    <tool name="Slingshot" description="Basic ranged attack program" string_id="seeker_1" movement="2" maxsize="2" cost="750" level="1">
+    <tool name="Slingshot" description="Basic ranged attack program" string_id="slingshot_1" movement="2" maxsize="2" cost="750" level="1">
         <attacks>
             <basicattack name="Stone" range="3" damage="1"/>
         </attacks>
     </tool>
 
-    <tool name="Seeker" description="Solid distance attack program" string_id="seeker_2" movement="3" maxsize="3" cost="1000" level="2">
+    <tool name="Catapult" description="Extreme range mobile attacker" string_id="slingshot_2" movement="2" maxsize="3" cost="4000" level="4">
         <attacks>
-            <basicattack name="Beam" range="2" damage="2"/>
+            <basicattack name="Fling" range="4" damage="2"/>
         </attacks>
     </tool>
 
-    <tool name="Seeker 1.1" description="33% further distance, 25% bigger size." string_id="seeker_3" movement="3" maxsize="4" cost="2500" level="3">
-        <attacks>
-            <basicattack name="Ray" range="3" damage="2"/>
-        </attacks>
-    </tool>
-
-    <tool name="Seeker 1.2" description="" string_id="seeker_4" movement="4" maxsize="5" cost="4500" level="4">
-        <attacks>
-            <basicattack name="Ray" range="3" damage="2"/>
-            <basicattack name="Search &amp; Destroy" range="2" self-minsize="5" self-size="-2" damage="5"/>
-        </attacks>
-    </tool>
-
-    <tool name="Tower" description="Immobile defence platform" string_id="tower_1" movement="0" maxsize="1" cost="1000" level="2">
+    <tool name="Tower" description="Immobile defence platform" string_id="tower_1" movement="0" maxsize="1" cost="1800" level="3">
         <attacks>
             <basicattack name="Spot" range="3" damage="3"/>
         </attacks>
     </tool>
 
-    <tool name="1" description="" string_id="" movement="" maxsize="" cost="" level="">
+    <tool name="Mobile Tower" description="*Just about* mobile defence platform" string_id="tower_2" movement="1" maxsize="1" cost="1000" level="2">
         <attacks>
-            <basicattack name="" range="" damage="" />
+            <basicattack name="Spot" range="3" damage="3"/>
         </attacks>
     </tool>
 
+    <tool name="Seeker" description="Solid distance attack program" string_id="seeker_1" movement="3" maxsize="3" cost="1000" level="2">
+        <attacks>
+            <basicattack name="Beam" range="2" damage="2"/>
+        </attacks>
+    </tool>
+
+    <tool name="Seeker 1.1" description="33% further distance, 25% bigger size." string_id="seeker_2" movement="3" maxsize="4" cost="2500" level="3">
+        <attacks>
+            <basicattack name="Ray" range="3" damage="2"/>
+        </attacks>
+    </tool>
+
+    <tool name="Seeker 1.2" description="" string_id="seeker_3" movement="4" maxsize="5" cost="4500" level="4">
+        <attacks>
+            <basicattack name="Ray" range="3" damage="2"/>
+            <basicattack name="Search &amp; Destroy" range="2" self-minsize="5" self-health="-2" damage="5"/>
+        </attacks>
+    </tool>
+
+    <tool name="Satellite" description="Short range hard-hitting program" string_id="satellite_1" movement="1" maxsize="1" cost="3500" level="3">
+        <attacks>
+            <basicattack name="Scramble" range="2" damage="4" />
+        </attacks>
+    </tool>
+
+    <tool name="Laser Satellite" description="Long range hard-hitting program" string_id="satellite_2" movement="2" maxsize="1" cost="5000" level="4">
+        <attacks>
+            <basicattack name="Scramble" range="3" damage="4" />
+        </attacks>
+    </tool>
 
     <!-- CLOGs -->
 
@@ -119,25 +136,29 @@
     <tool name="Data Doctor" description="This may sting a little" string_id="doctor_1" movement="4" maxsize="5" cost="500" level="1">
         <attacks>
             <attributemodifier name="Grow" type="help">
-                <attribute name="current_size" value="2" />
+                <attribute name="health" value="2" />
             </attributemodifier>
         </attacks>
     </tool>
 
-    <tool name="Medic" description="Data Doctor's ranged associate" string_id="medic_1" movement="3" maxsize="3" cost="1000">
+    <tool name="Data Doctor Pro" description="Recovers twice as much data as the standard version!" string_id="doctor_2" movement="5" maxsize="8" cost="1500" level="3">
+        <attacks>
+            <attributemodifier name="MegaGrow" type="help">
+                <attribute name="health" value="4" />
+            </attributemodifier>
+            <attributemodifier name="Surgery" type="help">
+                <attribute name="maxsize" value="1" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <tool name="Medic" description="Data Doctor's ranged associate" string_id="medic_1" movement="3" maxsize="3" cost="1000" level="2">
         <attacks>
             <attributemodifier name="Syringe" type="help" range="3">
-                <attribute name="current_size" value="2" />
+                <attribute name="health" value="2" />
             </attributemodifier>
         </attacks>
     </tool>
-
-    <tool name="" description="" string_id="" movement="3" maxsize="3" cost="2400">
-        <attacks>
-            <basicattack/>
-        </attacks>
-    </tool>
-
 
     <!-- Golems -->
 
@@ -186,6 +207,46 @@
         </attacks>
     </tool>
 
+    <!-- Turbos -->
+
+    <tool name="Turbo" description="Speeds up your programs" string_id="turbo_1" movement="3" maxsize="3" cost="1000" level="2">
+        <attacks>
+            <attributemodifier name="Boost" type="help" range="3">
+                <attribute name="movement" value="2" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <tool name="Turbo Deluxe" description="Slow and steady is for losers" string_id="turbo_2" movement="4" maxsize="4" cost="1750" level="3">
+        <attacks>
+            <attributemodifier name="MegaBoost" type="help" range="3" self-minsize="3" self-health="-2">
+                <attribute name="movement" value="2" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <!-- Wizards, chemists and gurus -->
+
+    <tool name="Fiddle" description="Reverse engineering can have interesting results" string_id="fiddle_1" movement="3" maxsize="3" cost="2400">
+        <attacks>
+            <attributemodifier name="Tweak" type="help" description="Increases the move rate of the target by 1, deletes 1 sector from fiddle">
+                <attribute name="health" value="4" />
+            </attributemodifier>
+            <attributemodifier name="Fiddle" type="help" description="Increases the maximum size of the target by 1, deletes from fiddle">
+                <attribute name="maxsize" value="1" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
+    <tool name="Guru" description="The discerning premium hacker's kit with a little bit of everything" string_id="guru_1" movement="2" maxsize="3" cost="4500">
+        <attacks>
+            <basicattack name="Fire" range="2" damage="4" />
+            <attributemodifier name="Ice" type="harm" range="2">
+                <attribute name="movement" value="-3" />
+            </attributemodifier>
+        </attacks>
+    </tool>
+
     <!-- Miscellaneous -->
 
     <tool name="Bit-man" description="Create, or destroy, the map to your advantage" string_id="bitman_1" movement="3" maxsize="3" cost="250" level="1">
@@ -195,33 +256,17 @@
         </attacks>
     </tool>
 
-    <tool name="Fiddle" description="" string_id="" movement="3" maxsize="3" cost="2400">
-        <attacks>
-            <basicattack />
-        </attacks>
-    </tool>
-
-    <tool name="Turbo" description="Speeds up your programs" string_id="turbo_1" movement="3" maxsize="3" cost="1000">
-        <attacks>
-            <attributemodifier name="Boost" type="help" range="3">
-                <attribute name="movement" value="2" />
-            </attributemodifier>
-        </attacks>
-    </tool>
-
-
-
-
     <tool name="BuzzBomb" description="Fast and annoying" string_id="buzz_1" movement="8" maxsize="2" cost="3500">
         <attacks>
             <basicattack name="Sting" damage="1"/>
             <basicattack name="Kamikazee" damage="5" self-result="suicide" />
         </attacks>
     </tool>
-
+<!--
     <tool name="" description="" string_id="" movement="3" maxsize="3" cost="2400">
         <attacks>
             <basicattack/>
         </attacks>
     </tool>
-</entities>
+-->
+</software>
