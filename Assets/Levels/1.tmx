@@ -136,9 +136,6 @@
 			<image width="30" height="30" source="../../map_features/wall.png"/>
 		</tile>
 	</tileset>
-	<imagelayer name="Background" x="-167" y="-118" visible="0">
-		<image source="//b-c1-fc2.serc.ac.uk/Users2/Students/C/CLO13201278/My Pictures/Starsinthesky.jpg"/>
-	</imagelayer>
 	<layer name="Geometry" width="16" height="12">
 		<data>
 			<tile gid="0"/>

@@ -5,21 +5,21 @@
 
     <tool name="Hack" description="Comes with the hacking starter kit" string_id="hack_1" movement="2" maxsize="4" cost="500" level="1">
         <attacks>
-            <basicattack name="Slice" damage="2"/>
+            <attackbasic name="Slice" damage="2"/>
         </attacks>
     </tool>
 
     <tool name="Hack 2.0" description="Now with extra slice!" string_id="hack_2" movement="2" maxsize="4" cost="1500" level="2">
         <attacks>
-            <basicattack name="Slice" damage="2" />
-            <basicattack name="Dice" damage="3" self-minsize="3" />
+            <attackbasic name="Slice" damage="2" />
+            <attackbasic name="Dice" damage="3" self-minsize="3" />
         </attacks>
     </tool>
 
     <tool name="Hack 3.0" description="The last and finest of the hack series" string_id="hack_3" movement="4" maxsize="4" cost="3500" level="3">
         <attacks>
-            <basicattack name="Slice" damage="2" />
-            <basicattack name="Dice" damage="4" self-minsize="4" />
+            <attackbasic name="Slice" damage="2" />
+            <attackbasic name="Dice" damage="4" self-minsize="4" />
         </attacks>
     </tool>
 
@@ -28,19 +28,19 @@
 
     <tool name="Bug" description="Fixed in the nightly build" string_id="bug_1" movement="5" maxsize="1" cost="750" level="1">
         <attacks>
-            <basicattack name="Glitch" damage="2"/>
+            <attackbasic name="Glitch" damage="2"/>
         </attacks>
     </tool>
 
     <tool name="MandelBug" description="Details of vulnerability not disclosed" string_id="bug_2" movement="5" maxsize="1" cost="3000" level="3">
         <attacks>
-            <basicattack name="Exploit" damage="4"/>
+            <attackbasic name="Exploit" damage="4"/>
         </attacks>
     </tool>
 
     <tool name="Heisenbug" description="Entry corrupte#2^*$_ __" string_id="bug_3" movement="5" maxsize="1" cost="3000" level="4">
         <attacks>
-            <basicattack name="Zer0 day" damage="6" />
+            <attackbasic name="Zer0 day" damage="6" />
         </attacks>
     </tool>
 
@@ -49,56 +49,56 @@
 
     <tool name="Slingshot" description="Basic ranged attack program" string_id="slingshot_1" movement="2" maxsize="2" cost="750" level="1">
         <attacks>
-            <basicattack name="Stone" range="3" damage="1"/>
+            <attackbasic name="Stone" range="3" damage="1"/>
         </attacks>
     </tool>
 
     <tool name="Catapult" description="Extreme range mobile attacker" string_id="slingshot_2" movement="2" maxsize="3" cost="4000" level="4">
         <attacks>
-            <basicattack name="Fling" range="4" damage="2"/>
+            <attackbasic name="Fling" range="4" damage="2"/>
         </attacks>
     </tool>
 
     <tool name="Tower" description="Immobile defence platform" string_id="tower_1" movement="0" maxsize="1" cost="1800" level="3">
         <attacks>
-            <basicattack name="Spot" range="3" damage="3"/>
+            <attackbasic name="Spot" range="3" damage="3"/>
         </attacks>
     </tool>
 
     <tool name="Mobile Tower" description="*Just about* mobile defence platform" string_id="tower_2" movement="1" maxsize="1" cost="1000" level="2">
         <attacks>
-            <basicattack name="Spot" range="3" damage="3"/>
+            <attackbasic name="Spot" range="3" damage="3"/>
         </attacks>
     </tool>
 
     <tool name="Seeker" description="Solid distance attack program" string_id="seeker_1" movement="3" maxsize="3" cost="1000" level="2">
         <attacks>
-            <basicattack name="Beam" range="2" damage="2"/>
+            <attackbasic name="Beam" range="2" damage="2"/>
         </attacks>
     </tool>
 
     <tool name="Seeker 1.1" description="33% further distance, 25% bigger size." string_id="seeker_2" movement="3" maxsize="4" cost="2500" level="3">
         <attacks>
-            <basicattack name="Ray" range="3" damage="2"/>
+            <attackbasic name="Ray" range="3" damage="2"/>
         </attacks>
     </tool>
 
     <tool name="Seeker 1.2" description="" string_id="seeker_3" movement="4" maxsize="5" cost="4500" level="4">
         <attacks>
-            <basicattack name="Ray" range="3" damage="2"/>
-            <basicattack name="Search &amp; Destroy" range="2" self-minsize="5" self-health="-2" damage="5"/>
+            <attackbasic name="Ray" range="3" damage="2"/>
+            <attackbasic name="Search &amp; Destroy" range="2" self-minsize="5" self-health="-2" damage="5"/>
         </attacks>
     </tool>
 
     <tool name="Satellite" description="Short range hard-hitting program" string_id="satellite_1" movement="1" maxsize="1" cost="3500" level="3">
         <attacks>
-            <basicattack name="Scramble" range="2" damage="4" />
+            <attackbasic name="Scramble" range="2" damage="4" />
         </attacks>
     </tool>
 
     <tool name="Laser Satellite" description="Long range hard-hitting program" string_id="satellite_2" movement="2" maxsize="1" cost="5000" level="4">
         <attacks>
-            <basicattack name="Scramble" range="3" damage="4" />
+            <attackbasic name="Scramble" range="3" damage="4" />
         </attacks>
     </tool>
 
@@ -164,19 +164,19 @@
 
     <tool name="Golem.MUD" description="Slow, but steady" string_id="golem_1" movement="1" maxsize="5" cost="1200" level="2">
         <attacks>
-            <basicattack name="Thump" damage="3"/>
+            <attackbasic name="Thump" damage="3"/>
         </attacks>
     </tool>
 
     <tool name="Golem.CLAY" description="Clay is stronger than mud" string_id="golem_2" movement="2" maxsize="6" cost="3000" level="3">
         <attacks>
-            <basicattack name="Bash" damage="5"/>
+            <attackbasic name="Bash" damage="5"/>
         </attacks>
     </tool>
 
     <tool name="Golem.STONE" description="Nothing stands in the way of Golem.STONE" string_id="golem_3" movement="3" maxsize="7" cost="5000" level="4">
         <attacks>
-            <basicattack name="Crash" damage="7" />
+            <attackbasic name="Crash" damage="7" />
         </attacks>
     </tool>
 
@@ -185,22 +185,22 @@
 
     <tool name="Wolf Spider" description="Web crawler that finds vulnerabilities" string_id="spider_1" movement="3" maxsize="3" cost="750" level="2">
         <attacks>
-            <basicattack name="Nibble" damage="2"/>
+            <attackbasic name="Nibble" damage="2"/>
         </attacks>
     </tool>
 
     <tool name="Black Widow" description="Creepier and faster" string_id="spider_2" movement="4" maxsize="3" cost="2000" level="3">
         <attacks>
-            <basicattack name="Byte" damage="2"/>
+            <attackbasic name="Byte" damage="2"/>
             <attributemodifier name="Paralyse" type="harm">
                 <attribute name="movement" value="-2" />
             </attributemodifier>
         </attacks>
     </tool>
 
-    <tool name="Tarantula" description="" string_id="" movement="5" maxsize="3" cost="3500">
+    <tool name="Tarantula" description="" string_id="spider_3" movement="5" maxsize="3" cost="3500">
         <attacks>
-            <basicattack name="MegaByte" damage="3"/>
+            <attackbasic name="MegaByte" damage="3"/>
             <attributemodifier name="Paralyse" type="harm">
                 <attribute name="movement" value="-3" />
             </attributemodifier>
@@ -240,7 +240,7 @@
 
     <tool name="Guru" description="The discerning premium hacker's kit with a little bit of everything" string_id="guru_1" movement="2" maxsize="3" cost="4500">
         <attacks>
-            <basicattack name="Fire" range="2" damage="4" />
+            <attackbasic name="Fire" range="2" damage="4" />
             <attributemodifier name="Ice" type="harm" range="2">
                 <attribute name="movement" value="-3" />
             </attributemodifier>
@@ -258,14 +258,14 @@
 
     <tool name="BuzzBomb" description="Fast and annoying" string_id="buzz_1" movement="8" maxsize="2" cost="3500">
         <attacks>
-            <basicattack name="Sting" damage="1"/>
-            <basicattack name="Kamikazee" damage="5" self-result="suicide" />
+            <attackbasic name="Sting" damage="1"/>
+            <attackbasic name="Kamikazee" damage="5" self-result="suicide" />
         </attacks>
     </tool>
 <!--
     <tool name="" description="" string_id="" movement="3" maxsize="3" cost="2400">
         <attacks>
-            <basicattack/>
+            <attackbasic/>
         </attacks>
     </tool>
 -->
