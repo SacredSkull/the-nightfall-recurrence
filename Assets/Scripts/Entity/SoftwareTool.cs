@@ -3,19 +3,13 @@ using System.Xml.Serialization;
 
 [XmlType(TypeName = "tool")]
 public class SoftwareTool : Attackable {
-    [XmlAttribute("name")]
-    public string name;
-    [XmlAttribute("description")]
-    public string description;
-    [XmlAttribute("string_id")]
-    public string string_id;
     [XmlAttribute("maxsize")]
     public short maxsize;
     [XmlAttribute("cost")]
     public short cost;
     [XmlAttribute("level")]
     public short level;
-    [XmlAttribute("governer")]
+    [XmlAttribute("governor")]
     public string governor;
     [XmlIgnore]
     public bool isEnemy { get; set; }

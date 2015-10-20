@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 
 
-public abstract class Attackable {
+public abstract class Attackable : MapItem {
     [XmlIgnore]
     public int health { get; set; }
     [XmlIgnore]

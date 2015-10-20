@@ -20,10 +20,10 @@ public class TileSet {
     public string name;
 
 	[XmlElement("tile")]
-    public List<TileSetTile> tiles = new List<TileSetTile>();
+    public List<Tile> tiles = new List<Tile>();
 }
 
-public class TileSetTile {
+public class Tile {
 	[XmlAttribute("id")]
     public int id;
 	// You're right, this is a strange name for an element. But it's a pointless element like <data> (see layer classes)
@@ -32,14 +32,15 @@ public class TileSetTile {
 	[XmlElement("properties")]
 	public TileSetProperties[] propertyContainer;
 	*/
-	[XmlElement("properties")]
-	public TileSetProperties properties;
+	[XmlArray("properties")]
+    [XmlArrayItem("property")]
+    public TileSetProperty[] properties;
 }
 
-public class TileSetProperties{
-	[XmlElement("property")]
-	public TileSetProperty[] propertyList;
-}
+//public class TileSetProperties{
+//	[XmlElement("property")]
+//	public TileSetProperty[] propertyList;
+//}
 
 public class TileSetProperty {
 	[XmlAttribute("name")]
@@ -64,14 +65,15 @@ public class Layer{
 
     // This TileList contains the random data element that actually contains the data titles. 
 	// It makes for weird looking foreach() statements, but it works!
-    [XmlElement("data")]
-    public LayerTileList data;
-}
-
-public class LayerTileList{
-    [XmlElement("tile")]
+    [XmlArray("data")]
+    [XmlArrayItem("tile")]
     public LayerTile[] tiles;
 }
+
+//public class LayerTileList{
+//    [XmlElement("tile")]
+//    public LayerTile[] tiles;
+//}
 
 public class LayerTile {
 	[XmlAttribute("gid")]
