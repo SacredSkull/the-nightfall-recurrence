@@ -1,13 +1,16 @@
-﻿using UnityEngine;
-using System;
-using System.Text;
+﻿using System;
 using System.Reflection;
+using System.Text;
 
-public class Utility {
+using UnityEngine;
+
+using Object = System.Object;
+
+public static class Utility {
     public static int level = LogLevels.DEBUG;
 
     public static void UnityLog(string s, int msgLevel = LogLevels.INFO) {
-        if (Utility.level <= msgLevel) {
+        if (level <= msgLevel) {
             switch (msgLevel) {
                 case LogLevels.DEBUG:
                     s = "[DEBUG] " + s;
@@ -28,7 +31,7 @@ public class Utility {
                 default:
                     msgLevel = 1;
                     s = "[DEFAULT] " + s;
-                    Utility.UnityLog("I was given a log level that doesn't exist.", LogLevels.WARNING);
+                    UnityLog("I was given a log level that doesn't exist.", LogLevels.WARNING);
                     break;
             }
         }
@@ -36,7 +39,7 @@ public class Utility {
 
     public static void UnityLog(int i, int msgLevel = LogLevels.DEBUG) {
         string s = i.ToString();
-        if(Utility.level <= msgLevel){
+        if(level <= msgLevel){
             switch (msgLevel) {
                 case LogLevels.DEBUG:
                     s = "[DEBUG]" + s;
@@ -57,28 +60,28 @@ public class Utility {
                 default:
                     msgLevel = 1;
                     s = "[DEFAULT]" + s;
-                    Utility.UnityLog("I was given a log level that doesn't exist.", LogLevels.WARNING);
+                    UnityLog("I was given a log level that doesn't exist.", LogLevels.WARNING);
                     break;
             }
         }
     }
 
-	public static string var_dump(System.Object o)
+	public static string var_dump(Object o)
 	{
 		StringBuilder sb = new StringBuilder();
 		
 		// Include the type of the object
-		System.Type type = o.GetType();
+		Type type = o.GetType();
 		sb.Append("Type: " + type.Name);
 		
 		// Include information for each Field
 		sb.Append("\r\n\r\nFields:");
-		System.Reflection.FieldInfo[] fi = type.GetFields();
+		FieldInfo[] fi = type.GetFields();
 		if (fi.Length > 0)
 		{
 			foreach (FieldInfo f in fi)
 			{
-				sb.Append("\r\n " + f.ToString() + " = " +
+				sb.Append("\r\n " + f + " = " +
 				          f.GetValue(o));
 			}
 		}
@@ -87,12 +90,12 @@ public class Utility {
 		
 		// Include information for each Property
 		sb.Append("\r\n\r\nProperties:");
-		System.Reflection.PropertyInfo[] pi = type.GetProperties();
+		PropertyInfo[] pi = type.GetProperties();
 		if (pi.Length > 0)
 		{
 			foreach (PropertyInfo p in pi)
 			{
-				sb.Append("\r\n " + p.ToString() + " = " +
+				sb.Append("\r\n " + p + " = " +
 				          p.GetValue(o, null));
 			}
 		}

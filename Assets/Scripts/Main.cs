@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
+
 using System.IO;
-using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Annotations;
 
-[ExecuteInEditMode]
 public class Main : MonoBehaviour {
 
     public float GRID_COLUMN_SPACER;
@@ -34,7 +31,7 @@ public class Main : MonoBehaviour {
     private List<List<int>> geometryRow = new List<List<int>>();
     private List<List<int>> entityRow = new List<List<int>>();
 
-    // Use this for initialization
+    // TODO: Need either a List<MapItem> for sprites or some sort of logic to tell what type of tileset is being loaded. CTRL-F entityIDs.Add to continue.
 
     [UsedImplicitly]
     void Start () {
@@ -58,6 +55,13 @@ public class Main : MonoBehaviour {
 
         float rowSpacer = 0;
 
+        if(entityIDs.Count == 0)
+            Utility.UnityLog("entityIDs does not contain anything!", LogLevels.ERROR);
+
+        foreach(KeyValuePair<int, SoftwareTool> keyvalue in entityIDs) {
+            Utility.UnityLog(keyvalue.Value.string_id + " has value of " + keyvalue.Key);
+        }
+
         GameObject geometryContainer = new GameObject("Geometry Grid");
 
         for (int row = 0; row < geometryRow.Count; row++) {
@@ -68,20 +72,20 @@ public class Main : MonoBehaviour {
             rowContainer.name = "Geometry Row " + (row + 1) + " [Generated]";
             rowContainer.hideFlags = HideFlags.DontSave;
 
-            for (int column = 0; column < geometryRow[1].Count; column++)
+            for (int column = 0; column < geometryRow[0].Count; column++)
             {
                 //Utility.UnityLog("(" + (row+1).ToString() + "," + (column+1) + ") id is "+ GetEntityByCoords(row, column));
                 int featureID = GetGeometryByCoords(row, column);
+
                 if (featureID != 0) {
                     SpriteRenderer rendered_tile = new GameObject().AddComponent<SpriteRenderer>();
                     rendered_tile.transform.parent = rowContainer.transform;
                     rendered_tile.hideFlags = HideFlags.DontSave;
 
+                    Utility.UnityLog(featureID);
                     Sprite sprite;
-                    bool foundSprite = entitySpriteDictionary.TryGetValue(entityIDs[featureID].string_id, out sprite);
+                    bool foundSprite = entitySpriteDictionary.TryGetValue(tool.string_id, out sprite);
 
-                    if(!foundSprite)
-                        Utility.UnityLog("Failed for " + entityIDs[featureID].string_id);
 
                     rendered_tile.sprite = sprite;
                     rendered_tile.name = "Grid Path";
@@ -101,17 +105,17 @@ public class Main : MonoBehaviour {
 
         rowSpacer = 0;
 
-        GameObject entityContainer = new GameObject("Geometry Grid");
+        GameObject entityContainer = new GameObject("Entity Grid");
 
         for(int row = 0; row < entityRow.Count; row++) {
             float columnSpacer = 0;
 
             GameObject rowContainer = new GameObject();
-            rowContainer.name = "Geometry Row " + (row + 1) + " [Generated]";
+            rowContainer.name = "Entity Row " + (row + 1) + " [Generated]";
             rowContainer.transform.parent = entityContainer.transform;
             rowContainer.hideFlags = HideFlags.DontSave;
 
-            for(int column = 0; column < entityRow[1].Count; column++) {
+            for(int column = 0; column < entityRow[0].Count; column++) {
                 KeyValuePair<int, SoftwareTool> tool = GetEntityByCoords(row, column);
 
                 if (tool.Value != null) {
@@ -121,7 +125,7 @@ public class Main : MonoBehaviour {
                         continue;
                     }
                     if (success == null) {
-                        Utility.UnityLog("Something is wrong with <b>" + tool.Value.string_id + "</b>");
+                        Utility.UnityLog("Something is wrong with <b>" + tool.Value.string_id + string.Format("</b> at row: {0}, column: {1}", row, column));
                         continue;
                     }
 
@@ -129,6 +133,7 @@ public class Main : MonoBehaviour {
                     Utility.UnityLog("Nothing is wrong with" + tool.Value.string_id);
                     renderedTile.sprite = success;
                     renderedTile.name = tool.Value.name;
+                    renderedTile.transform.parent = rowContainer.transform;
                     renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
                     renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer));
                 }
@@ -286,7 +291,7 @@ public class Main : MonoBehaviour {
             } else if(l.name == "Entities") {
                 Utility.UnityLog("Starting to parse Entities layer");
 
-                // Begin loop for populating grid geometry
+                // Begin loop for populating entity grid
                 int currentTile = 0;
                 for(int row = 0; row < l.height; row++) {
                     List<int> columnList = new List<int>();

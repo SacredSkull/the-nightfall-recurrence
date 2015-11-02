@@ -4,32 +4,31 @@
 //    <NameSpace>SacredSkull.Software</NameSpace><Collection>List</Collection><codeType>CSharp</codeType><EnableDataBinding>False</EnableDataBinding><EnableLazyLoading>False</EnableLazyLoading><TrackingChangesEnable>False</TrackingChangesEnable><GenTrackingClasses>False</GenTrackingClasses><HidePrivateFieldInIDE>False</HidePrivateFieldInIDE><EnableSummaryComment>False</EnableSummaryComment><VirtualProp>False</VirtualProp><IncludeSerializeMethod>True</IncludeSerializeMethod><UseBaseClass>False</UseBaseClass><GenBaseClass>False</GenBaseClass><GenerateCloneMethod>False</GenerateCloneMethod><GenerateDataContracts>False</GenerateDataContracts><CodeBaseTag>Net35</CodeBaseTag><SerializeMethodName>Serialize</SerializeMethodName><DeserializeMethodName>Deserialize</DeserializeMethodName><SaveToFileMethodName>SaveToFile</SaveToFileMethodName><LoadFromFileMethodName>LoadFromFile</LoadFromFileMethodName><GenerateXMLAttributes>True</GenerateXMLAttributes><OrderXMLAttrib>False</OrderXMLAttrib><EnableEncoding>False</EnableEncoding><AutomaticProperties>True</AutomaticProperties><GenerateShouldSerialize>False</GenerateShouldSerialize><DisableDebug>False</DisableDebug><PropNameSpecified>Default</PropNameSpecified><Encoder>UTF8</Encoder><CustomUsings></CustomUsings><ExcludeIncludedTypes>False</ExcludeIncludedTypes><EnableInitializeFields>True</EnableInitializeFields>
 //  </auto-generated>
 // ------------------------------------------------------------------------------
+
+using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+
 namespace SacredSkull.Software {
-    using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
-    using System.IO;
-    using System.Text;
-    using System.Collections.Generic;
-    
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.32990")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
-    public partial class software {
+    [GeneratedCode("Xsd2Code", "3.4.0.32990")]
+    [Serializable]
+    [DesignerCategory("code")]
+    [XmlType(AnonymousType=true)]
+    [XmlRoot(Namespace="", IsNullable=false)]
+    public class software {
         
         private List<softwareTool> toolField;
         
         private string versionField;
         
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private static XmlSerializer serializer;
         
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string version {get; set;}
 
         
@@ -37,7 +36,7 @@ namespace SacredSkull.Software {
             this.toolField = new List<softwareTool>();
         }
         
-        [System.Xml.Serialization.XmlElementAttribute("tool", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [XmlElement("tool", Form=XmlSchemaForm.Unqualified)]
         public List<softwareTool> tool {
             get {
                 return this.toolField;
@@ -47,10 +46,10 @@ namespace SacredSkull.Software {
             }
         }
         
-        private static System.Xml.Serialization.XmlSerializer Serializer {
+        private static XmlSerializer Serializer {
             get {
                 if ((serializer == null)) {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(software));
+                    serializer = new XmlSerializer(typeof(software));
                 }
                 return serializer;
             }
@@ -62,13 +61,13 @@ namespace SacredSkull.Software {
         /// </summary>
         /// <returns>string XML value</returns>
         public virtual string Serialize() {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
+            StreamReader streamReader = null;
+            MemoryStream memoryStream = null;
             try {
-                memoryStream = new System.IO.MemoryStream();
+                memoryStream = new MemoryStream();
                 Serializer.Serialize(memoryStream, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                streamReader = new StreamReader(memoryStream);
                 return streamReader.ReadToEnd();
             }
             finally {
@@ -88,29 +87,29 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output software object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out software obj, out System.Exception exception) {
+        public static bool Deserialize(string xml, out software obj, out Exception exception) {
             exception = null;
             obj = default(software);
             try {
                 obj = Deserialize(xml);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool Deserialize(string xml, out software obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return Deserialize(xml, out obj, out exception);
         }
         
         public static software Deserialize(string xml) {
-            System.IO.StringReader stringReader = null;
+            StringReader stringReader = null;
             try {
-                stringReader = new System.IO.StringReader(xml);
-                return ((software)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
+                stringReader = new StringReader(xml);
+                return ((software)(Serializer.Deserialize(XmlReader.Create(stringReader))));
             }
             finally {
                 if ((stringReader != null)) {
@@ -125,23 +124,23 @@ namespace SacredSkull.Software {
         /// <param name="fileName">full path of outupt xml file</param>
         /// <param name="exception">output Exception value if failed</param>
         /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, out System.Exception exception) {
+        public virtual bool SaveToFile(string fileName, out Exception exception) {
             exception = null;
             try {
                 SaveToFile(fileName);
                 return true;
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 exception = e;
                 return false;
             }
         }
         
         public virtual void SaveToFile(string fileName) {
-            System.IO.StreamWriter streamWriter = null;
+            StreamWriter streamWriter = null;
             try {
                 string xmlString = Serialize();
-                System.IO.FileInfo xmlFile = new System.IO.FileInfo(fileName);
+                FileInfo xmlFile = new FileInfo(fileName);
                 streamWriter = xmlFile.CreateText();
                 streamWriter.WriteLine(xmlString);
                 streamWriter.Close();
@@ -160,30 +159,30 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output software object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, out software obj, out System.Exception exception) {
+        public static bool LoadFromFile(string fileName, out software obj, out Exception exception) {
             exception = null;
             obj = default(software);
             try {
                 obj = LoadFromFile(fileName);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool LoadFromFile(string fileName, out software obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return LoadFromFile(fileName, out obj, out exception);
         }
         
         public static software LoadFromFile(string fileName) {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
+            FileStream file = null;
+            StreamReader sr = null;
             try {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file);
+                file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                sr = new StreamReader(file);
                 string xmlString = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
@@ -201,11 +200,11 @@ namespace SacredSkull.Software {
         #endregion
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.32990")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class softwareTool {
+    [GeneratedCode("Xsd2Code", "3.4.0.32990")]
+    [Serializable]
+    [DesignerCategory("code")]
+    [XmlType(AnonymousType=true)]
+    public class softwareTool {
         
         private List<softwareToolAttacks> attacksField;
         
@@ -227,31 +226,31 @@ namespace SacredSkull.Software {
         
         private bool isEnemyField;
         
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private static XmlSerializer serializer;
         
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string name {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string description {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string string_id {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string governor {get; set;}
 
         
         public softwareTool() {
             this.attacksField = new List<softwareToolAttacks>();
-            this.movementField = ((short)(1));
-            this.maxsizeField = ((short)(1));
-            this.costField = ((short)(100));
-            this.levelField = ((short)(1));
+            this.movementField = 1;
+            this.maxsizeField = 1;
+            this.costField = 100;
+            this.levelField = 1;
             this.isEnemyField = false;
         }
         
-        [System.Xml.Serialization.XmlElementAttribute("attacks", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [XmlElement("attacks", Form=XmlSchemaForm.Unqualified)]
         public List<softwareToolAttacks> attacks {
             get {
                 return this.attacksField;
@@ -261,8 +260,8 @@ namespace SacredSkull.Software {
             }
         }
         
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(short), "1")]
+        [XmlAttribute]
+        [DefaultValue(typeof(short), "1")]
         public short movement {
             get {
                 return this.movementField;
@@ -272,8 +271,8 @@ namespace SacredSkull.Software {
             }
         }
         
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(short), "1")]
+        [XmlAttribute]
+        [DefaultValue(typeof(short), "1")]
         public short maxsize {
             get {
                 return this.maxsizeField;
@@ -283,8 +282,8 @@ namespace SacredSkull.Software {
             }
         }
         
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(short), "100")]
+        [XmlAttribute]
+        [DefaultValue(typeof(short), "100")]
         public short cost {
             get {
                 return this.costField;
@@ -294,8 +293,8 @@ namespace SacredSkull.Software {
             }
         }
         
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(short), "1")]
+        [XmlAttribute]
+        [DefaultValue(typeof(short), "1")]
         public short level {
             get {
                 return this.levelField;
@@ -305,8 +304,8 @@ namespace SacredSkull.Software {
             }
         }
         
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(false)]
+        [XmlAttribute]
+        [DefaultValue(false)]
         public bool isEnemy {
             get {
                 return this.isEnemyField;
@@ -316,10 +315,10 @@ namespace SacredSkull.Software {
             }
         }
         
-        private static System.Xml.Serialization.XmlSerializer Serializer {
+        private static XmlSerializer Serializer {
             get {
                 if ((serializer == null)) {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(softwareTool));
+                    serializer = new XmlSerializer(typeof(softwareTool));
                 }
                 return serializer;
             }
@@ -331,13 +330,13 @@ namespace SacredSkull.Software {
         /// </summary>
         /// <returns>string XML value</returns>
         public virtual string Serialize() {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
+            StreamReader streamReader = null;
+            MemoryStream memoryStream = null;
             try {
-                memoryStream = new System.IO.MemoryStream();
+                memoryStream = new MemoryStream();
                 Serializer.Serialize(memoryStream, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                streamReader = new StreamReader(memoryStream);
                 return streamReader.ReadToEnd();
             }
             finally {
@@ -357,29 +356,29 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareTool object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out softwareTool obj, out System.Exception exception) {
+        public static bool Deserialize(string xml, out softwareTool obj, out Exception exception) {
             exception = null;
             obj = default(softwareTool);
             try {
                 obj = Deserialize(xml);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool Deserialize(string xml, out softwareTool obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return Deserialize(xml, out obj, out exception);
         }
         
         public static softwareTool Deserialize(string xml) {
-            System.IO.StringReader stringReader = null;
+            StringReader stringReader = null;
             try {
-                stringReader = new System.IO.StringReader(xml);
-                return ((softwareTool)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
+                stringReader = new StringReader(xml);
+                return ((softwareTool)(Serializer.Deserialize(XmlReader.Create(stringReader))));
             }
             finally {
                 if ((stringReader != null)) {
@@ -394,23 +393,23 @@ namespace SacredSkull.Software {
         /// <param name="fileName">full path of outupt xml file</param>
         /// <param name="exception">output Exception value if failed</param>
         /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, out System.Exception exception) {
+        public virtual bool SaveToFile(string fileName, out Exception exception) {
             exception = null;
             try {
                 SaveToFile(fileName);
                 return true;
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 exception = e;
                 return false;
             }
         }
         
         public virtual void SaveToFile(string fileName) {
-            System.IO.StreamWriter streamWriter = null;
+            StreamWriter streamWriter = null;
             try {
                 string xmlString = Serialize();
-                System.IO.FileInfo xmlFile = new System.IO.FileInfo(fileName);
+                FileInfo xmlFile = new FileInfo(fileName);
                 streamWriter = xmlFile.CreateText();
                 streamWriter.WriteLine(xmlString);
                 streamWriter.Close();
@@ -429,30 +428,30 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareTool object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, out softwareTool obj, out System.Exception exception) {
+        public static bool LoadFromFile(string fileName, out softwareTool obj, out Exception exception) {
             exception = null;
             obj = default(softwareTool);
             try {
                 obj = LoadFromFile(fileName);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool LoadFromFile(string fileName, out softwareTool obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return LoadFromFile(fileName, out obj, out exception);
         }
         
         public static softwareTool LoadFromFile(string fileName) {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
+            FileStream file = null;
+            StreamReader sr = null;
             try {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file);
+                file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                sr = new StreamReader(file);
                 string xmlString = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
@@ -470,11 +469,11 @@ namespace SacredSkull.Software {
         #endregion
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.32990")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class softwareToolAttacks {
+    [GeneratedCode("Xsd2Code", "3.4.0.32990")]
+    [Serializable]
+    [DesignerCategory("code")]
+    [XmlType(AnonymousType=true)]
+    public class softwareToolAttacks {
         
         private List<softwareToolAttacksBasicattack> basicattackField;
         
@@ -482,7 +481,7 @@ namespace SacredSkull.Software {
         
         private List<softwareToolAttacksMapmodifier> mapmodifierField;
         
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private static XmlSerializer serializer;
         
         public softwareToolAttacks() {
             this.mapmodifierField = new List<softwareToolAttacksMapmodifier>();
@@ -490,7 +489,7 @@ namespace SacredSkull.Software {
             this.basicattackField = new List<softwareToolAttacksBasicattack>();
         }
         
-        [System.Xml.Serialization.XmlElementAttribute("basicattack", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [XmlElement("basicattack", Form=XmlSchemaForm.Unqualified)]
         public List<softwareToolAttacksBasicattack> basicattack {
             get {
                 return this.basicattackField;
@@ -500,7 +499,7 @@ namespace SacredSkull.Software {
             }
         }
         
-        [System.Xml.Serialization.XmlElementAttribute("attributemodifier", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [XmlElement("attributemodifier", Form=XmlSchemaForm.Unqualified)]
         public List<softwareToolAttacksAttributemodifier> attributemodifier {
             get {
                 return this.attributemodifierField;
@@ -510,7 +509,7 @@ namespace SacredSkull.Software {
             }
         }
         
-        [System.Xml.Serialization.XmlElementAttribute("mapmodifier", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [XmlElement("mapmodifier", Form=XmlSchemaForm.Unqualified)]
         public List<softwareToolAttacksMapmodifier> mapmodifier {
             get {
                 return this.mapmodifierField;
@@ -520,10 +519,10 @@ namespace SacredSkull.Software {
             }
         }
         
-        private static System.Xml.Serialization.XmlSerializer Serializer {
+        private static XmlSerializer Serializer {
             get {
                 if ((serializer == null)) {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(softwareToolAttacks));
+                    serializer = new XmlSerializer(typeof(softwareToolAttacks));
                 }
                 return serializer;
             }
@@ -535,13 +534,13 @@ namespace SacredSkull.Software {
         /// </summary>
         /// <returns>string XML value</returns>
         public virtual string Serialize() {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
+            StreamReader streamReader = null;
+            MemoryStream memoryStream = null;
             try {
-                memoryStream = new System.IO.MemoryStream();
+                memoryStream = new MemoryStream();
                 Serializer.Serialize(memoryStream, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                streamReader = new StreamReader(memoryStream);
                 return streamReader.ReadToEnd();
             }
             finally {
@@ -561,29 +560,29 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacks object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out softwareToolAttacks obj, out System.Exception exception) {
+        public static bool Deserialize(string xml, out softwareToolAttacks obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacks);
             try {
                 obj = Deserialize(xml);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool Deserialize(string xml, out softwareToolAttacks obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return Deserialize(xml, out obj, out exception);
         }
         
         public static softwareToolAttacks Deserialize(string xml) {
-            System.IO.StringReader stringReader = null;
+            StringReader stringReader = null;
             try {
-                stringReader = new System.IO.StringReader(xml);
-                return ((softwareToolAttacks)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
+                stringReader = new StringReader(xml);
+                return ((softwareToolAttacks)(Serializer.Deserialize(XmlReader.Create(stringReader))));
             }
             finally {
                 if ((stringReader != null)) {
@@ -598,23 +597,23 @@ namespace SacredSkull.Software {
         /// <param name="fileName">full path of outupt xml file</param>
         /// <param name="exception">output Exception value if failed</param>
         /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, out System.Exception exception) {
+        public virtual bool SaveToFile(string fileName, out Exception exception) {
             exception = null;
             try {
                 SaveToFile(fileName);
                 return true;
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 exception = e;
                 return false;
             }
         }
         
         public virtual void SaveToFile(string fileName) {
-            System.IO.StreamWriter streamWriter = null;
+            StreamWriter streamWriter = null;
             try {
                 string xmlString = Serialize();
-                System.IO.FileInfo xmlFile = new System.IO.FileInfo(fileName);
+                FileInfo xmlFile = new FileInfo(fileName);
                 streamWriter = xmlFile.CreateText();
                 streamWriter.WriteLine(xmlString);
                 streamWriter.Close();
@@ -633,30 +632,30 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacks object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, out softwareToolAttacks obj, out System.Exception exception) {
+        public static bool LoadFromFile(string fileName, out softwareToolAttacks obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacks);
             try {
                 obj = LoadFromFile(fileName);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool LoadFromFile(string fileName, out softwareToolAttacks obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return LoadFromFile(fileName, out obj, out exception);
         }
         
         public static softwareToolAttacks LoadFromFile(string fileName) {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
+            FileStream file = null;
+            StreamReader sr = null;
             try {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file);
+                file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                sr = new StreamReader(file);
                 string xmlString = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
@@ -674,11 +673,11 @@ namespace SacredSkull.Software {
         #endregion
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.32990")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class softwareToolAttacksBasicattack {
+    [GeneratedCode("Xsd2Code", "3.4.0.32990")]
+    [Serializable]
+    [DesignerCategory("code")]
+    [XmlType(AnonymousType=true)]
+    public class softwareToolAttacksBasicattack {
         
         private string nameField;
         
@@ -696,36 +695,36 @@ namespace SacredSkull.Software {
         
         private string selfresultField;
         
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private static XmlSerializer serializer;
         
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string name {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public short damage {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute("self-minsize")]
+    [XmlAttribute("self-minsize")]
     public short selfminsize {get; set;}
 
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    [XmlIgnore]
     public bool selfminsizeSpecified {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute("self-health")]
+    [XmlAttribute("self-health")]
     public short selfhealth {get; set;}
 
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    [XmlIgnore]
     public bool selfhealthSpecified {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute("self-result")]
+    [XmlAttribute("self-result")]
     public string selfresult {get; set;}
 
         
         public softwareToolAttacksBasicattack() {
-            this.rangeField = ((short)(1));
+            this.rangeField = 1;
         }
         
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(short), "1")]
+        [XmlAttribute]
+        [DefaultValue(typeof(short), "1")]
         public short range {
             get {
                 return this.rangeField;
@@ -735,10 +734,10 @@ namespace SacredSkull.Software {
             }
         }
         
-        private static System.Xml.Serialization.XmlSerializer Serializer {
+        private static XmlSerializer Serializer {
             get {
                 if ((serializer == null)) {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(softwareToolAttacksBasicattack));
+                    serializer = new XmlSerializer(typeof(softwareToolAttacksBasicattack));
                 }
                 return serializer;
             }
@@ -750,13 +749,13 @@ namespace SacredSkull.Software {
         /// </summary>
         /// <returns>string XML value</returns>
         public virtual string Serialize() {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
+            StreamReader streamReader = null;
+            MemoryStream memoryStream = null;
             try {
-                memoryStream = new System.IO.MemoryStream();
+                memoryStream = new MemoryStream();
                 Serializer.Serialize(memoryStream, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                streamReader = new StreamReader(memoryStream);
                 return streamReader.ReadToEnd();
             }
             finally {
@@ -776,29 +775,29 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacksBasicattack object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out softwareToolAttacksBasicattack obj, out System.Exception exception) {
+        public static bool Deserialize(string xml, out softwareToolAttacksBasicattack obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacksBasicattack);
             try {
                 obj = Deserialize(xml);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool Deserialize(string xml, out softwareToolAttacksBasicattack obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return Deserialize(xml, out obj, out exception);
         }
         
         public static softwareToolAttacksBasicattack Deserialize(string xml) {
-            System.IO.StringReader stringReader = null;
+            StringReader stringReader = null;
             try {
-                stringReader = new System.IO.StringReader(xml);
-                return ((softwareToolAttacksBasicattack)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
+                stringReader = new StringReader(xml);
+                return ((softwareToolAttacksBasicattack)(Serializer.Deserialize(XmlReader.Create(stringReader))));
             }
             finally {
                 if ((stringReader != null)) {
@@ -813,23 +812,23 @@ namespace SacredSkull.Software {
         /// <param name="fileName">full path of outupt xml file</param>
         /// <param name="exception">output Exception value if failed</param>
         /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, out System.Exception exception) {
+        public virtual bool SaveToFile(string fileName, out Exception exception) {
             exception = null;
             try {
                 SaveToFile(fileName);
                 return true;
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 exception = e;
                 return false;
             }
         }
         
         public virtual void SaveToFile(string fileName) {
-            System.IO.StreamWriter streamWriter = null;
+            StreamWriter streamWriter = null;
             try {
                 string xmlString = Serialize();
-                System.IO.FileInfo xmlFile = new System.IO.FileInfo(fileName);
+                FileInfo xmlFile = new FileInfo(fileName);
                 streamWriter = xmlFile.CreateText();
                 streamWriter.WriteLine(xmlString);
                 streamWriter.Close();
@@ -848,30 +847,30 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacksBasicattack object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, out softwareToolAttacksBasicattack obj, out System.Exception exception) {
+        public static bool LoadFromFile(string fileName, out softwareToolAttacksBasicattack obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacksBasicattack);
             try {
                 obj = LoadFromFile(fileName);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool LoadFromFile(string fileName, out softwareToolAttacksBasicattack obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return LoadFromFile(fileName, out obj, out exception);
         }
         
         public static softwareToolAttacksBasicattack LoadFromFile(string fileName) {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
+            FileStream file = null;
+            StreamReader sr = null;
             try {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file);
+                file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                sr = new StreamReader(file);
                 string xmlString = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
@@ -889,11 +888,11 @@ namespace SacredSkull.Software {
         #endregion
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.32990")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class softwareToolAttacksAttributemodifier {
+    [GeneratedCode("Xsd2Code", "3.4.0.32990")]
+    [Serializable]
+    [DesignerCategory("code")]
+    [XmlType(AnonymousType=true)]
+    public class softwareToolAttacksAttributemodifier {
         
         private List<softwareToolAttacksAttributemodifierAttribute> attributeField;
         
@@ -915,30 +914,30 @@ namespace SacredSkull.Software {
         
         private string selfresultField;
         
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private static XmlSerializer serializer;
         
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string name {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string type {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string description {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute("self-minsize")]
+    [XmlAttribute("self-minsize")]
     public short selfminsize {get; set;}
 
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    [XmlIgnore]
     public bool selfminsizeSpecified {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute("self-health")]
+    [XmlAttribute("self-health")]
     public short selfhealth {get; set;}
 
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    [XmlIgnore]
     public bool selfhealthSpecified {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute("self-result")]
+    [XmlAttribute("self-result")]
     public string selfresult {get; set;}
 
         
@@ -947,7 +946,7 @@ namespace SacredSkull.Software {
             this.rangeField = "1";
         }
         
-        [System.Xml.Serialization.XmlElementAttribute("attribute", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
+        [XmlElement("attribute", Form=XmlSchemaForm.Unqualified)]
         public List<softwareToolAttacksAttributemodifierAttribute> attribute {
             get {
                 return this.attributeField;
@@ -957,8 +956,8 @@ namespace SacredSkull.Software {
             }
         }
         
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute("1")]
+        [XmlAttribute]
+        [DefaultValue("1")]
         public string range {
             get {
                 return this.rangeField;
@@ -968,10 +967,10 @@ namespace SacredSkull.Software {
             }
         }
         
-        private static System.Xml.Serialization.XmlSerializer Serializer {
+        private static XmlSerializer Serializer {
             get {
                 if ((serializer == null)) {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(softwareToolAttacksAttributemodifier));
+                    serializer = new XmlSerializer(typeof(softwareToolAttacksAttributemodifier));
                 }
                 return serializer;
             }
@@ -983,13 +982,13 @@ namespace SacredSkull.Software {
         /// </summary>
         /// <returns>string XML value</returns>
         public virtual string Serialize() {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
+            StreamReader streamReader = null;
+            MemoryStream memoryStream = null;
             try {
-                memoryStream = new System.IO.MemoryStream();
+                memoryStream = new MemoryStream();
                 Serializer.Serialize(memoryStream, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                streamReader = new StreamReader(memoryStream);
                 return streamReader.ReadToEnd();
             }
             finally {
@@ -1009,29 +1008,29 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacksAttributemodifier object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out softwareToolAttacksAttributemodifier obj, out System.Exception exception) {
+        public static bool Deserialize(string xml, out softwareToolAttacksAttributemodifier obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacksAttributemodifier);
             try {
                 obj = Deserialize(xml);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool Deserialize(string xml, out softwareToolAttacksAttributemodifier obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return Deserialize(xml, out obj, out exception);
         }
         
         public static softwareToolAttacksAttributemodifier Deserialize(string xml) {
-            System.IO.StringReader stringReader = null;
+            StringReader stringReader = null;
             try {
-                stringReader = new System.IO.StringReader(xml);
-                return ((softwareToolAttacksAttributemodifier)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
+                stringReader = new StringReader(xml);
+                return ((softwareToolAttacksAttributemodifier)(Serializer.Deserialize(XmlReader.Create(stringReader))));
             }
             finally {
                 if ((stringReader != null)) {
@@ -1046,23 +1045,23 @@ namespace SacredSkull.Software {
         /// <param name="fileName">full path of outupt xml file</param>
         /// <param name="exception">output Exception value if failed</param>
         /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, out System.Exception exception) {
+        public virtual bool SaveToFile(string fileName, out Exception exception) {
             exception = null;
             try {
                 SaveToFile(fileName);
                 return true;
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 exception = e;
                 return false;
             }
         }
         
         public virtual void SaveToFile(string fileName) {
-            System.IO.StreamWriter streamWriter = null;
+            StreamWriter streamWriter = null;
             try {
                 string xmlString = Serialize();
-                System.IO.FileInfo xmlFile = new System.IO.FileInfo(fileName);
+                FileInfo xmlFile = new FileInfo(fileName);
                 streamWriter = xmlFile.CreateText();
                 streamWriter.WriteLine(xmlString);
                 streamWriter.Close();
@@ -1081,30 +1080,30 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacksAttributemodifier object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, out softwareToolAttacksAttributemodifier obj, out System.Exception exception) {
+        public static bool LoadFromFile(string fileName, out softwareToolAttacksAttributemodifier obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacksAttributemodifier);
             try {
                 obj = LoadFromFile(fileName);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool LoadFromFile(string fileName, out softwareToolAttacksAttributemodifier obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return LoadFromFile(fileName, out obj, out exception);
         }
         
         public static softwareToolAttacksAttributemodifier LoadFromFile(string fileName) {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
+            FileStream file = null;
+            StreamReader sr = null;
             try {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file);
+                file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                sr = new StreamReader(file);
                 string xmlString = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
@@ -1122,29 +1121,29 @@ namespace SacredSkull.Software {
         #endregion
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.32990")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class softwareToolAttacksAttributemodifierAttribute {
+    [GeneratedCode("Xsd2Code", "3.4.0.32990")]
+    [Serializable]
+    [DesignerCategory("code")]
+    [XmlType(AnonymousType=true)]
+    public class softwareToolAttacksAttributemodifierAttribute {
         
         private string nameField;
         
         private short valueField;
         
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private static XmlSerializer serializer;
         
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string name {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public short value {get; set;}
 
         
-        private static System.Xml.Serialization.XmlSerializer Serializer {
+        private static XmlSerializer Serializer {
             get {
                 if ((serializer == null)) {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(softwareToolAttacksAttributemodifierAttribute));
+                    serializer = new XmlSerializer(typeof(softwareToolAttacksAttributemodifierAttribute));
                 }
                 return serializer;
             }
@@ -1156,13 +1155,13 @@ namespace SacredSkull.Software {
         /// </summary>
         /// <returns>string XML value</returns>
         public virtual string Serialize() {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
+            StreamReader streamReader = null;
+            MemoryStream memoryStream = null;
             try {
-                memoryStream = new System.IO.MemoryStream();
+                memoryStream = new MemoryStream();
                 Serializer.Serialize(memoryStream, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                streamReader = new StreamReader(memoryStream);
                 return streamReader.ReadToEnd();
             }
             finally {
@@ -1182,29 +1181,29 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacksAttributemodifierAttribute object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out softwareToolAttacksAttributemodifierAttribute obj, out System.Exception exception) {
+        public static bool Deserialize(string xml, out softwareToolAttacksAttributemodifierAttribute obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacksAttributemodifierAttribute);
             try {
                 obj = Deserialize(xml);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool Deserialize(string xml, out softwareToolAttacksAttributemodifierAttribute obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return Deserialize(xml, out obj, out exception);
         }
         
         public static softwareToolAttacksAttributemodifierAttribute Deserialize(string xml) {
-            System.IO.StringReader stringReader = null;
+            StringReader stringReader = null;
             try {
-                stringReader = new System.IO.StringReader(xml);
-                return ((softwareToolAttacksAttributemodifierAttribute)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
+                stringReader = new StringReader(xml);
+                return ((softwareToolAttacksAttributemodifierAttribute)(Serializer.Deserialize(XmlReader.Create(stringReader))));
             }
             finally {
                 if ((stringReader != null)) {
@@ -1219,23 +1218,23 @@ namespace SacredSkull.Software {
         /// <param name="fileName">full path of outupt xml file</param>
         /// <param name="exception">output Exception value if failed</param>
         /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, out System.Exception exception) {
+        public virtual bool SaveToFile(string fileName, out Exception exception) {
             exception = null;
             try {
                 SaveToFile(fileName);
                 return true;
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 exception = e;
                 return false;
             }
         }
         
         public virtual void SaveToFile(string fileName) {
-            System.IO.StreamWriter streamWriter = null;
+            StreamWriter streamWriter = null;
             try {
                 string xmlString = Serialize();
-                System.IO.FileInfo xmlFile = new System.IO.FileInfo(fileName);
+                FileInfo xmlFile = new FileInfo(fileName);
                 streamWriter = xmlFile.CreateText();
                 streamWriter.WriteLine(xmlString);
                 streamWriter.Close();
@@ -1254,30 +1253,30 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacksAttributemodifierAttribute object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, out softwareToolAttacksAttributemodifierAttribute obj, out System.Exception exception) {
+        public static bool LoadFromFile(string fileName, out softwareToolAttacksAttributemodifierAttribute obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacksAttributemodifierAttribute);
             try {
                 obj = LoadFromFile(fileName);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool LoadFromFile(string fileName, out softwareToolAttacksAttributemodifierAttribute obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return LoadFromFile(fileName, out obj, out exception);
         }
         
         public static softwareToolAttacksAttributemodifierAttribute LoadFromFile(string fileName) {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
+            FileStream file = null;
+            StreamReader sr = null;
             try {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file);
+                file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                sr = new StreamReader(file);
                 string xmlString = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
@@ -1295,29 +1294,29 @@ namespace SacredSkull.Software {
         #endregion
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.32990")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    public partial class softwareToolAttacksMapmodifier {
+    [GeneratedCode("Xsd2Code", "3.4.0.32990")]
+    [Serializable]
+    [DesignerCategory("code")]
+    [XmlType(AnonymousType=true)]
+    public class softwareToolAttacksMapmodifier {
         
         private string nameField;
         
         private short valueField;
         
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private static XmlSerializer serializer;
         
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public string name {get; set;}
 
-    [System.Xml.Serialization.XmlAttributeAttribute()]
+    [XmlAttribute]
     public short value {get; set;}
 
         
-        private static System.Xml.Serialization.XmlSerializer Serializer {
+        private static XmlSerializer Serializer {
             get {
                 if ((serializer == null)) {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(softwareToolAttacksMapmodifier));
+                    serializer = new XmlSerializer(typeof(softwareToolAttacksMapmodifier));
                 }
                 return serializer;
             }
@@ -1329,13 +1328,13 @@ namespace SacredSkull.Software {
         /// </summary>
         /// <returns>string XML value</returns>
         public virtual string Serialize() {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
+            StreamReader streamReader = null;
+            MemoryStream memoryStream = null;
             try {
-                memoryStream = new System.IO.MemoryStream();
+                memoryStream = new MemoryStream();
                 Serializer.Serialize(memoryStream, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                streamReader = new StreamReader(memoryStream);
                 return streamReader.ReadToEnd();
             }
             finally {
@@ -1355,29 +1354,29 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacksMapmodifier object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out softwareToolAttacksMapmodifier obj, out System.Exception exception) {
+        public static bool Deserialize(string xml, out softwareToolAttacksMapmodifier obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacksMapmodifier);
             try {
                 obj = Deserialize(xml);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool Deserialize(string xml, out softwareToolAttacksMapmodifier obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return Deserialize(xml, out obj, out exception);
         }
         
         public static softwareToolAttacksMapmodifier Deserialize(string xml) {
-            System.IO.StringReader stringReader = null;
+            StringReader stringReader = null;
             try {
-                stringReader = new System.IO.StringReader(xml);
-                return ((softwareToolAttacksMapmodifier)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
+                stringReader = new StringReader(xml);
+                return ((softwareToolAttacksMapmodifier)(Serializer.Deserialize(XmlReader.Create(stringReader))));
             }
             finally {
                 if ((stringReader != null)) {
@@ -1392,23 +1391,23 @@ namespace SacredSkull.Software {
         /// <param name="fileName">full path of outupt xml file</param>
         /// <param name="exception">output Exception value if failed</param>
         /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, out System.Exception exception) {
+        public virtual bool SaveToFile(string fileName, out Exception exception) {
             exception = null;
             try {
                 SaveToFile(fileName);
                 return true;
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 exception = e;
                 return false;
             }
         }
         
         public virtual void SaveToFile(string fileName) {
-            System.IO.StreamWriter streamWriter = null;
+            StreamWriter streamWriter = null;
             try {
                 string xmlString = Serialize();
-                System.IO.FileInfo xmlFile = new System.IO.FileInfo(fileName);
+                FileInfo xmlFile = new FileInfo(fileName);
                 streamWriter = xmlFile.CreateText();
                 streamWriter.WriteLine(xmlString);
                 streamWriter.Close();
@@ -1427,30 +1426,30 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output softwareToolAttacksMapmodifier object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, out softwareToolAttacksMapmodifier obj, out System.Exception exception) {
+        public static bool LoadFromFile(string fileName, out softwareToolAttacksMapmodifier obj, out Exception exception) {
             exception = null;
             obj = default(softwareToolAttacksMapmodifier);
             try {
                 obj = LoadFromFile(fileName);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool LoadFromFile(string fileName, out softwareToolAttacksMapmodifier obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return LoadFromFile(fileName, out obj, out exception);
         }
         
         public static softwareToolAttacksMapmodifier LoadFromFile(string fileName) {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
+            FileStream file = null;
+            StreamReader sr = null;
             try {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file);
+                file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                sr = new StreamReader(file);
                 string xmlString = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
@@ -1468,22 +1467,22 @@ namespace SacredSkull.Software {
         #endregion
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Xsd2Code", "3.4.0.32990")]
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
-    public partial class NewDataSet {
+    [GeneratedCode("Xsd2Code", "3.4.0.32990")]
+    [Serializable]
+    [DesignerCategory("code")]
+    [XmlType(AnonymousType=true)]
+    [XmlRoot(Namespace="", IsNullable=false)]
+    public class NewDataSet {
         
         private List<software> itemsField;
         
-        private static System.Xml.Serialization.XmlSerializer serializer;
+        private static XmlSerializer serializer;
         
         public NewDataSet() {
             this.itemsField = new List<software>();
         }
         
-        [System.Xml.Serialization.XmlElementAttribute("software")]
+        [XmlElement("software")]
         public List<software> Items {
             get {
                 return this.itemsField;
@@ -1493,10 +1492,10 @@ namespace SacredSkull.Software {
             }
         }
         
-        private static System.Xml.Serialization.XmlSerializer Serializer {
+        private static XmlSerializer Serializer {
             get {
                 if ((serializer == null)) {
-                    serializer = new System.Xml.Serialization.XmlSerializer(typeof(NewDataSet));
+                    serializer = new XmlSerializer(typeof(NewDataSet));
                 }
                 return serializer;
             }
@@ -1508,13 +1507,13 @@ namespace SacredSkull.Software {
         /// </summary>
         /// <returns>string XML value</returns>
         public virtual string Serialize() {
-            System.IO.StreamReader streamReader = null;
-            System.IO.MemoryStream memoryStream = null;
+            StreamReader streamReader = null;
+            MemoryStream memoryStream = null;
             try {
-                memoryStream = new System.IO.MemoryStream();
+                memoryStream = new MemoryStream();
                 Serializer.Serialize(memoryStream, this);
-                memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
-                streamReader = new System.IO.StreamReader(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                streamReader = new StreamReader(memoryStream);
                 return streamReader.ReadToEnd();
             }
             finally {
@@ -1534,29 +1533,29 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output NewDataSet object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool Deserialize(string xml, out NewDataSet obj, out System.Exception exception) {
+        public static bool Deserialize(string xml, out NewDataSet obj, out Exception exception) {
             exception = null;
             obj = default(NewDataSet);
             try {
                 obj = Deserialize(xml);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool Deserialize(string xml, out NewDataSet obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return Deserialize(xml, out obj, out exception);
         }
         
         public static NewDataSet Deserialize(string xml) {
-            System.IO.StringReader stringReader = null;
+            StringReader stringReader = null;
             try {
-                stringReader = new System.IO.StringReader(xml);
-                return ((NewDataSet)(Serializer.Deserialize(System.Xml.XmlReader.Create(stringReader))));
+                stringReader = new StringReader(xml);
+                return ((NewDataSet)(Serializer.Deserialize(XmlReader.Create(stringReader))));
             }
             finally {
                 if ((stringReader != null)) {
@@ -1571,23 +1570,23 @@ namespace SacredSkull.Software {
         /// <param name="fileName">full path of outupt xml file</param>
         /// <param name="exception">output Exception value if failed</param>
         /// <returns>true if can serialize and save into file; otherwise, false</returns>
-        public virtual bool SaveToFile(string fileName, out System.Exception exception) {
+        public virtual bool SaveToFile(string fileName, out Exception exception) {
             exception = null;
             try {
                 SaveToFile(fileName);
                 return true;
             }
-            catch (System.Exception e) {
+            catch (Exception e) {
                 exception = e;
                 return false;
             }
         }
         
         public virtual void SaveToFile(string fileName) {
-            System.IO.StreamWriter streamWriter = null;
+            StreamWriter streamWriter = null;
             try {
                 string xmlString = Serialize();
-                System.IO.FileInfo xmlFile = new System.IO.FileInfo(fileName);
+                FileInfo xmlFile = new FileInfo(fileName);
                 streamWriter = xmlFile.CreateText();
                 streamWriter.WriteLine(xmlString);
                 streamWriter.Close();
@@ -1606,30 +1605,30 @@ namespace SacredSkull.Software {
         /// <param name="obj">Output NewDataSet object</param>
         /// <param name="exception">output Exception value if deserialize failed</param>
         /// <returns>true if this XmlSerializer can deserialize the object; otherwise, false</returns>
-        public static bool LoadFromFile(string fileName, out NewDataSet obj, out System.Exception exception) {
+        public static bool LoadFromFile(string fileName, out NewDataSet obj, out Exception exception) {
             exception = null;
             obj = default(NewDataSet);
             try {
                 obj = LoadFromFile(fileName);
                 return true;
             }
-            catch (System.Exception ex) {
+            catch (Exception ex) {
                 exception = ex;
                 return false;
             }
         }
         
         public static bool LoadFromFile(string fileName, out NewDataSet obj) {
-            System.Exception exception = null;
+            Exception exception = null;
             return LoadFromFile(fileName, out obj, out exception);
         }
         
         public static NewDataSet LoadFromFile(string fileName) {
-            System.IO.FileStream file = null;
-            System.IO.StreamReader sr = null;
+            FileStream file = null;
+            StreamReader sr = null;
             try {
-                file = new System.IO.FileStream(fileName, FileMode.Open, FileAccess.Read);
-                sr = new System.IO.StreamReader(file);
+                file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                sr = new StreamReader(file);
                 string xmlString = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
