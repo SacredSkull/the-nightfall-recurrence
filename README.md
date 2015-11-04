@@ -16,7 +16,7 @@ It's very early days yet - at the moment only rending software/map data - but th
   - ~~Programs~~ (software tools)
   - ~~Vanilla program information~~ (stats, attacks, etc.)
   - ~~Levels~~
-  - Vanilla levels (literally the )
+  - Vanilla levels (literally the levels from the original)
   - Saving progress
 - Rendering
   - ~~Map geometry~~
