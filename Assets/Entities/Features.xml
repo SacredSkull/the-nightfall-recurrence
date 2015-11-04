@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <features version="1.0">
-    <mapitem name="Map piece" string_id="path" description="Traversable network path"/>
-    <spawnpoint name="Spawn Point" string_id="spawnpoint" description="Attack vector entry point for your software tools"/>
     <pickup name="Credit" string_id="credit" description="You could sell this data for a pretty penny on the market">
         <required>false</required>
         <action>reward</action>

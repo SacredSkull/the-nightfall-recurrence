@@ -89,7 +89,7 @@
         	<attackbasic name="Scan" range="8" damage="1"/>
         </attacks>
     </tool>
-    <tool name="Radar" description="You're probably in range" string_id="radar_1"  movement="0" maxsize="1" level="4">
+    <tool name="Radar" description="You're probably in range" string_id="sensor_3"  movement="0" maxsize="1" level="4">
         <attacks>
         	<attackbasic name="Phase" range="5" damage="2"/>
         </attacks>
@@ -118,7 +118,7 @@
 
     <tool name="Boss" description="root@localhost:~#" string_id="boss_1" movement="6" maxsize="25" level="5">
         <attacks>
-        	<attackbasic name="kill -SIGKILL" range="5" damage="5"/>
+        	<attackbasic name="TERMINATE PROCESS" range="5" damage="5"/>
         </attacks>
     </tool>
 </software>

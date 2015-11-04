@@ -141,7 +141,7 @@
         </attacks>
     </tool>
 
-    <tool name="Data Doctor Pro" description="Recovers twice as much data as the standard version!" string_id="doctor_2" movement="5" maxsize="8" cost="1500" level="3">
+    <tool name="Data Doctor Pro" description="Recovers twice as much data as the standard version!" string_id="doctor_3" movement="5" maxsize="8" cost="1500" level="3">
         <attacks>
             <attributemodifier name="MegaGrow" type="help">
                 <attribute name="health" value="4" />
@@ -152,7 +152,7 @@
         </attacks>
     </tool>
 
-    <tool name="Medic" description="Data Doctor's ranged associate" string_id="medic_1" movement="3" maxsize="3" cost="1000" level="2">
+    <tool name="Medic" description="Data Doctor's ranged associate" string_id="doctor_2" movement="3" maxsize="3" cost="1000" level="2">
         <attacks>
             <attributemodifier name="Syringe" type="help" range="3">
                 <attribute name="health" value="2" />
