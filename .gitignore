@@ -23,3 +23,6 @@ Tiled/
 *.psd
 XML_Entity_Serialised.xml
 XML_Level_Serialised.xml
+XML_Features_Serialised.xml
+XML_Sentries_Serialised.xml
+XML_Tools_Serialised.xml
