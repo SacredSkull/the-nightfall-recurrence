@@ -16,6 +16,7 @@ It's very early days yet - at the moment only rending software/map data - but th
   - ~~Programs~~ (software tools)
   - ~~Vanilla program information~~ (stats, attacks, etc.)
   - ~~Levels~~
+  - ~~Vanilla map features~~ (Credits with different values aren't currently possible because of [this issue](https://github.com/bjorn/tiled/issues/31) - I may consider modifiying Tiled or the XML to achieve this)
   - Vanilla levels (literally the levels from the original)
   - Saving progress
 - Rendering
