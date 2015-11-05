@@ -5,11 +5,9 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
-using UnityEngine.Networking.NetworkSystem;
 
-public class Main : MonoBehaviour {
+public class GameController : MonoBehaviour {
 
     public float GRID_COLUMN_SPACER;
     public float GRID_ROW_SPACER;
@@ -44,6 +42,8 @@ public class Main : MonoBehaviour {
             { "blank",  Resources.Load<Sprite>("Sprites/map_features/empty") },
         };
 
+        // BEGIN SPRITE LOADING
+
         foreach(MapItem mapItem in AllFeatures) {
             if(!entitySpriteDictionary.ContainsKey(mapItem.string_id)) {
                 Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/map_features/{0}", mapItem.string_id));
@@ -66,6 +66,8 @@ public class Main : MonoBehaviour {
             }
         }
 
+        // END SPRITE LOADING
+
         // Start geometry
         float rowSpacer = 0;
 
@@ -81,7 +83,6 @@ public class Main : MonoBehaviour {
 
         for (int row = 0; row < geometryRow.Count; row++) {
             float columnSpacer = 0;
-
             GameObject rowContainer = new GameObject();
             rowContainer.transform.parent = geometryContainer.transform;
             rowContainer.name = "Geometry Row " + (row + 1) + " [Generated]";
@@ -99,14 +100,12 @@ public class Main : MonoBehaviour {
                     }
                     else
                     {
-
                         SpriteRenderer renderedTile = new GameObject().AddComponent<SpriteRenderer>();
                         renderedTile.transform.parent = rowContainer.transform;
                         renderedTile.hideFlags = HideFlags.DontSave;
 
                         Sprite sprite;
                         entitySpriteDictionary.TryGetValue(feature.Value.string_id, out sprite);
-
 
                         renderedTile.sprite = sprite;
                         renderedTile.name = "Grid Path";
@@ -172,13 +171,34 @@ public class Main : MonoBehaviour {
         MapItem success;
         mapItems.TryGetValue(id, out success);
 
-        return new KeyValuePair<int, MapItem>(id, success);
+        if (id != 0) {
+            // Ensure that this is infact an entity, and not a general map object
+            if (success is SoftwareTool)
+                return new KeyValuePair<int, MapItem>(id, success);
+            Utility.UnityLog(
+                string.Format(
+                    "[ENTITY] Attempted to load a map feature ({0}) into the entity layer! Check that it is on the right layer in Tiled.",
+                    success == null ? "NULL mapItem reference - ID #" + id : success.string_id), Utility.Level.WARNING);
+        }
+        return new KeyValuePair<int, MapItem>(0, null);
     }
 
     KeyValuePair<int, MapItem> GetGeometryByCoords(int x, int y) {
         int id = geometryRow[x][y];
         MapItem success;
         mapItems.TryGetValue(id, out success);
+
+        if (id != 0) {
+            // Ensure this is NOT a software tool
+            if (success is SoftwareTool){
+                Utility.UnityLog(
+                    string.Format(
+                        "[ENTITY] Attempted to load software ({0}) into the geometry layer! Check that it is on the right layer in Tiled.",
+                        success.string_id), Utility.Level.WARNING);
+                return new KeyValuePair<int, MapItem>(0, null);
+            }
+        }
+
         return new KeyValuePair<int, MapItem>(id, success);
     }
 	
@@ -226,7 +246,6 @@ public class Main : MonoBehaviour {
         sentryReader.Close();
         featureReader.Close();
 
-        AllFeatures.Add(new Pickup() {name = "asd123", description = "needs to be deleted - was around line #229 in Main.cs", required = true, string_id = "not_real"});
         #region debug serialised SoftwareXML & Abilities
 
         foreach(SoftwareTool tool in Tools) {
@@ -270,7 +289,7 @@ public class Main : MonoBehaviour {
             description = "Traversable network pathing",
             string_id = "path"
         });
-        AllFeatures.Add(new SpawnPoint() {
+        AllFeatures.Add(new SpawnPoint {
             name = "Spawn Point",
             description = "Attack vector entry point for your software tools",
             string_id = "spawnpoint",
@@ -298,7 +317,7 @@ public class Main : MonoBehaviour {
                 if(existing != null)
                     mapItems.Add(tl.id + tileFirstGID, existing);
                 else
-                    Utility.UnityLog("Failed to add ID " + tilePropertyStringID.value, Utility.Level.ERROR);
+                    Utility.UnityLog(string.Format("Could not find {0} in any of the global lists.", tilePropertyStringID.value), Utility.Level.ERROR);
                 if(dumpTileSets)
                     Utility.UnityLog("This tile's " + tilePropertyStringID.name + " is '" + tilePropertyStringID.value + "'");
             }

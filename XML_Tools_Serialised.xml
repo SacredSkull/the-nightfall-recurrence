@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<software xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <tool name="Hack" description="Comes with the hacking starter kit" string_id="hack_1" maxsize="4" cost="500" level="1">
+    <attacks>
+      <attackbasic name="Slice" damage="2" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Hack 2.0" description="Now with extra slice!" string_id="hack_2" maxsize="4" cost="1500" level="2">
+    <attacks>
+      <attackbasic name="Slice" damage="2" range="0" />
+      <attackbasic name="Dice" damage="3" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Hack 3.0" description="The last and finest of the hack series" string_id="hack_3" maxsize="4" cost="3500" level="3">
+    <attacks>
+      <attackbasic name="Slice" damage="2" range="0" />
+      <attackbasic name="Dice" damage="4" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Bug" description="Fixed in the nightly build" string_id="bug_1" maxsize="1" cost="750" level="1">
+    <attacks>
+      <attackbasic name="Glitch" damage="2" range="0" />
+    </attacks>
+  </tool>
+  <tool name="MandelBug" description="Details of vulnerability not disclosed" string_id="bug_2" maxsize="1" cost="3000" level="3">
+    <attacks>
+      <attackbasic name="Exploit" damage="4" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Heisenbug" description="Entry corrupte#2^*$_ __" string_id="bug_3" maxsize="1" cost="3000" level="4">
+    <attacks>
+      <attackbasic name="Zer0 day" damage="6" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Slingshot" description="Basic ranged attack program" string_id="slingshot_1" maxsize="2" cost="750" level="1">
+    <attacks>
+      <attackbasic name="Stone" damage="1" range="3" />
+    </attacks>
+  </tool>
+  <tool name="Catapult" description="Extreme range mobile attacker" string_id="slingshot_2" maxsize="3" cost="4000" level="4">
+    <attacks>
+      <attackbasic name="Fling" damage="2" range="4" />
+    </attacks>
+  </tool>
+  <tool name="Tower" description="Immobile defence platform" string_id="tower_1" maxsize="1" cost="1800" level="3">
+    <attacks>
+      <attackbasic name="Spot" damage="3" range="3" />
+    </attacks>
+  </tool>
+  <tool name="Mobile Tower" description="*Just about* mobile defence platform" string_id="tower_2" maxsize="1" cost="1000" level="2">
+    <attacks>
+      <attackbasic name="Spot" damage="3" range="3" />
+    </attacks>
+  </tool>
+  <tool name="Seeker" description="Solid distance attack program" string_id="seeker_1" maxsize="3" cost="1000" level="2">
+    <attacks>
+      <attackbasic name="Beam" damage="2" range="2" />
+    </attacks>
+  </tool>
+  <tool name="Seeker 1.1" description="33% further distance, 25% bigger size." string_id="seeker_2" maxsize="4" cost="2500" level="3">
+    <attacks>
+      <attackbasic name="Ray" damage="2" range="3" />
+    </attacks>
+  </tool>
+  <tool name="Seeker 1.2" description="" string_id="seeker_3" maxsize="5" cost="4500" level="4">
+    <attacks>
+      <attackbasic name="Ray" damage="2" range="3" />
+      <attackbasic name="Search &amp; Destroy" damage="5" range="2" />
+    </attacks>
+  </tool>
+  <tool name="Satellite" description="Short range hard-hitting program" string_id="satellite_1" maxsize="1" cost="3500" level="3">
+    <attacks>
+      <attackbasic name="Scramble" damage="4" range="2" />
+    </attacks>
+  </tool>
+  <tool name="Laser Satellite" description="Long range hard-hitting program" string_id="satellite_2" maxsize="1" cost="5000" level="4">
+    <attacks>
+      <attackbasic name="Scramble" damage="4" range="3" />
+    </attacks>
+  </tool>
+  <tool name="CLOG.01" description="README: This program is meant for development or education use only." string_id="clog_1" maxsize="4" cost="-1" level="1">
+    <attacks>
+      <attributemodifier name="Lag">
+        <attribute name="movement" value="-1" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="CLOG.02" description="Thank you for purchasing a professional license for CLOG" string_id="clog_2" maxsize="4" cost="2000" level="3">
+    <attacks>
+      <attributemodifier name="Chug">
+        <attribute name="movement" value="-2" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="CLOG.03" description="This program comes with absolutely no warranty, and PENETRATION TESTING TOOLS LLD is not responsible for any harm that is caused." string_id="clog_3" maxsize="4" cost="3500" level="4">
+    <attacks>
+      <attributemodifier name="Chug">
+        <attribute name="movement" value="-2" />
+      </attributemodifier>
+      <attributemodifier name="Hang">
+        <attribute name="movement" value="0" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Data Doctor" description="This may sting a little" string_id="doctor_1" maxsize="5" cost="500" level="1">
+    <attacks>
+      <attributemodifier name="Grow">
+        <attribute name="health" value="2" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Data Doctor Pro" description="Recovers twice as much data as the standard version!" string_id="doctor_2" maxsize="8" cost="1500" level="3">
+    <attacks>
+      <attributemodifier name="MegaGrow">
+        <attribute name="health" value="4" />
+      </attributemodifier>
+      <attributemodifier name="Surgery">
+        <attribute name="maxsize" value="1" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Medic" description="Data Doctor's ranged associate" string_id="medic_1" maxsize="3" cost="1000" level="2">
+    <attacks>
+      <attributemodifier name="Syringe">
+        <attribute name="health" value="2" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Golem.MUD" description="Slow, but steady" string_id="golem_1" maxsize="5" cost="1200" level="2">
+    <attacks>
+      <attackbasic name="Thump" damage="3" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Golem.CLAY" description="Clay is stronger than mud" string_id="golem_2" maxsize="6" cost="3000" level="3">
+    <attacks>
+      <attackbasic name="Bash" damage="5" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Golem.STONE" description="Nothing stands in the way of Golem.STONE" string_id="golem_3" maxsize="7" cost="5000" level="4">
+    <attacks>
+      <attackbasic name="Crash" damage="7" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Wolf Spider" description="Web crawler that finds vulnerabilities" string_id="spider_1" maxsize="3" cost="750" level="2">
+    <attacks>
+      <attackbasic name="Nibble" damage="2" range="0" />
+    </attacks>
+  </tool>
+  <tool name="Black Widow" description="Creepier and faster" string_id="spider_2" maxsize="3" cost="2000" level="3">
+    <attacks>
+      <attackbasic name="Byte" damage="2" range="0" />
+      <attributemodifier name="Paralyse">
+        <attribute name="movement" value="-2" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Tarantula" description="" string_id="spider_3" maxsize="3" cost="3500" level="0">
+    <attacks>
+      <attackbasic name="MegaByte" damage="3" range="0" />
+      <attributemodifier name="Paralyse">
+        <attribute name="movement" value="-3" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Turbo" description="Speeds up your programs" string_id="turbo_1" maxsize="3" cost="1000" level="2">
+    <attacks>
+      <attributemodifier name="Boost">
+        <attribute name="movement" value="2" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Turbo Deluxe" description="Slow and steady is for losers" string_id="turbo_2" maxsize="4" cost="1750" level="3">
+    <attacks>
+      <attributemodifier name="MegaBoost">
+        <attribute name="movement" value="2" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Fiddle" description="Reverse engineering can have interesting results" string_id="fiddle_1" maxsize="3" cost="2400" level="0">
+    <attacks>
+      <attributemodifier name="Tweak">
+        <attribute name="health" value="4" />
+      </attributemodifier>
+      <attributemodifier name="Fiddle">
+        <attribute name="maxsize" value="1" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Guru" description="The discerning premium hacker's kit with a little bit of everything" string_id="guru_1" maxsize="3" cost="4500" level="0">
+    <attacks>
+      <attackbasic name="Fire" damage="4" range="2" />
+      <attributemodifier name="Ice">
+        <attribute name="movement" value="-3" />
+      </attributemodifier>
+    </attacks>
+  </tool>
+  <tool name="Bit-man" description="Create, or destroy, the map to your advantage" string_id="bitman_1" maxsize="3" cost="250" level="1">
+    <attacks>
+      <mapmodifier name="Zero" value="0" />
+      <mapmodifier name="One" value="1" />
+    </attacks>
+  </tool>
+  <tool name="BuzzBomb" description="Fast and annoying" string_id="buzz_1" maxsize="2" cost="3500" level="0">
+    <attacks>
+      <attackbasic name="Sting" damage="1" range="0" />
+      <attackbasic name="Kamikazee" damage="5" range="0" />
+    </attacks>
+  </tool>
+</software>

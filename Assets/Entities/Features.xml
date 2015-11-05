@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <features version="1.0">
+    <mapitem name="Wall" string_id="wall" description="An impassible threshold"/>
     <pickup name="Credit" string_id="credit" description="You could sell this data for a pretty penny on the market">
         <required>false</required>
-        <action>reward</action>
     </pickup>
     <pickup name="Log Files" string_id="intel" description="This information is vital to your mission's success.">
         <required>true</required>
