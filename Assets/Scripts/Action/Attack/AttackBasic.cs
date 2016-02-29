@@ -7,7 +7,7 @@ public class AttackBasic : Attack {
     [XmlAttribute("range")]
     public short range;
 
-    public bool Attack(SoftwareTool target, SoftwareTool source) {
+    public override bool attack(SoftwareTool target, SoftwareTool source) {
         if(!(source.isEnemy) && !(target.isEnemy)) {
             return false;
         }

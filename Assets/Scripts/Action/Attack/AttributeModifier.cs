@@ -8,7 +8,7 @@ public class AttributeModifier : Attack {
     [XmlElement("attribute")]
     public List<Attribute> Attributes;
 
-    public bool Attack(SoftwareTool target, SoftwareTool source) {
+    public override bool attack(SoftwareTool target, SoftwareTool source) {
         foreach(Attribute attribute in this.Attributes) {
             if(attribute.name == "movement") {
                 if(attribute.value == 0)
