@@ -28,13 +28,26 @@ public class SoftwareTool : Attackable {
     public List<Attack> attacks { get; set; }
 
     public SoftwareTool(){
+        SetGovernor();
+
+        this.gridPosition = new Vector2();
+    }
+
+    public static SoftwareTool Copy(SoftwareTool st)
+    {
+        SoftwareTool copy = SoftwareTool.Clone(st);
+
+        // Nullify the references to actual stuff
+        copy.gridPosition = new Vector2();
+        return copy;
+    }
+
+    private void SetGovernor() {
         var assembly = Assembly.GetExecutingAssembly();
         var type = assembly.GetTypes().FirstOrDefault(t => t.Name == governor_string);
-        if (type != null)
+        if(type != null)
             governor = Activator.CreateInstance(type) as Governor;
         else
             governor = new Governor();
-
-        this.gridPosition = new Vector2();
     }
 }

@@ -2,16 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using Utility.Collections;
+using Logger = Utility.Logger;
 
 namespace Scripts.Action.Move {
-
-    public class GridGraph {
-        public Dictionary<int, Dictionary<int, int>> grid;
+    public class GridGraph<T> {
+        public GridCollection<T> grid;
         private HashSet<int> bad_path_IDs; 
 
-        public GridGraph(Dictionary<int, Dictionary<int, int>> grid, HashSet<int> bad_paths) {
+        public GridGraph(GridCollection<T> grid, HashSet<int> bad_paths) {
             this.grid = grid;
             this.bad_path_IDs = bad_paths;
+            
         }
 
         public List<Vector2> Neighbours(Vector2 xy) {
@@ -27,58 +29,54 @@ namespace Scripts.Action.Move {
             // this co-ordinate
 
             // Top-Left
-            if (edgeExists(x-1, y+1) && !bad_path_IDs.Contains(grid[x - 1][y + 1]))
+            if (grid.Contains(x-1, y+1) && !bad_path_IDs.Contains(grid.Get(x - 1,y + 1).id))
             {
                 edges.Add(new Vector2(x - 1, y + 1));
             }
 
             // Left
-            if (edgeExists(x - 1, y) && !bad_path_IDs.Contains(grid[x - 1][y]))
+            if (grid.Contains(x - 1, y) && !bad_path_IDs.Contains(grid.Get(x - 1,y).id))
             {
                 edges.Add(new Vector2(x - 1, y));
             }
 
             // Bottom-left
-            if (edgeExists(x - 1, y - 1) && !bad_path_IDs.Contains(grid[x - 1][y - 1]))
+            if (grid.Contains(x - 1, y - 1) && !bad_path_IDs.Contains(grid.Get(x - 1,y - 1).id))
             {
                 edges.Add(new Vector2(x - 1, y - 1));
             }
 
             // Up
-            if (edgeExists(x, y + 1) && !bad_path_IDs.Contains(grid[x][y + 1]))
+            if (grid.Contains(x, y + 1) && !bad_path_IDs.Contains(grid.Get(x, y + 1).id))
             {
                 edges.Add(new Vector2(x, y + 1));
             }
 
             // Down
-            if (edgeExists(x, y - 1) && !bad_path_IDs.Contains(grid[x][y - 1]))
+            if (grid.Contains(x, y - 1) && !bad_path_IDs.Contains(grid.Get(x, y - 1).id))
             {
                 edges.Add(new Vector2(x, y - 1));
             }
 
             // Top-right
-            if (edgeExists(x + 1, y + 1) && !bad_path_IDs.Contains(grid[x + 1][y + 1]))
+            if (grid.Contains(x + 1, y + 1) && !bad_path_IDs.Contains(grid.Get(x + 1, y + 1).id))
             {
                 edges.Add(new Vector2(x + 1, y + 1));
             }
 
             // Right
-            if (edgeExists(x + 1, y) && !bad_path_IDs.Contains(grid[x + 1][y]))
+            if (grid.Contains(x + 1, y) && !bad_path_IDs.Contains(grid.Get(x + 1, y).id))
             {
                 edges.Add(new Vector2(x + 1, y));
             }
 
             // Bottom-right
-            if (edgeExists(x + 1, y - 1) && !bad_path_IDs.Contains(grid[x + 1][y - 1]))
+            if (grid.Contains(x + 1, y - 1) && !bad_path_IDs.Contains(grid.Get(x + 1, y - 1).id))
             {
                 edges.Add(new Vector2(x + 1, y - 1));
             }
 
             return edges;
-        }
-
-        private bool edgeExists(int x, int y) {
-            return (grid.ContainsKey(x) && grid[x].ContainsKey(y));
         }
     }
 
@@ -86,10 +84,12 @@ namespace Scripts.Action.Move {
     // AND the targeting details.
     // For example, the ranged enemies will want to get in range
     // but only just!
-    public class Governor {
+    public class Governor
+    {
+        public static GridCollection<MapItem> grid; 
         private IGridVisualise visualiser = new GridVisualiser();
 
-        public virtual void move(GridGraph graph, Vector2 start_pos) {
+        public virtual void move(GridGraph<MapItem> graph, Vector2 start_pos) {
             Queue<Vector2> frontier = new Queue<Vector2>();
             frontier.Enqueue(start_pos);
 
@@ -98,7 +98,7 @@ namespace Scripts.Action.Move {
 
             while(frontier.Count != 0) {
                 Vector2 current_pos = frontier.Dequeue();
-                Utility.UnityLog(string.Format("[AI][PATHING] Visiting {0},{1}", current_pos.x, current_pos.y));
+                Logger.UnityLog(string.Format("[AI][PATHING] Visiting {0},{1}", current_pos.x, current_pos.y));
                 foreach (Vector2 next_pos in graph.Neighbours(current_pos)) {
                     if (came_from_node.Contains(next_pos))
                         continue;
