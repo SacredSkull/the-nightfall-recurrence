@@ -30,9 +30,11 @@ public class SoftwareTool : Attackable {
     public SoftwareTool(){
         var assembly = Assembly.GetExecutingAssembly();
         var type = assembly.GetTypes().FirstOrDefault(t => t.Name == governor_string);
-        if(type != null)
+        if (type != null)
             governor = Activator.CreateInstance(type) as Governor;
+        else
+            governor = new Governor();
 
-        this.position = new Vector2();
+        this.gridPosition = new Vector2();
     }
 }

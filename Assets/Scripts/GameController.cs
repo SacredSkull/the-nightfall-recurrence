@@ -1,11 +1,64 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 using System.IO;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
+using Scripts.Action.Move;
+using System;
+using System.Collections;
+
+public class GridCollection<T> : IEnumerable<Dictionary<int, T>> {
+    private Dictionary<int, Dictionary<int, T>> gridDictionary;
+
+    public GridCollection(){
+        gridDictionary = new Dictionary<int, Dictionary<int, T>>();
+    } 
+
+    public T Get(int x, int y) {
+        Dictionary<int, T> rowDic;
+        gridDictionary.TryGetValue(x, out rowDic);
+        if(rowDic == null)
+            throw new KeyNotFoundException(string.Format("Could not find grid row/X number {0}", x));
+
+        T success;
+        rowDic.TryGetValue(y, out success);
+
+        if(rowDic == null)
+            throw new KeyNotFoundException(string.Format("Could not find grid column/Y number {0}", y));
+
+        return success;
+    }
+
+    public void Set(int x, int y, T value) {
+        gridDictionary[x][y] = value;
+    }
+
+    public IEnumerator<Dictionary<int, T>> GetEnumerator() {
+        return gridDictionary.Values.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() {
+        return gridDictionary.GetEnumerator();
+    }
+
+    public IEnumerable<int> Keys {
+        get { return gridDictionary.Keys; }
+    }
+
+    public Dictionary<int, T> Values {
+        get { return gridDictionary.Values; }
+    } 
+
+    public int Count {
+        get {
+            int rows = gridDictionary.Keys.Count;
+            int columns = gridDictionary.Values.Count;
+
+            return rows * columns;
+        }
+    }
+}
 
 public class GameController : MonoBehaviour {
 
@@ -28,15 +81,18 @@ public class GameController : MonoBehaviour {
     public IEnumerable<SoftwareTool> SentryTools; 
     public List<SoftwareTool> AllSoftwareTools;
     public List<MapItem> AllFeatures;
-    public List<SoftwareTool> LevelTools = new List<SoftwareTool>(); 
+    public GridCollection<SoftwareTool> LevelTools = new GridCollection<SoftwareTool>(); 
 
     private Map map;
-    private readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
-    private readonly List<List<int>> geometryRow = new List<List<int>>();
-    private readonly Dictionary<int, Dictionary<int, int>> entityRow = new Dictionary<int, Dictionary<int, int>>();
-    private readonly Dictionary<string, Sprite> loadedSprites = new Dictionary<string, Sprite>();  
+    private static readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
+    private static readonly Dictionary<int, Dictionary<int, int>> geometryRow = new Dictionary<int, Dictionary<int, int>>();
+    private static readonly Dictionary<int, Dictionary<int, int>> entityRow = new Dictionary<int, Dictionary<int, int>>();
+    private static readonly Dictionary<string, Sprite> loadedSprites = new Dictionary<string, Sprite>();  
 
     void Start () {
+
+        mapItems.Add(0, new MapItem { name = "Empty tile", string_id = "blank" });
+
         // Load from XML
         ReadData();
         // Using XML data, map sprites to appropriate entities
@@ -46,12 +102,17 @@ public class GameController : MonoBehaviour {
         InjectGeometry();
         InjectEntities();
 
+
+
+        GridGraph gg = new GridGraph(geometryRow, new HashSet<int> { 0 });
+
         foreach (var softwareTool in LevelTools) {
-            
+            softwareTool.governor.move(gg, softwareTool.gridPosition);
         }
     }
 
-    KeyValuePair<int, Attackable> GetEntityByCoords(int x, int y) {
+    // TODO: WARNING! This currently gets REFERENCES for entities from the list of loaded entities, meaning that each entity is being assigned the SAME REFERENCE! Set up a cloning/copy operation for a list that guarauntees its uniquity
+    public static KeyValuePair<int, Attackable> GetEntityByCoords(int x, int y) {
         int id = entityRow[x][y];
         MapItem success;
         mapItems.TryGetValue(id, out success);
@@ -69,15 +130,19 @@ public class GameController : MonoBehaviour {
         return new KeyValuePair<int, Attackable>(0, null);
     }
 
-    KeyValuePair<int, Attackable> GetEntityByCoords(Vector2 xy) {
+    // TODO: WARNING! This currently gets REFERENCES for entities from the list of loaded entities, meaning that each entity
+    // is being assigned the SAME REFERENCE!
+    // Set up a cloning/copy operation for a list that guarauntees its uniquity
+    public static KeyValuePair<int, Attackable> GetEntityByCoords(Vector2 xy) {
         int id = entityRow[(int)xy.x][(int)xy.y];
         MapItem success;
         mapItems.TryGetValue(id, out success);
 
         if (id != 0) {
             // Ensure that this is in fact an entity, and not a general map object
-            if (success is Attackable)
-                return new KeyValuePair<int, Attackable>(id, (Attackable)success);
+            Attackable value = success as Attackable;
+            if (value != null)
+                return new KeyValuePair<int, Attackable>(id, value);
             Utility.UnityLog(
                     string.Format(
                             "[ENTITY] Attempted to load a map feature ({0}) into the entity layer! Check that it is on the right layer in Tiled.",
@@ -86,7 +151,7 @@ public class GameController : MonoBehaviour {
         return new KeyValuePair<int, Attackable>(0, null);
     }
 
-    KeyValuePair<int, MapItem> GetGeometryByCoords(int x, int y) {
+    public static KeyValuePair<int, MapItem> GetGeometryByCoords(int x, int y) {
         int id = geometryRow[x][y];
         MapItem success;
         mapItems.TryGetValue(id, out success);
@@ -105,7 +170,7 @@ public class GameController : MonoBehaviour {
         return new KeyValuePair<int, MapItem>(id, success);
     }
 
-    KeyValuePair<int, MapItem> GetGeometryByCoords(Vector2 xy) {
+    public static KeyValuePair<int, MapItem> GetGeometryByCoords(Vector2 xy) {
         int id = geometryRow[(int)xy.x][(int)xy.y];
         MapItem success;
         mapItems.TryGetValue(id, out success);
@@ -121,6 +186,14 @@ public class GameController : MonoBehaviour {
             }
         }
 
+        return new KeyValuePair<int, MapItem>(id, success);
+    }
+
+    public static KeyValuePair<int, MapItem> GetMapItemByCoords(Vector2 xy)
+    {
+        int id = geometryRow[(int)xy.x][(int)xy.y];
+        MapItem success;
+        mapItems.TryGetValue(id, out success);
         return new KeyValuePair<int, MapItem>(id, success);
     }
 	
@@ -255,20 +328,29 @@ public class GameController : MonoBehaviour {
                 // Begin loop for populating grid geometry
                 int currentTile = 0;
                 for(int row = 0; row < l.height; row++) {
-                    List<int> columnList = new List<int>();
+                    Dictionary<int, int> columnList = new Dictionary<int, int>();
                     for(int column = 0; column < l.width; column++) {
                         LayerTile tile = l.tiles[currentTile];
 
                         int gid = tile.gid;
 
-                        columnList.Add(gid);
+                        columnList.Add(column, gid);
                         currentTile++;
                     }
-                    geometryRow.Add(columnList);
+                    geometryRow.Add(row, columnList);
+                }
+
+                for (int row = 0; row < l.height; row++)
+                {
+                    for (int column = 0; column < l.width; column++)
+                    {
+                        MapItem mi = GetMapItemByCoords(new Vector2(row, column)).Value;
+                        mi.gridPosition = new Vector2(row, column);
+                    }
                 }
 
                 // Print the populated grid geometry
-                if(dumpGeometry) {
+                if (dumpGeometry) {
                     Utility.UnityLog("Printing all Geometry values");
                     for(int row = 0; row < geometryRow.Count; row++) {
                         int pleasantRow = row + 1;
@@ -300,12 +382,12 @@ public class GameController : MonoBehaviour {
                 }
 
                 for(int row = 0; row < entityRow.Count; row++) {
-                    for(int column = 0; row < entityRow[row].Count; column++) {
+                    for(int column = 0; column < entityRow[row].Count; column++) {
                         if (entityRow[row][column] == 0)
                             continue;
                         SoftwareTool st = GetEntityByCoords(new Vector2(row, column)).Value as SoftwareTool;
                         if(st != null) {
-                            st.position = new Vector2(row, column);
+                            st.gridPosition = new Vector2(row, column);
                             LevelTools.Add(st);
                         }
                     }
@@ -455,7 +537,15 @@ public class GameController : MonoBehaviour {
                         renderedTile.name = "Grid Path";
                         renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
                         renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer));
+                        feature.Value.gameobject = renderedTile.gameObject;
                     }
+                } else
+                {
+                    GameObject emptySquare = new GameObject();
+                    emptySquare.name = "Blank tile";
+                    emptySquare.transform.localScale += new Vector3(2f, 2f, 2f);
+                    emptySquare.transform.Translate(new Vector3(columnSpacer, rowSpacer));
+                    feature.Value.gameobject = emptySquare;
                 }
                 columnSpacer += GRID_COLUMN_SPACER;
             }
