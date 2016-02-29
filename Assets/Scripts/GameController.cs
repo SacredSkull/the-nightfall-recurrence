@@ -27,160 +27,63 @@ public class GameController : MonoBehaviour {
     public IEnumerable<SoftwareTool> Tools; 
     public IEnumerable<SoftwareTool> SentryTools; 
     public List<SoftwareTool> AllSoftwareTools;
-    public List<MapItem> AllFeatures; 
+    public List<MapItem> AllFeatures;
+    public List<SoftwareTool> LevelTools = new List<SoftwareTool>(); 
 
     private Map map;
     private readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
     private readonly List<List<int>> geometryRow = new List<List<int>>();
-    private readonly List<List<int>> entityRow = new List<List<int>>();
+    private readonly Dictionary<int, Dictionary<int, int>> entityRow = new Dictionary<int, Dictionary<int, int>>();
+    private readonly Dictionary<string, Sprite> loadedSprites = new Dictionary<string, Sprite>();  
 
-    [UsedImplicitly]
     void Start () {
-        InitialiseData();
+        // Load from XML
+        ReadData();
+        // Using XML data, map sprites to appropriate entities
+        LoadSprites();
 
-        Dictionary<string, Sprite> entitySpriteDictionary = new Dictionary<string, Sprite>() {
-            { "blank",  Resources.Load<Sprite>("Sprites/map_features/empty") },
-        };
+        // Generate level from geometry/entity data
+        InjectGeometry();
+        InjectEntities();
 
-        // BEGIN SPRITE LOADING
-
-        foreach(MapItem mapItem in AllFeatures) {
-            if(!entitySpriteDictionary.ContainsKey(mapItem.string_id)) {
-                Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/map_features/{0}", mapItem.string_id));
-                if(sprite == null) {
-                    Utility.UnityLog(string.Format("[SPRITE] Could not find/load a sprite for {0}", mapItem.string_id), Utility.Level.ERROR);
-                    continue;
-                }
-                entitySpriteDictionary.Add(mapItem.string_id, sprite);
-            }
+        foreach (var softwareTool in LevelTools) {
+            
         }
-
-        foreach(SoftwareTool software in AllSoftwareTools) {
-            if(!entitySpriteDictionary.ContainsKey(software.string_id)) {
-                Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/{0}", software.string_id));
-                if(sprite == null) {
-                    Utility.UnityLog(string.Format("[SPRITE] Could not find/load a sprite for {0}", software.string_id), Utility.Level.ERROR);
-                    continue;
-                }
-                entitySpriteDictionary.Add(software.string_id, sprite);
-            }
-        }
-
-        // END SPRITE LOADING
-
-        // Start geometry
-        float rowSpacer = 0;
-
-        if(mapItems.Count == 0)
-            Utility.UnityLog("mapItems does not contain anything!", Utility.Level.ERROR);
-
-        if(dumpLoadedMapItems)
-            foreach(KeyValuePair<int, MapItem> keyvalue in mapItems) {
-                Utility.UnityLog(keyvalue.Value.string_id + " has value of " + keyvalue.Key);
-            }
-
-        GameObject geometryContainer = new GameObject("Geometry Grid");
-
-        for (int row = 0; row < geometryRow.Count; row++) {
-            float columnSpacer = 0;
-            GameObject rowContainer = new GameObject();
-            rowContainer.transform.parent = geometryContainer.transform;
-            rowContainer.name = "Geometry Row " + (row + 1) + " [Generated]";
-            rowContainer.hideFlags = HideFlags.DontSave;
-
-            for (int column = 0; column < geometryRow[0].Count; column++)
-            {
-                //Utility.UnityLog("(" + (row+1).ToString() + "," + (column+1) + ") id is "+ GetEntityByCoords(row, column));
-                KeyValuePair<int, MapItem> feature = GetGeometryByCoords(row, column);
-
-                if (feature.Key != 0) {
-                    if (feature.Value == null)
-                    {
-                        Utility.UnityLog(string.Format("[GEOMETRY][RASTERING] {0} could not be located in the geometry grid.", feature.Key), Utility.Level.ERROR);
-                    }
-                    else
-                    {
-                        SpriteRenderer renderedTile = new GameObject().AddComponent<SpriteRenderer>();
-                        renderedTile.transform.parent = rowContainer.transform;
-                        renderedTile.hideFlags = HideFlags.DontSave;
-
-                        Sprite sprite;
-                        entitySpriteDictionary.TryGetValue(feature.Value.string_id, out sprite);
-
-                        renderedTile.sprite = sprite;
-                        renderedTile.name = "Grid Path";
-                        renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
-                        renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer));
-                    }
-                }
-                columnSpacer += GRID_COLUMN_SPACER;
-            }
-            rowSpacer += GRID_ROW_SPACER;
-        }
-
-        // End geometry
-
-        // Start entity
-
-        Utility.UnityLog("[SPRITE] Holding " + entitySpriteDictionary.Count + " sprites.");
-
-        rowSpacer = 0;
-
-        GameObject entityContainer = new GameObject("Entity Grid");
-
-        for(int row = 0; row < entityRow.Count; row++) {
-            float columnSpacer = 0;
-
-            GameObject rowContainer = new GameObject {name = "Entity Row " + (row + 1) + " [Generated]"};
-            rowContainer.transform.parent = entityContainer.transform;
-            rowContainer.hideFlags = HideFlags.DontSave;
-
-            for(int column = 0; column < entityRow[0].Count; column++) {
-                KeyValuePair<int, MapItem> mapEntity = GetEntityByCoords(row, column);
-
-                if (mapEntity.Value != null) {
-                    Sprite success;
-                    if (!entitySpriteDictionary.TryGetValue(mapEntity.Value.string_id, out success)) {
-                        Utility.UnityLog("Something is wrong with <b>" + mapEntity.Value.string_id + "</b>", Utility.Level.ERROR);
-                        success = entitySpriteDictionary["empty"];
-                    }
-                    if (success == null) {
-                        Utility.UnityLog("Something is wrong with <b>" + mapEntity.Value.string_id + string.Format("</b> at row: {0}, column: {1}", row, column), Utility.Level.ERROR);
-                        success = entitySpriteDictionary["empty"];
-                    }
-
-                    SpriteRenderer renderedTile = new GameObject().AddComponent<SpriteRenderer>();
-                    renderedTile.sprite = success;
-                    renderedTile.name = mapEntity.Value.name;
-                    renderedTile.transform.parent = rowContainer.transform;
-                    renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
-                    renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer, -1f));
-                }
-                columnSpacer += GRID_COLUMN_SPACER;
-            }
-            rowSpacer += GRID_ROW_SPACER;
-        }
-
-        // End entity
-
     }
 
-    KeyValuePair<int, MapItem> GetEntityByCoords(int x, int y)
-    {
+    KeyValuePair<int, Attackable> GetEntityByCoords(int x, int y) {
         int id = entityRow[x][y];
         MapItem success;
         mapItems.TryGetValue(id, out success);
 
         if (id != 0) {
-            // Ensure that this is infact an entity, and not a general map object
-            if (success is SoftwareTool)
-                return new KeyValuePair<int, MapItem>(id, success);
+            // Ensure that this is in fact an entity, and not a general map object
+            Attackable value = success as Attackable;
+            if (value != null)
+                return new KeyValuePair<int, Attackable>(id, value);
             Utility.UnityLog(
                 string.Format(
                     "[ENTITY] Attempted to load a map feature ({0}) into the entity layer! Check that it is on the right layer in Tiled.",
                     success == null ? "NULL mapItem reference - ID #" + id : success.string_id), Utility.Level.WARNING);
         }
-        return new KeyValuePair<int, MapItem>(0, null);
+        return new KeyValuePair<int, Attackable>(0, null);
+    }
+
+    KeyValuePair<int, Attackable> GetEntityByCoords(Vector2 xy) {
+        int id = entityRow[(int)xy.x][(int)xy.y];
+        MapItem success;
+        mapItems.TryGetValue(id, out success);
+
+        if (id != 0) {
+            // Ensure that this is in fact an entity, and not a general map object
+            if (success is Attackable)
+                return new KeyValuePair<int, Attackable>(id, (Attackable)success);
+            Utility.UnityLog(
+                    string.Format(
+                            "[ENTITY] Attempted to load a map feature ({0}) into the entity layer! Check that it is on the right layer in Tiled.",
+                            success == null ? "NULL mapItem reference - ID #" + id : success.string_id), Utility.Level.WARNING);
+        }
+        return new KeyValuePair<int, Attackable>(0, null);
     }
 
     KeyValuePair<int, MapItem> GetGeometryByCoords(int x, int y) {
@@ -201,12 +104,32 @@ public class GameController : MonoBehaviour {
 
         return new KeyValuePair<int, MapItem>(id, success);
     }
+
+    KeyValuePair<int, MapItem> GetGeometryByCoords(Vector2 xy) {
+        int id = geometryRow[(int)xy.x][(int)xy.y];
+        MapItem success;
+        mapItems.TryGetValue(id, out success);
+
+        if (id != 0) {
+            // Ensure this is NOT a software tool
+            if (success is SoftwareTool){
+                Utility.UnityLog(
+                        string.Format(
+                                "[ENTITY] Attempted to load software ({0}) into the geometry layer! Check that it is on the right layer in Tiled.",
+                                success.string_id), Utility.Level.WARNING);
+                return new KeyValuePair<int, MapItem>(0, null);
+            }
+        }
+
+        return new KeyValuePair<int, MapItem>(id, success);
+    }
 	
 	// Update is called once per frame
 	void Update () {
+
 	}
 
-    void InitialiseData() {
+    void ReadData() {
 
         // Test level XML load
 
@@ -277,8 +200,8 @@ public class GameController : MonoBehaviour {
                 toolSerializer.Serialize(writer, Tools);
             }
 
-            using(TextWriter writer = new StreamWriter(@"./XML_Sentries_Serialised.xml")) {
-                toolSerializer.Serialize(writer, SentryTools);
+            using(TextWriter writer1 = new StreamWriter(@"./XML_Sentries_Serialised.xml")) {
+                toolSerializer.Serialize(writer1, SentryTools);
             }
         }
 
@@ -364,16 +287,28 @@ public class GameController : MonoBehaviour {
                 // Begin loop for populating entity grid
                 int currentTile = 0;
                 for(int row = 0; row < l.height; row++) {
-                    List<int> columnList = new List<int>();
+                    Dictionary<int, int> columnList = new Dictionary<int, int>();
                     for(int column = 0; column < l.width; column++) {
                         LayerTile tile = l.tiles[currentTile];
 
                         int gid = tile.gid;
 
-                        columnList.Add(gid);
+                        columnList.Add(column, gid);
                         currentTile++;
                     }
-                    entityRow.Add(columnList);
+                    entityRow.Add(row, columnList);
+                }
+
+                for(int row = 0; row < entityRow.Count; row++) {
+                    for(int column = 0; row < entityRow[row].Count; column++) {
+                        if (entityRow[row][column] == 0)
+                            continue;
+                        SoftwareTool st = GetEntityByCoords(new Vector2(row, column)).Value as SoftwareTool;
+                        if(st != null) {
+                            st.position = new Vector2(row, column);
+                            LevelTools.Add(st);
+                        }
+                    }
                 }
 
                 #region debugEntityValues
@@ -407,5 +342,124 @@ public class GameController : MonoBehaviour {
         }
 
         #endregion
+    }
+
+    private void LoadSprites() {
+        // Load empty tile
+        loadedSprites.Add("blank", Resources.Load<Sprite>("Sprites/map_features/empty"));
+
+        // BEGIN SPRITE LOADING
+
+        foreach(MapItem mapItem in AllFeatures) {
+            if(loadedSprites.ContainsKey(mapItem.string_id)) {
+                mapItem.sprite = loadedSprites[mapItem.string_id];
+                continue;
+            }
+
+            Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/map_features/{0}", mapItem.string_id));
+
+            if(sprite == null) {
+                Utility.UnityLog(string.Format("[SPRITE] Could not find/load a sprite for {0}", mapItem.string_id), Utility.Level.ERROR);
+                continue;
+            }
+            mapItem.sprite = sprite;
+            loadedSprites.Add(mapItem.string_id, sprite);
+        }
+
+        foreach(SoftwareTool software in AllSoftwareTools) {
+            if(loadedSprites.ContainsKey(software.string_id)) {
+                software.sprite = loadedSprites[software.string_id];
+                continue;
+            }
+
+            Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/{0}", software.string_id));
+
+            if(sprite == null) {
+                Utility.UnityLog(string.Format("[SPRITE] Could not find/load a sprite for {0}", software.string_id), Utility.Level.ERROR);
+                continue;
+            }
+
+            software.sprite = sprite;
+            loadedSprites.Add(software.string_id, sprite);
+        }
+
+        // END SPRITE LOADING
+    }
+
+    private void InjectEntities(){
+        Utility.UnityLog("[SPRITE] Holding " + loadedSprites.Count + " sprites.");
+
+        float rowSpacer = 0;
+
+        GameObject entityContainer = new GameObject("Entity Grid");
+
+        for(int row = 0; row < entityRow.Count; row++) {
+            float columnSpacer = 0;
+
+            GameObject rowContainer = new GameObject {name = "Entity Row " + (row + 1) + " [Generated]"};
+            rowContainer.transform.parent = entityContainer.transform;
+            rowContainer.hideFlags = HideFlags.DontSave;
+
+            for(int column = 0; column < entityRow[0].Count; column++) {
+                KeyValuePair<int, Attackable> mapEntity = GetEntityByCoords(row, column);
+
+                if (mapEntity.Value != null) {
+                    SpriteRenderer renderedTile = new GameObject().AddComponent<SpriteRenderer>();
+                    renderedTile.sprite = mapEntity.Value.sprite;
+                    renderedTile.name = mapEntity.Value.name;
+                    renderedTile.transform.parent = rowContainer.transform;
+                    renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
+                    renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer, -1f));
+                }
+                columnSpacer += GRID_COLUMN_SPACER;
+            }
+            rowSpacer += GRID_ROW_SPACER;
+        }
+    }
+
+    private void InjectGeometry(){
+        float rowSpacer = 0;
+
+        if(mapItems.Count == 0)
+            Utility.UnityLog("mapItems does not contain anything!", Utility.Level.ERROR);
+
+        if(dumpLoadedMapItems)
+            foreach(KeyValuePair<int, MapItem> keyvalue in mapItems) {
+                Utility.UnityLog(keyvalue.Value.string_id + " has value of " + keyvalue.Key);
+            }
+
+        GameObject geometryContainer = new GameObject("Geometry Grid");
+
+        for (int row = 0; row < geometryRow.Count; row++) {
+            float columnSpacer = 0;
+            GameObject rowContainer = new GameObject();
+            rowContainer.transform.parent = geometryContainer.transform;
+            rowContainer.name = "Geometry Row " + (row + 1) + " [Generated]";
+            rowContainer.hideFlags = HideFlags.DontSave;
+
+            for (int column = 0; column < geometryRow[0].Count; column++)
+            {
+                KeyValuePair<int, MapItem> feature = GetGeometryByCoords(row, column);
+
+                if (feature.Key != 0) {
+                    if (feature.Value == null)
+                    {
+                        Utility.UnityLog(string.Format("[GEOMETRY][RASTERING] {0} could not be located in the geometry grid.", feature.Key), Utility.Level.ERROR);
+                    }
+                    else
+                    {
+                        SpriteRenderer renderedTile = new GameObject().AddComponent<SpriteRenderer>();
+                        renderedTile.transform.parent = rowContainer.transform;
+                        renderedTile.hideFlags = HideFlags.DontSave;
+                        renderedTile.sprite = feature.Value.sprite;
+                        renderedTile.name = "Grid Path";
+                        renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
+                        renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer));
+                    }
+                }
+                columnSpacer += GRID_COLUMN_SPACER;
+            }
+            rowSpacer += GRID_ROW_SPACER;
+        }
     }
 }
