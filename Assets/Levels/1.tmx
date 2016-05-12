@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="12" tilewidth="30" tileheight="30" nextobjectid="4">
- <tileset firstgid="1" name="map_features" tilewidth="30" tileheight="30">
+ <tileset firstgid="1" name="map_features" tilewidth="30" tileheight="30" tilecount="5" columns="0">
   <tile id="0">
    <properties>
     <property name="id" value="credit"/>
@@ -32,7 +32,7 @@
    <image width="30" height="30" source="../../map_features/wall.png"/>
   </tile>
  </tileset>
- <tileset firstgid="6" name="enemies" tilewidth="30" tileheight="30">
+ <tileset firstgid="6" name="enemies" tilewidth="30" tileheight="30" tilecount="17" columns="0">
   <tile id="0">
    <properties>
     <property name="id" value="boss_1"/>
@@ -138,6 +138,7 @@
  </tileset>
  <layer name="Geometry" width="16" height="12">
   <data>
+   <tile gid="5"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -152,8 +153,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="4"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -314,6 +314,7 @@
    <tile gid="4"/>
    <tile gid="4"/>
    <tile gid="4"/>
+   <tile gid="4"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -328,8 +329,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="5"/>
   </data>
  </layer>
  <layer name="Entities" width="16" height="12">
@@ -349,7 +349,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="6"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -365,6 +365,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="9"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -509,8 +510,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="6"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>

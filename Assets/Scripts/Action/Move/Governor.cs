@@ -1,131 +1,89 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
-using System.Linq;
-using System;
+using Utility;
 using Utility.Collections;
+using Utility.Collections.Grid;
 using Logger = Utility.Logger;
 
-namespace Scripts.Action.Move {
-    public class GridGraph<T> {
-        public GridCollection<T> grid;
-        private HashSet<int> bad_path_IDs; 
-
-        public GridGraph(GridCollection<T> grid, HashSet<int> bad_paths) {
-            this.grid = grid;
-            this.bad_path_IDs = bad_paths;
-            
-        }
-
-        public List<Vector2> Neighbours(Vector2 xy) {
-            // Find neighbouring nodes that are not in the pathing black list
-            // Check left, right, up down - diagonal movement isn't possible,
-            // but we still need to parse it!
-            int x = (int)xy.x;
-            int y = (int)xy.y;
-
-            List<Vector2> edges = new List<Vector2>();
-
-            // First, make sure the grid actually contains
-            // this co-ordinate
-
-            // Top-Left
-            if (grid.Contains(x-1, y+1) && !bad_path_IDs.Contains(grid.Get(x - 1,y + 1).id))
-            {
-                edges.Add(new Vector2(x - 1, y + 1));
-            }
-
-            // Left
-            if (grid.Contains(x - 1, y) && !bad_path_IDs.Contains(grid.Get(x - 1,y).id))
-            {
-                edges.Add(new Vector2(x - 1, y));
-            }
-
-            // Bottom-left
-            if (grid.Contains(x - 1, y - 1) && !bad_path_IDs.Contains(grid.Get(x - 1,y - 1).id))
-            {
-                edges.Add(new Vector2(x - 1, y - 1));
-            }
-
-            // Up
-            if (grid.Contains(x, y + 1) && !bad_path_IDs.Contains(grid.Get(x, y + 1).id))
-            {
-                edges.Add(new Vector2(x, y + 1));
-            }
-
-            // Down
-            if (grid.Contains(x, y - 1) && !bad_path_IDs.Contains(grid.Get(x, y - 1).id))
-            {
-                edges.Add(new Vector2(x, y - 1));
-            }
-
-            // Top-right
-            if (grid.Contains(x + 1, y + 1) && !bad_path_IDs.Contains(grid.Get(x + 1, y + 1).id))
-            {
-                edges.Add(new Vector2(x + 1, y + 1));
-            }
-
-            // Right
-            if (grid.Contains(x + 1, y) && !bad_path_IDs.Contains(grid.Get(x + 1, y).id))
-            {
-                edges.Add(new Vector2(x + 1, y));
-            }
-
-            // Bottom-right
-            if (grid.Contains(x + 1, y - 1) && !bad_path_IDs.Contains(grid.Get(x + 1, y - 1).id))
-            {
-                edges.Add(new Vector2(x + 1, y - 1));
-            }
-
-            return edges;
-        }
-    }
+namespace Action.Move {
 
     // Governor sets the movement algorithm,
     // AND the targeting details.
     // For example, the ranged enemies will want to get in range
     // but only just!
-    public class Governor
-    {
-        public static GridCollection<MapItem> grid; 
-        private IGridVisualise visualiser = new GridVisualiser();
+    public class Governor {        
+        private readonly IGridVisualise _visualiser = new GridVisualiser();
 
-        public virtual void move(GridGraph<MapItem> graph, Vector2 start_pos) {
+        public virtual IEnumerator Move(GridGraph<MapItem> graph, Vector2 startPos, Vector2 destinationPos, bool debug = false) {
             Queue<Vector2> frontier = new Queue<Vector2>();
-            frontier.Enqueue(start_pos);
+            frontier.Enqueue(startPos);
 
-            HashSet<Vector2> came_from_node = new HashSet<Vector2>();
-            came_from_node.Add(start_pos);
+            HashSet<Vector2> cameFromNode = new HashSet<Vector2>();
+            cameFromNode.Add(startPos);
 
             while(frontier.Count != 0) {
-                Vector2 current_pos = frontier.Dequeue();
-                Logger.UnityLog(string.Format("[AI][PATHING] Visiting {0},{1}", current_pos.x, current_pos.y));
-                foreach (Vector2 next_pos in graph.Neighbours(current_pos)) {
-                    if (came_from_node.Contains(next_pos))
-                        continue;
-                    frontier.Enqueue(next_pos);
-                    came_from_node.Add(current_pos);
+                Vector2 currentPos = frontier.Dequeue();
+                Logger.UnityLog(string.Format("[AI][PATHING] Visiting [{0},{1}]", currentPos.x, currentPos.y));
+
+                if (currentPos == destinationPos) {
+                    yield break;
                 }
-                visualiser.Visualise(current_pos, frontier.Peek());
+
+                foreach (Vector2 nextPos in graph.Neighbours(currentPos)) {
+                    if (cameFromNode.Contains(nextPos))
+                        continue;
+                    frontier.Enqueue(nextPos);
+                    cameFromNode.Add(currentPos);
+                }
+                if (debug)
+                    yield return _visualiser.Visualise(currentPos, frontier.Peek());
             }
         }
     }
 
-    public interface IGridVisualise
-    {
-        void Visualise(Vector2 source, Vector2 dest);
+    public interface IGridVisualise {
+        IEnumerator Visualise(Vector2 source, Vector2 dest);
     }
 
-    public class GridVisualiser : IGridVisualise
-    {
-        public void Visualise(Vector2 source, Vector2 dest) {
-            GameObject go = GameController.GetMapItemByCoords(source).Value.gameobject;
-            Transform nextGO = GameController.GetMapItemByCoords(dest).Value.gameobject.transform;
-            LineRenderer line = go.AddComponent<LineRenderer>();
+    public class GridVisualiser : IGridVisualise {
+        private static Sprite debugSprite = Resources.Load<Sprite>("Sprites/map_features/debug");
+        public IEnumerator Visualise(Vector2 source, Vector2 dest) {
+            GameObject go = GameController.LayeredGrid.GetHighestElement(source).Value.gameobject;
+            GameObject nextGO = GameController.LayeredGrid.GetHighestElement(dest).Value.gameobject;
+
+            Sprite currentSprite;
+            Sprite nextSprite;
+
+            SpriteRenderer currentRenderer = go.GetComponent<SpriteRenderer>();
+            SpriteRenderer nextRenderer = nextGO.GetComponent<SpriteRenderer>();
+
+            //DrawArrow.ForDebug(go.transform.position, nextGO.transform.position - go.transform.position);
+
+            currentSprite = currentRenderer.sprite;
+            nextSprite = nextRenderer.sprite;
+
+            currentRenderer.sprite = debugSprite;
+            nextRenderer.sprite = debugSprite;
+
+            currentRenderer.color = Color.red;
+            nextRenderer.color = Color.black;
+
+            yield return null;
+
+            currentRenderer.color = Color.yellow;
+            nextRenderer.color = Color.blue;
+
+
+//            currentRenderer.sprite = currentSprite;
+//            nextRenderer.sprite = nextSprite;
+
             //line.useWorldSpace = true;
-            line.SetVertexCount(2);
-            line.SetWidth(10, 10);
-            line.SetPosition(0, new Vector3(go.transform.position.x, go.transform.position.y, go.transform.position.z - 2));
-            line.SetPosition(1, new Vector3(nextGO.position.x, nextGO.position.y, nextGO.position.z - 2));
+//            line.SetVertexCount(2);
+//            line.SetWidth(0.015f, 0.015f);
+//            line.SetPosition(0, new Vector3(go.transform.position.x, go.transform.position.y, -go.transform.position.z));
+//            line.SetPosition(1, new Vector3(nextGO.position.x, nextGO.position.y, -nextGO.position.z));
         }
     }
 }
