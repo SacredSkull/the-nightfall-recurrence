@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 public abstract class Attackable : MapItem {
     [XmlIgnore]
