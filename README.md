@@ -23,7 +23,7 @@ I'm currently using [Tiled](https://github.com/bjorn/tiled) to store and create 
   - ~~Map geometry~~
   - ~~Programs~~
 - AI
-  - ~~Movement~~ (a star)
+  - ~~Movement~~ (A*)
 - Menus
   - Main
   - Level selection/node view
