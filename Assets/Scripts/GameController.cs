@@ -5,18 +5,14 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using System.Collections;
-using Action.Move;
-using Assets.Scripts.Utility;
-using Utility.Collections;
+using Level;
+using Utility;
+using Level.Entity;
+using UnityEngine.UI;
 using Utility.Collections.Grid;
 using Logger = Utility.Logger;
 
 public class GameController : MonoBehaviour {
-
-    public float GRID_COLUMN_SPACER;
-    public float GRID_ROW_SPACER;
-
 	public bool dumpLevelXML;
 	public bool dumpEntityXML;
 	public bool dumpProgramXML;
@@ -29,30 +25,31 @@ public class GameController : MonoBehaviour {
 	public bool dumpTileSets;
 	public bool dumpEntityRasters;
 
-    private const int GRID_ROWS = 12;
-    private const int GRID_COLUMNS = 16;
+    private static int GRID_ROWS = 12;
+    private static int GRID_COLUMNS = 16;
 
     public IEnumerable<SoftwareTool> Tools; 
     public IEnumerable<SoftwareTool> SentryTools; 
     public List<SoftwareTool> AllSoftwareTools;
     public List<MapItem> AllFeatures;
-    public GridCollection<SoftwareTool> LevelTools = new GridCollection<SoftwareTool>(); 
 
     private Map map;
     private static readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
-    public static readonly LayeredGrid<MapItem> LayeredGrid = new LayeredGrid<MapItem> {
-        { "geometry", new GridCollection<MapItem>(GRID_ROWS, GRID_COLUMNS) },
-        { "entity", new GridCollection<MapItem>(GRID_ROWS, GRID_COLUMNS) }
-    };
+    private static readonly GridPiece<MapItem> EmptyMapItem = new GridPiece<MapItem>(0, MapItem.BlankTile, new Vector2(), 1, null);
+    private static readonly LayeredGrid<MapItem> LayeredGrid = new LayeredGrid<MapItem>(EmptyMapItem, GRID_ROWS, GRID_COLUMNS);
 
-    private static readonly GridCollection<MapItem> geometryGrid = LayeredGrid[0];
-    private static readonly GridCollection<MapItem> entityGrid = LayeredGrid[1];
+    private static readonly GridCollection<MapItem> geometryGrid = LayeredGrid.Add("geometry");
+    private static readonly GridCollection<MapItem> entityGrid = LayeredGrid.Add("entity");
     private static readonly Dictionary<string, Sprite> loadedSprites = new Dictionary<string, Sprite>();
 
-    private SoftwareTool test;
-    private GridGraph<MapItem> testGG;
+    public GameObject gridContainer;
+    public GameObject gridPiece;
 
-    void Start () {
+
+    private SoftwareTool test;
+    private GridGraph<MapItem> graph;
+
+    private void Start () {
         // Load from XML
         ReadData();
 
@@ -64,40 +61,51 @@ public class GameController : MonoBehaviour {
         InjectGeometry();
         InjectEntities();
 
-        testGG = new GridGraph<MapItem>(LayeredGrid, new HashSet<int> { 0, 5 });
+        HashSet<int> badPaths = new HashSet<int> { 0, 5 };
+        graph = new GridGraph<MapItem>(LayeredGrid, badPaths);
 
-        test = (SoftwareTool) entityGrid.Get(1, 4).Value;
+        ServiceLocator.ProvideGraph(graph);
+        ServiceLocator.ProvideLevelLayeredGrid(LayeredGrid);
 
-        StartCoroutine(test.Move(testGG, new Vector2(10, 15), true));
+        entityGrid.PieceChanged += HandleChangedGridEvent;
+        geometryGrid.PieceChanged += HandleChangedGridEvent;
+
+        test = (SoftwareTool)entityGrid.Get(1, 4).Value;
     }
 
     // Update is called once per frame
-    void Update() {
+    private void Update() {
+        if (Input.GetMouseButtonDown(0)) {
+            test.Move(new Vector2(5, 7));
+            //Debug.Log(string.Format("New position of {0} is {1}", entityGrid.Get(test.GetPosition()).Value.name, entityGrid.Get(test.GetPosition()).Value.GetPosition()));
+        }
     }
 
-    public static KeyValuePair<int, MapItem> GetEntityByCoords(int x, int y) {
-        GridPiece<MapItem> piece = entityGrid.Get(x, y);
-
-        return new KeyValuePair<int, MapItem>(piece.ID, piece.Value);
+    private void HandleChangedGridEvent(GridCollectionEventArgs<MapItem> args) {
+        if (args.GridPiece.GameObject != null) {
+            //Debug.Log(string.Format("Event triggered for {0} - its new GO is {1}", args.GridPiece.Position, args.NewGO.name));
+            DecorateGridPiece(args.GridPiece.GameObject, args.GridPiece);
+        }
     }
 
-    public static KeyValuePair<int, MapItem> GetEntityByCoords(Vector2 xy) {
-        return GetEntityByCoords((int) xy.x, (int)xy.y);
+    private GameObject DecorateGridPiece(GameObject go, GridPiece<MapItem> piece, string sortingLayer = null, GameObject parent = null) {
+        SpriteRenderer renderedTile = go.GetComponent<SpriteRenderer>();
+
+        // Optional parameters.
+        if (parent != null)
+            renderedTile.transform.SetParent(parent.transform, false);
+        if (sortingLayer != null && !sortingLayer.Equals(string.Empty))
+            renderedTile.sortingLayerName = sortingLayer;
+
+        renderedTile.hideFlags = HideFlags.DontSave;
+        renderedTile.sprite = piece.Value.sprite;
+        renderedTile.name = piece.Value.name;
+        return go;
     }
 
-    public static KeyValuePair<int, MapItem> GetGeometryByCoords(int x, int y) {
-        GridPiece<MapItem> piece = geometryGrid.Get(x, y);
-        return new KeyValuePair<int, MapItem>(piece.ID, piece.Value);
-    }
-
-    public static KeyValuePair<int, MapItem> GetGeometryByCoords(Vector2 xy) {
-        return GetGeometryByCoords((int)xy.x, (int)xy.y);
-    }
-
-    void ReadData() {
+    private void ReadData() {
 
         // Test level XML load
-
         XmlSerializer deserializerLevel = new XmlSerializer(typeof(Map));
         TextReader readerLevel = new StreamReader("./Assets/Levels/1.tmx");
         object objLevel = deserializerLevel.Deserialize(readerLevel);
@@ -145,8 +153,8 @@ public class GameController : MonoBehaviour {
             if(dumpProgramXML)
                 Logger.UnityLog(tool.name);
             if(dumpProgramAbilities)
-                foreach(var ability in tool.attacks) {
-                    Logger.UnityLog("---->" + ability.name);
+                foreach(var ability in tool.Attacks) {
+                    Logger.UnityLog("---->" + ability.Name);
                 }
         }
         if(dumpFeatureXML)
@@ -275,7 +283,7 @@ public class GameController : MonoBehaviour {
             int tile = 1;
             for(int row = 0; row < entityGrid.Height; row++) {
                 for(int column = 0; column < entityGrid.GetRow(row).Count(); column++) {
-                    Logger.UnityLog(string.Format("{0} ({1}): {2}", tile, mapItems[entityGrid.Get(row, column).ID]));
+                    Logger.UnityLog(string.Format("{0} ({1})", tile, mapItems[entityGrid.Get(row, column).ID]));
                     tile++;
                 }
             }
@@ -285,7 +293,6 @@ public class GameController : MonoBehaviour {
     }
 
     private void InjectGeometry() {
-        float rowSpacer = 0;
 
         if(mapItems.Count == 0)
             Logger.UnityLog("mapItems does not contain anything!", Logger.Level.ERROR);
@@ -295,68 +302,39 @@ public class GameController : MonoBehaviour {
                 Logger.UnityLog(keyvalue.Value.string_id + " has value of " + keyvalue.Key);
             }
 
-        GameObject geometryContainer = new GameObject("Geometry Grid");
+        GameObject geometryContainer = (GameObject)Instantiate(gridContainer, Vector3.zero, Quaternion.identity);
+        geometryContainer.name = "Geometry Grid";
+        geometryContainer.GetComponent<GridLayoutGroup>().constraintCount = GRID_ROWS;
 
         for (int row = 0; row < geometryGrid.Height; row++) {
-            float columnSpacer = 0;
-            GameObject rowContainer = new GameObject();
-            rowContainer.transform.parent = geometryContainer.transform;
-            rowContainer.name = "Geometry Row " + (row + 1) + " [Generated]";
-            rowContainer.hideFlags = HideFlags.DontSave;
-
             for (int column = 0; column < geometryGrid.GetRow(row).Count(); column++) {
-                KeyValuePair<int, MapItem> feature = GetGeometryByCoords(row, column);
-
+                GridPiece<MapItem> feature = geometryGrid.Get(row, column);
                 if (feature.Value == null) {
-                    Logger.UnityLog(string.Format("[GEOMETRY][RASTERING] A Grid Piece has a null value! ID: {0}.", feature.Key), Logger.Level.ERROR);
+                    Logger.UnityLog(string.Format("[GEOMETRY][RASTERING] A Grid Piece has a null value! ID: {0}.", feature.ID), Logger.Level.ERROR);
                 } else {
-                    SpriteRenderer renderedTile = new GameObject().AddComponent<SpriteRenderer>();
-                    renderedTile.transform.parent = rowContainer.transform;
-                    renderedTile.hideFlags = HideFlags.DontSave;
-                    renderedTile.sprite = feature.Value.sprite;
-                    renderedTile.name = feature.Value.name;
-                    renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
-                    renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer));
-                    feature.Value.gameobject = renderedTile.gameObject;
+                    GameObject newTile = DecorateGridPiece((GameObject) Instantiate(gridPiece, Vector3.zero, Quaternion.identity), feature, "Geometry", geometryContainer);
+                    feature.GameObject = newTile;
                 }
-
-                columnSpacer += GRID_COLUMN_SPACER;
             }
-            rowSpacer += GRID_ROW_SPACER;
         }
     }
 
     private void InjectEntities() {
         Logger.UnityLog("[SPRITE] Holding " + loadedSprites.Count + " sprites.");
 
-        float rowSpacer = 0;
-
-        GameObject entityContainer = new GameObject("Entity Grid");
+        GameObject entityContainer = (GameObject)Instantiate(gridContainer, Vector3.zero, Quaternion.identity);
+        entityContainer.name = "Entity Grid";
+        entityContainer.GetComponent<GridLayoutGroup>().constraintCount = GRID_ROWS;
 
         for (int row = 0; row < entityGrid.Height; row++) {
-            float columnSpacer = 0;
-
-            GameObject rowContainer = new GameObject { name = "Entity Row " + (row + 1) + " [Generated]" };
-            rowContainer.transform.parent = entityContainer.transform;
-            rowContainer.hideFlags = HideFlags.DontSave;
-
             for (int column = 0; column < entityGrid.GetRow(row).Count(); column++) {
-                KeyValuePair<int, MapItem> piece = GetEntityByCoords(row, column);
+                GridPiece<MapItem> piece = entityGrid.Get(row, column);
 
                 if (piece.Value != null) {
-                    GameObject go = new GameObject(piece.Value.name);
-                    piece.Value.gameobject = go;
-                    SpriteRenderer renderedTile = go.AddComponent<SpriteRenderer>();
-                    renderedTile.sprite = piece.Value.sprite;
-                    renderedTile.name = piece.Value.name;
-                    renderedTile.transform.parent = rowContainer.transform;
-                    renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
-                    renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer, -1f));
+                    GameObject go = DecorateGridPiece((GameObject)Instantiate(gridPiece, Vector3.zero, Quaternion.identity), piece, "Entities", entityContainer);
+                    piece.GameObject = go;
                 }
-
-                columnSpacer += GRID_COLUMN_SPACER;
             }
-            rowSpacer += GRID_ROW_SPACER;
         }
     }
 
