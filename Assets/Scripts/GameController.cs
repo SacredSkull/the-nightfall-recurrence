@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour {
     private static int GRID_COLUMNS = 16;
 
     public IEnumerable<SoftwareTool> Tools; 
-    public IEnumerable<SoftwareTool> SentryTools; 
+    public IEnumerable<Sentry> SentryTools; 
     public List<SoftwareTool> AllSoftwareTools;
     public List<MapItem> AllFeatures;
 
@@ -127,6 +127,7 @@ public class GameController : MonoBehaviour {
         // Tool/Sentry XML load
 
         XmlSerializer toolSerializer = new XmlSerializer(typeof(List<SoftwareTool>), new XmlRootAttribute("software"));
+        XmlSerializer sentrySerializer = new XmlSerializer(typeof(List<Sentry>), new XmlRootAttribute("software"));
         XmlSerializer featureSerializer = new XmlSerializer(typeof(FeaturesXMLRoot), new XmlRootAttribute("features"));
 
         TextReader toolReader = new StreamReader(@"./Assets/Entities/Tools.xml");
@@ -134,8 +135,8 @@ public class GameController : MonoBehaviour {
         TextReader featureReader = new StreamReader(@"./Assets/Entities/Features.xml");
 
         Tools = (List<SoftwareTool>)toolSerializer.Deserialize(toolReader);
-        SentryTools = (List<SoftwareTool>)toolSerializer.Deserialize(sentryReader);
-        AllSoftwareTools = Tools.Concat(SentryTools).ToList();
+        SentryTools = (List<Sentry>)sentrySerializer.Deserialize(sentryReader);
+        AllSoftwareTools = SentryTools.Cast<SoftwareTool>().Concat(Tools).ToList();
         AllFeatures = ((FeaturesXMLRoot)featureSerializer.Deserialize(featureReader)).features;
 
         mapItems.Add(0, MapItem.BlankTile);

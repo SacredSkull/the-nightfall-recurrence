@@ -51,9 +51,9 @@
             <attackbasic name="Byte" damage="2"/>
         </attacks>
     </sentry>
-    <sentry name="Attack Dog" description="It'll be over, quickly" string_id="dog_3"  movement="4" maxsize="7" level="3">
+    <sentry name="Attack Dog" description="Ravenous and bloodthirsty corporate canine" string_id="dog_3"  movement="4" maxsize="7" level="3">
         <attacks>
-            <attackbasic name="Megabyte" damage="3"/>
+            <attackbasic name="MegaByte" damage="3"/>
         </attacks>
     </sentry>
 
@@ -65,7 +65,7 @@
             <attackbasic name="Thump" damage="3"/>
         </attacks>
     </sentry>
-    <sentry name="Warden++" description="'Sir, you shouldn't be in here.'" string_id="warden_2"  movement="2" maxsize="6" level="2">
+    <sentry name="Warden++" description="Bashes first, questions later" string_id="warden_2"  movement="2" maxsize="6" level="2">
         <attacks>
             <attackbasic name="Bash" damage="5"/>
         </attacks>
@@ -89,7 +89,7 @@
         	<attackbasic name="Scan" range="8" damage="1"/>
         </attacks>
     </sentry>
-    <sentry name="Radar" description="You're probably in range" string_id="sensor_3"  movement="0" maxsize="1" level="4">
+    <sentry name="Radar" description="Long range program eradicator- you're probably in range" string_id="sensor_3"  movement="0" maxsize="1" level="4">
         <attacks>
         	<attackbasic name="Phase" range="5" damage="2"/>
         </attacks>
@@ -118,7 +118,7 @@
 
     <sentry name="Boss" description="root@localhost:~#" string_id="boss_1" movement="6" maxsize="25" level="5">
         <attacks>
-        	<attackbasic name="TERMINATE PROCESS" range="5" damage="5"/>
+        	<attackbasic name="SIGKILL" range="5" damage="5"/>
         </attacks>
     </sentry>
 </software>
