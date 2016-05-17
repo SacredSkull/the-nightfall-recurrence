@@ -1,17 +1,18 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 using System.IO;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
+using System;
+using Level;
+using Utility;
+using Level.Entity;
+using UnityEngine.UI;
+using Utility.Collections.Grid;
+using Logger = Utility.Logger;
 
 public class GameController : MonoBehaviour {
-
-    public float GRID_COLUMN_SPACER;
-    public float GRID_ROW_SPACER;
-
 	public bool dumpLevelXML;
 	public bool dumpEntityXML;
 	public bool dumpProgramXML;
@@ -24,192 +25,87 @@ public class GameController : MonoBehaviour {
 	public bool dumpTileSets;
 	public bool dumpEntityRasters;
 
+    private static int GRID_ROWS = 12;
+    private static int GRID_COLUMNS = 16;
+
     public IEnumerable<SoftwareTool> Tools; 
     public IEnumerable<SoftwareTool> SentryTools; 
     public List<SoftwareTool> AllSoftwareTools;
-    public List<MapItem> AllFeatures; 
+    public List<MapItem> AllFeatures;
 
     private Map map;
-    private readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
-    private readonly List<List<int>> geometryRow = new List<List<int>>();
-    private readonly List<List<int>> entityRow = new List<List<int>>();
+    private static readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
+    private static readonly GridPiece<MapItem> EmptyMapItem = new GridPiece<MapItem>(0, MapItem.BlankTile, new Vector2(), 1, null);
+    private static readonly LayeredGrid<MapItem> LayeredGrid = new LayeredGrid<MapItem>(EmptyMapItem, GRID_ROWS, GRID_COLUMNS);
 
-    [UsedImplicitly]
-    void Start () {
-        InitialiseData();
+    private static readonly GridCollection<MapItem> geometryGrid = LayeredGrid.Add("geometry");
+    private static readonly GridCollection<MapItem> entityGrid = LayeredGrid.Add("entity");
+    private static readonly Dictionary<string, Sprite> loadedSprites = new Dictionary<string, Sprite>();
 
-        Dictionary<string, Sprite> entitySpriteDictionary = new Dictionary<string, Sprite>() {
-            { "blank",  Resources.Load<Sprite>("Sprites/map_features/empty") },
-        };
+    public GameObject gridContainer;
+    public GameObject gridPiece;
 
-        // BEGIN SPRITE LOADING
 
-        foreach(MapItem mapItem in AllFeatures) {
-            if(!entitySpriteDictionary.ContainsKey(mapItem.string_id)) {
-                Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/map_features/{0}", mapItem.string_id));
-                if(sprite == null) {
-                    Utility.UnityLog(string.Format("[SPRITE] Could not find/load a sprite for {0}", mapItem.string_id), Utility.Level.ERROR);
-                    continue;
-                }
-                entitySpriteDictionary.Add(mapItem.string_id, sprite);
-            }
-        }
+    private SoftwareTool test;
+    private GridGraph<MapItem> graph;
 
-        foreach(SoftwareTool software in AllSoftwareTools) {
-            if(!entitySpriteDictionary.ContainsKey(software.string_id)) {
-                Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/{0}", software.string_id));
-                if(sprite == null) {
-                    Utility.UnityLog(string.Format("[SPRITE] Could not find/load a sprite for {0}", software.string_id), Utility.Level.ERROR);
-                    continue;
-                }
-                entitySpriteDictionary.Add(software.string_id, sprite);
-            }
-        }
+    private void Start () {
+        // Load from XML
+        ReadData();
 
-        // END SPRITE LOADING
+        // Using XML data, map sprites to appropriate entities
+        // MUST take place AFTER loading, but BEFORE grid injection
+        LoadSprites();
 
-        // Start geometry
-        float rowSpacer = 0;
+        // Generate level from geometry/entity data
+        InjectGeometry();
+        InjectEntities();
 
-        if(mapItems.Count == 0)
-            Utility.UnityLog("mapItems does not contain anything!", Utility.Level.ERROR);
+        HashSet<int> badPaths = new HashSet<int> { 0, 5 };
+        graph = new GridGraph<MapItem>(LayeredGrid, badPaths);
 
-        if(dumpLoadedMapItems)
-            foreach(KeyValuePair<int, MapItem> keyvalue in mapItems) {
-                Utility.UnityLog(keyvalue.Value.string_id + " has value of " + keyvalue.Key);
-            }
+        ServiceLocator.ProvideGraph(graph);
+        ServiceLocator.ProvideLevelLayeredGrid(LayeredGrid);
 
-        GameObject geometryContainer = new GameObject("Geometry Grid");
+        entityGrid.PieceChanged += HandleChangedGridEvent;
+        geometryGrid.PieceChanged += HandleChangedGridEvent;
 
-        for (int row = 0; row < geometryRow.Count; row++) {
-            float columnSpacer = 0;
-            GameObject rowContainer = new GameObject();
-            rowContainer.transform.parent = geometryContainer.transform;
-            rowContainer.name = "Geometry Row " + (row + 1) + " [Generated]";
-            rowContainer.hideFlags = HideFlags.DontSave;
-
-            for (int column = 0; column < geometryRow[0].Count; column++)
-            {
-                //Utility.UnityLog("(" + (row+1).ToString() + "," + (column+1) + ") id is "+ GetEntityByCoords(row, column));
-                KeyValuePair<int, MapItem> feature = GetGeometryByCoords(row, column);
-
-                if (feature.Key != 0) {
-                    if (feature.Value == null)
-                    {
-                        Utility.UnityLog(string.Format("[GEOMETRY][RASTERING] {0} could not be located in the geometry grid.", feature.Key), Utility.Level.ERROR);
-                    }
-                    else
-                    {
-                        SpriteRenderer renderedTile = new GameObject().AddComponent<SpriteRenderer>();
-                        renderedTile.transform.parent = rowContainer.transform;
-                        renderedTile.hideFlags = HideFlags.DontSave;
-
-                        Sprite sprite;
-                        entitySpriteDictionary.TryGetValue(feature.Value.string_id, out sprite);
-
-                        renderedTile.sprite = sprite;
-                        renderedTile.name = "Grid Path";
-                        renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
-                        renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer));
-                    }
-                }
-                columnSpacer += GRID_COLUMN_SPACER;
-            }
-            rowSpacer += GRID_ROW_SPACER;
-        }
-
-        // End geometry
-
-        // Start entity
-
-        Utility.UnityLog("[SPRITE] Holding " + entitySpriteDictionary.Count + " sprites.");
-
-        rowSpacer = 0;
-
-        GameObject entityContainer = new GameObject("Entity Grid");
-
-        for(int row = 0; row < entityRow.Count; row++) {
-            float columnSpacer = 0;
-
-            GameObject rowContainer = new GameObject {name = "Entity Row " + (row + 1) + " [Generated]"};
-            rowContainer.transform.parent = entityContainer.transform;
-            rowContainer.hideFlags = HideFlags.DontSave;
-
-            for(int column = 0; column < entityRow[0].Count; column++) {
-                KeyValuePair<int, MapItem> mapEntity = GetEntityByCoords(row, column);
-
-                if (mapEntity.Value != null) {
-                    Sprite success;
-                    if (!entitySpriteDictionary.TryGetValue(mapEntity.Value.string_id, out success)) {
-                        Utility.UnityLog("Something is wrong with <b>" + mapEntity.Value.string_id + "</b>", Utility.Level.ERROR);
-                        success = entitySpriteDictionary["empty"];
-                    }
-                    if (success == null) {
-                        Utility.UnityLog("Something is wrong with <b>" + mapEntity.Value.string_id + string.Format("</b> at row: {0}, column: {1}", row, column), Utility.Level.ERROR);
-                        success = entitySpriteDictionary["empty"];
-                    }
-
-                    SpriteRenderer renderedTile = new GameObject().AddComponent<SpriteRenderer>();
-                    renderedTile.sprite = success;
-                    renderedTile.name = mapEntity.Value.name;
-                    renderedTile.transform.parent = rowContainer.transform;
-                    renderedTile.transform.localScale += new Vector3(2f, 2f, 2f);
-                    renderedTile.transform.Translate(new Vector3(columnSpacer, rowSpacer, -1f));
-                }
-                columnSpacer += GRID_COLUMN_SPACER;
-            }
-            rowSpacer += GRID_ROW_SPACER;
-        }
-
-        // End entity
-
+        test = (SoftwareTool)entityGrid.Get(1, 4).Value;
     }
 
-    KeyValuePair<int, MapItem> GetEntityByCoords(int x, int y)
-    {
-        int id = entityRow[x][y];
-        MapItem success;
-        mapItems.TryGetValue(id, out success);
-
-        if (id != 0) {
-            // Ensure that this is infact an entity, and not a general map object
-            if (success is SoftwareTool)
-                return new KeyValuePair<int, MapItem>(id, success);
-            Utility.UnityLog(
-                string.Format(
-                    "[ENTITY] Attempted to load a map feature ({0}) into the entity layer! Check that it is on the right layer in Tiled.",
-                    success == null ? "NULL mapItem reference - ID #" + id : success.string_id), Utility.Level.WARNING);
+    // Update is called once per frame
+    private void Update() {
+        if (Input.GetMouseButtonDown(0)) {
+            test.Move(new Vector2(5, 7));
+            //Debug.Log(string.Format("New position of {0} is {1}", entityGrid.Get(test.GetPosition()).Value.name, entityGrid.Get(test.GetPosition()).Value.GetPosition()));
         }
-        return new KeyValuePair<int, MapItem>(0, null);
     }
 
-    KeyValuePair<int, MapItem> GetGeometryByCoords(int x, int y) {
-        int id = geometryRow[x][y];
-        MapItem success;
-        mapItems.TryGetValue(id, out success);
-
-        if (id != 0) {
-            // Ensure this is NOT a software tool
-            if (success is SoftwareTool){
-                Utility.UnityLog(
-                    string.Format(
-                        "[ENTITY] Attempted to load software ({0}) into the geometry layer! Check that it is on the right layer in Tiled.",
-                        success.string_id), Utility.Level.WARNING);
-                return new KeyValuePair<int, MapItem>(0, null);
-            }
+    private void HandleChangedGridEvent(GridCollectionEventArgs<MapItem> args) {
+        if (args.GridPiece.GameObject != null) {
+            //Debug.Log(string.Format("Event triggered for {0} - its new GO is {1}", args.GridPiece.Position, args.NewGO.name));
+            DecorateGridPiece(args.GridPiece.GameObject, args.GridPiece);
         }
-
-        return new KeyValuePair<int, MapItem>(id, success);
     }
-	
-	// Update is called once per frame
-	void Update () {
-	}
 
-    void InitialiseData() {
+    private GameObject DecorateGridPiece(GameObject go, GridPiece<MapItem> piece, string sortingLayer = null, GameObject parent = null) {
+        SpriteRenderer renderedTile = go.GetComponent<SpriteRenderer>();
+
+        // Optional parameters.
+        if (parent != null)
+            renderedTile.transform.SetParent(parent.transform, false);
+        if (sortingLayer != null && !sortingLayer.Equals(string.Empty))
+            renderedTile.sortingLayerName = sortingLayer;
+
+        renderedTile.hideFlags = HideFlags.DontSave;
+        renderedTile.sprite = piece.Value.sprite;
+        renderedTile.name = piece.Value.name;
+        return go;
+    }
+
+    private void ReadData() {
 
         // Test level XML load
-
         XmlSerializer deserializerLevel = new XmlSerializer(typeof(Map));
         TextReader readerLevel = new StreamReader("./Assets/Levels/1.tmx");
         object objLevel = deserializerLevel.Deserialize(readerLevel);
@@ -242,6 +138,11 @@ public class GameController : MonoBehaviour {
         AllSoftwareTools = Tools.Concat(SentryTools).ToList();
         AllFeatures = ((FeaturesXMLRoot)featureSerializer.Deserialize(featureReader)).features;
 
+        mapItems.Add(0, MapItem.BlankTile);
+        AllFeatures.Add(MapItem.BlankTile);
+        AllFeatures.Add(MapItem.MapPath);
+        AllFeatures.Add(SpawnPoint.Spawn);
+
         toolReader.Close();
         sentryReader.Close();
         featureReader.Close();
@@ -250,16 +151,16 @@ public class GameController : MonoBehaviour {
 
         foreach(SoftwareTool tool in Tools) {
             if(dumpProgramXML)
-                Utility.UnityLog(tool.name);
+                Logger.UnityLog(tool.name);
             if(dumpProgramAbilities)
-                foreach(var ability in tool.attacks) {
-                    Utility.UnityLog("---->" + ability.name);
+                foreach(var ability in tool.Attacks) {
+                    Logger.UnityLog("---->" + ability.Name);
                 }
         }
         if(dumpFeatureXML)
             foreach (MapItem mapItem in AllFeatures)
             {
-                Utility.UnityLog("[FEATURES] Found map feature " + mapItem.name);
+                Logger.UnityLog("[FEATURES] Found map feature " + mapItem.name);
             }
 
         if(dumpFeatureXML)
@@ -269,7 +170,7 @@ public class GameController : MonoBehaviour {
 
         if(dumpEnemyXML)
             foreach(SoftwareTool tool in SentryTools) {
-                Utility.UnityLog(tool.name);
+                Logger.UnityLog(tool.name);
             }
 
         if(dumpProgramXML) {
@@ -277,39 +178,24 @@ public class GameController : MonoBehaviour {
                 toolSerializer.Serialize(writer, Tools);
             }
 
-            using(TextWriter writer = new StreamWriter(@"./XML_Sentries_Serialised.xml")) {
-                toolSerializer.Serialize(writer, SentryTools);
+            using(TextWriter writer1 = new StreamWriter(@"./XML_Sentries_Serialised.xml")) {
+                toolSerializer.Serialize(writer1, SentryTools);
             }
         }
 
         #endregion
 
-        AllFeatures.Add(new MapItem {
-            name = "Map Piece",
-            description = "Traversable network pathing",
-            string_id = "path"
-        });
-        AllFeatures.Add(new SpawnPoint {
-            name = "Spawn Point",
-            description = "Attack vector entry point for your software tools",
-            string_id = "spawnpoint",
-        });
-
-        Utility.UnityLog("Starting to parse Tilesets", Utility.Level.INFO);
-
-
+        Logger.UnityLog("Starting to parse Tilesets", Logger.Level.INFO);
 
         foreach(TileSet ts in map.tilesets) {
-            Utility.UnityLog("Currently working on the TS " + ts.name);
+            Logger.UnityLog("Currently working on the TS " + ts.name);
             // Tiler's tiles are zero-index ID'd, but this is referenced in the actual map data one-indexed.
             // So, an empty tile will always be zero, and therefore we need to add the firstGID to the ID to get our actual ID.
             int tileFirstGID = ts.firstgid;
 
-            Utility.UnityLog("First GID of " + ts.name + " is " + tileFirstGID);
+            Logger.UnityLog("First GID of " + ts.name + " is " + tileFirstGID);
             foreach(Tile tl in ts.tiles) {
                 TileSetProperty tilePropertyStringID = tl.properties.First(x => x.name == "id");
-
-                //string[] test = AllSoftwareTools.Select(x => x.string_id).ToArray();
 
                 MapItem existing = AllSoftwareTools.FirstOrDefault(x => x.string_id == tilePropertyStringID.value) ??
                                    AllFeatures.FirstOrDefault(x => x.string_id == tilePropertyStringID.value);
@@ -317,95 +203,178 @@ public class GameController : MonoBehaviour {
                 if(existing != null)
                     mapItems.Add(tl.id + tileFirstGID, existing);
                 else
-                    Utility.UnityLog(string.Format("Could not find {0} in any of the global lists.", tilePropertyStringID.value), Utility.Level.ERROR);
+                    Logger.UnityLog(string.Format("Could not find {0} in any of the global lists.", tilePropertyStringID.value), Logger.Level.ERROR);
                 if(dumpTileSets)
-                    Utility.UnityLog("This tile's " + tilePropertyStringID.name + " is '" + tilePropertyStringID.value + "'");
+                    Logger.UnityLog(string.Format("This tile's {0} ({1}) is '{2}'", tilePropertyStringID.name, tl.id + tileFirstGID, tilePropertyStringID.value));
             }
         }
 
-        Utility.UnityLog("Finished parsing Tilesets", Utility.Level.INFO);
+        Logger.UnityLog("Finished parsing Tilesets", Logger.Level.INFO);
 
         foreach(Layer l in map.layers) {
             if(l.name == "Geometry") {
-                Utility.UnityLog("Starting to parse Geometry layer");
+                Logger.UnityLog("Starting to parse Geometry layer");
 
                 // Begin loop for populating grid geometry
                 int currentTile = 0;
                 for(int row = 0; row < l.height; row++) {
-                    List<int> columnList = new List<int>();
+                    List<GridPiece<MapItem>> columnList = new List<GridPiece<MapItem>>();
                     for(int column = 0; column < l.width; column++) {
-                        LayerTile tile = l.tiles[currentTile];
-
-                        int gid = tile.gid;
-
-                        columnList.Add(gid);
-                        currentTile++;
+                        LayerTile tile = l.tiles[currentTile++];
+                        MapItem mi = Cloner.Clone(mapItems[tile.gid]);
+                        mi.SetPosition(row, column);
+                        columnList.Add(new GridPiece<MapItem>{ID = tile.gid, Value = mi});
                     }
-                    geometryRow.Add(columnList);
+                    geometryGrid.SetRow(row, columnList);
                 }
 
                 // Print the populated grid geometry
-                if(dumpGeometry) {
-                    Utility.UnityLog("Printing all Geometry values");
-                    for(int row = 0; row < geometryRow.Count; row++) {
+                if (dumpGeometry) {
+                    Logger.UnityLog("Printing all Geometry values");
+                    for(int row = 0; row < geometryGrid.Height; row++) {
                         int pleasantRow = row + 1;
-                        //Utility.UnityLog("Geo. Row " + pleasantRow.ToString(), Utility.Level.DEBUG);
-                        for(int column = 0; column < geometryRow[row].Count; column++) {
-                            Utility.UnityLog("Geo. (" + pleasantRow + ", " + (column + 1) + ") " + geometryRow[row][column]);
+                        //Logger.UnityLog("Geo. Row " + pleasantRow.ToString(), Logger.Level.DEBUG);
+                        for(int column = 0; column < geometryGrid.GetRow(row).Count(); column++) {
+                            Logger.UnityLog("Geo. (" + pleasantRow + ", " + (column + 1) + ") " + geometryGrid.Get(row, column).ID);
                         }
                     }
                 }
+                Logger.UnityLog("Finished parsing Geometry layer", Logger.Level.INFO);
 
-
-                Utility.UnityLog("Finished parsing Geometry layer", Utility.Level.INFO);
             } else if(l.name == "Entities") {
-                Utility.UnityLog("Starting to parse Entities layer");
+                Logger.UnityLog("Starting to parse Entities layer");
 
                 // Begin loop for populating entity grid
                 int currentTile = 0;
                 for(int row = 0; row < l.height; row++) {
-                    List<int> columnList = new List<int>();
-                    for(int column = 0; column < l.width; column++) {
-                        LayerTile tile = l.tiles[currentTile];
+                    List<GridPiece<MapItem>> columnList = new List<GridPiece<MapItem>>();
+                    for (int column = 0; column < l.width; column++) {
+                        LayerTile tile = l.tiles[currentTile++];
+                        Attackable entity = mapItems[tile.gid] as Attackable;
 
-                        int gid = tile.gid;
-
-                        columnList.Add(gid);
-                        currentTile++;
+                        if (entity == null && tile.gid != 0)
+                            throw new InvalidCastException(string.Format("A non-entity was found in the entity grid - '{0}'", mapItems[tile.gid].name));
+                        columnList.Add(new GridPiece<MapItem> { ID = tile.gid, Value = entity == null ? Cloner.Clone(mapItems[0]) : Cloner.Clone(entity) });
                     }
-                    entityRow.Add(columnList);
+                    entityGrid.SetRow(row, columnList);
                 }
 
                 #region debugEntityValues
                 if(dumpEntities) {
-                    Utility.UnityLog("Printing all Entitity values");
-                    for(int row = 0; row < entityRow.Count; row++) {
+                    Logger.UnityLog("Printing all Entitity values");
+                    for(int row = 0; row < entityGrid.Height; row++) {
                         int pleasantRow = row + 1;
-                        Utility.UnityLog("Ent. Row " + pleasantRow);
-                        for(int column = 0; column < entityRow[row].Count; column++) {
-                            Utility.UnityLog("Ent. " + entityRow[row][column]);
+                        Logger.UnityLog("Ent. Row " + pleasantRow);
+                        for(int column = 0; column < entityGrid.GetRow(row).Count(); column++) {
+                            Logger.UnityLog("Ent. " + entityGrid.Get(row, column).ID);
                         }
                     }
                 }
                 #endregion
 
-                Utility.UnityLog("Finished parsing Entity layer", Utility.Level.INFO);
+                Logger.UnityLog("Finished parsing Entity layer", Logger.Level.INFO);
             }
         }
 
         #region debugEntityRasters
 
-        Utility.UnityLog("Displaying loaded entities");
+        Logger.UnityLog("Displaying loaded entities");
         if(dumpEntityRasters) {
             int tile = 1;
-            for(int row = 0; row < entityRow.Count; row++) {
-                for(int column = 0; column < entityRow[row].Count; column++) {
-                    Utility.UnityLog(tile + ": " + mapItems[entityRow[row][column]]);
+            for(int row = 0; row < entityGrid.Height; row++) {
+                for(int column = 0; column < entityGrid.GetRow(row).Count(); column++) {
+                    Logger.UnityLog(string.Format("{0} ({1})", tile, mapItems[entityGrid.Get(row, column).ID]));
                     tile++;
                 }
             }
         }
 
         #endregion
+    }
+
+    private void InjectGeometry() {
+
+        if(mapItems.Count == 0)
+            Logger.UnityLog("mapItems does not contain anything!", Logger.Level.ERROR);
+
+        if(dumpLoadedMapItems)
+            foreach(KeyValuePair<int, MapItem> keyvalue in mapItems) {
+                Logger.UnityLog(keyvalue.Value.string_id + " has value of " + keyvalue.Key);
+            }
+
+        GameObject geometryContainer = (GameObject)Instantiate(gridContainer, Vector3.zero, Quaternion.identity);
+        geometryContainer.name = "Geometry Grid";
+        geometryContainer.GetComponent<GridLayoutGroup>().constraintCount = GRID_ROWS;
+
+        for (int row = 0; row < geometryGrid.Height; row++) {
+            for (int column = 0; column < geometryGrid.GetRow(row).Count(); column++) {
+                GridPiece<MapItem> feature = geometryGrid.Get(row, column);
+                if (feature.Value == null) {
+                    Logger.UnityLog(string.Format("[GEOMETRY][RASTERING] A Grid Piece has a null value! ID: {0}.", feature.ID), Logger.Level.ERROR);
+                } else {
+                    GameObject newTile = DecorateGridPiece((GameObject) Instantiate(gridPiece, Vector3.zero, Quaternion.identity), feature, "Geometry", geometryContainer);
+                    feature.GameObject = newTile;
+                }
+            }
+        }
+    }
+
+    private void InjectEntities() {
+        Logger.UnityLog("[SPRITE] Holding " + loadedSprites.Count + " sprites.");
+
+        GameObject entityContainer = (GameObject)Instantiate(gridContainer, Vector3.zero, Quaternion.identity);
+        entityContainer.name = "Entity Grid";
+        entityContainer.GetComponent<GridLayoutGroup>().constraintCount = GRID_ROWS;
+
+        for (int row = 0; row < entityGrid.Height; row++) {
+            for (int column = 0; column < entityGrid.GetRow(row).Count(); column++) {
+                GridPiece<MapItem> piece = entityGrid.Get(row, column);
+
+                if (piece.Value != null) {
+                    GameObject go = DecorateGridPiece((GameObject)Instantiate(gridPiece, Vector3.zero, Quaternion.identity), piece, "Entities", entityContainer);
+                    piece.GameObject = go;
+                }
+            }
+        }
+    }
+
+    private void LoadSprites() {
+        // BEGIN SPRITE LOADING
+
+        foreach (MapItem mi in geometryGrid) {
+            if (loadedSprites.ContainsKey(mi.string_id)) {
+                mi.sprite = loadedSprites[mi.string_id];
+                continue;
+            }
+
+            Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/map_features/{0}", mi.string_id));
+
+            if (sprite == null) {
+                Logger.UnityLog(string.Format("[SPRITE] Could not find/load a sprite for {0}", mi.string_id), Logger.Level.ERROR);
+                continue;
+            }
+
+            mi.sprite = sprite;
+            loadedSprites.Add(mi.string_id, sprite);
+        }
+
+        foreach (MapItem mi in entityGrid) {
+            if (loadedSprites.ContainsKey(mi.string_id)) {
+                mi.sprite = loadedSprites[mi.string_id];
+                continue;
+            }
+
+            Sprite sprite = Resources.Load<Sprite>(string.Format("Sprites/{0}", mi.string_id));
+
+            if (sprite == null) {
+                Logger.UnityLog(string.Format("[SPRITE] Could not find/load a sprite for {0}", mi.string_id), Logger.Level.ERROR);
+                continue;
+            }
+
+            mi.sprite = sprite;
+            loadedSprites.Add(mi.string_id, sprite);
+        }
+
+        // END SPRITE LOADING
     }
 }
