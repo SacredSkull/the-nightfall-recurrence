@@ -9,7 +9,7 @@ extensibility, in terms of levels and programs/enemies. I'm also thinking about 
 
 I'm currently using [Tiled](https://github.com/bjorn/tiled) to store and create levels because it's fairly accessible (therefore allowing user created content) and is quite mature.
 
-It's very early days yet - at the moment only rending software/map data - but the foundations are there. Because of its infancy I won't be accepting any pull requests until there is an Alpha version.
+
 
 ##Todo
 - Storage/metadata
@@ -17,12 +17,13 @@ It's very early days yet - at the moment only rending software/map data - but th
   - ~~Vanilla program information~~ (stats, attacks, etc.)
   - ~~Levels~~
   - ~~Vanilla map features~~ (Credits with different values aren't currently possible because of [this issue](https://github.com/bjorn/tiled/issues/31) - I may consider modifiying Tiled or the XML to achieve this)
-  - Vanilla levels (literally the levels from the original)
+  - Vanilla levels (the levels from the original)
   - Saving progress
 - Rendering
   - ~~Map geometry~~
   - ~~Programs~~
 - AI
+  - ~~Movement~~ (a star)
 - Menus
   - Main
   - Level selection/node view
