@@ -1,51 +1,39 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
-using Action.Move;
+using Action.Attack;
 using UnityEngine;
-using Utility.Collections;
-using Utility.Collections.Grid;
 
-[XmlType(TypeName = "tool")]
-public class SoftwareTool : Attackable {
-    [XmlAttribute("maxsize")]
-    public short maxsize;
-    [XmlAttribute("cost")]
-    public short cost;
-    [XmlAttribute("level")]
-    public short level;
-    [XmlAttribute("governor")]
-    public string governor_string;
-    [XmlIgnore]
-    public bool isEnemy { get; set; }
-    [XmlIgnore]
-    public Governor governor;
+namespace Level.Entity {
+    [XmlType(TypeName = "tool")]
+    public class SoftwareTool : Attackable {
+        [XmlAttribute("maxsize")]
+        public short MaxSize;
+        [XmlAttribute("cost")]
+        public short Cost;
+        [XmlAttribute("level")]
+        public short Level;
+        [XmlArray("attacks")]
+        [XmlArrayItem(ElementName = "attackbasic", Type = typeof(AttackBasic)),
+         XmlArrayItem(ElementName = "attributemodifier", Type = typeof(AttributeModifier)),
+         XmlArrayItem(ElementName = "mapmodifier", Type = typeof(MapModifier))]
+        public List<Attack> Attacks { get; set; }
 
-    [XmlArray("attacks")]
-    [XmlArrayItem(ElementName = "attackbasic", Type = typeof(AttackBasic)),
-        XmlArrayItem(ElementName = "attributemodifier", Type = typeof(AttributeModifier)),
-        XmlArrayItem(ElementName = "mapmodifier", Type = typeof(MapModifier))]
-    public List<Attack> attacks { get; set; }
+        public SoftwareTool(){
+            gridPosition = new Vector2();
+        }
 
-    public SoftwareTool(){
-        SetGovernor();
+        public bool isEntirelyRanged() {
+            bool ranged = false;
+            foreach (var attack in Attacks) {
+                if (attack.Range > 1)
+                    ranged = true;
+            }
 
-        this.gridPosition = new Vector2();
-    }
+            return ranged;
+        }
 
-    private void SetGovernor() {
-        var assembly = Assembly.GetExecutingAssembly();
-        var type = assembly.GetTypes().FirstOrDefault(t => t.Name == governor_string);
-        if(type != null)
-            governor = Activator.CreateInstance(type) as Governor;
-        else
-            governor = new Governor();
-    }
-
-    public IEnumerator Move(GridGraph<MapItem> graph, Vector2 destination, bool debug = false) {
-        return governor.Move(graph, gridPosition, destination, debug);
+        public virtual void Move(Vector2 destination) {
+            
+        }
     }
 }

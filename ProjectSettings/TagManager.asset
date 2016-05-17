@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Geometry
+    uniqueID: 2186744249
+    locked: 0
+  - name: Entities
+    uniqueID: 4075129129
+    locked: 0
+  - name: Overlay
+    uniqueID: 3908125411
+    locked: 0

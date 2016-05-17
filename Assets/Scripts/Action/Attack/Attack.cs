@@ -1,8 +1,18 @@
 ﻿using System.Xml.Serialization;
+using Level.Entity;
 
-public abstract class Attack {
-    [XmlAttribute("name")]
-    public string name;
+namespace Action.Attack {
+    public abstract class Attack {
+        [XmlAttribute("name")]
+        public string Name;
+        [XmlAttribute("range")]
+        public short Range;
 
-    public abstract bool attack(SoftwareTool target, SoftwareTool source);
+        public abstract bool Execute(SoftwareTool target, SoftwareTool source);
+
+        public Attack() {
+            // Overridden by any XML properties specifying range
+            Range = 1;
+        }
+    }
 }

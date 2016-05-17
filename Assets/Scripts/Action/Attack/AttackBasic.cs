@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Xml.Serialization;
+using Level.Entity;
 
-public class AttackBasic : Attack {
-    [XmlAttribute("damage")]
-    public short damage;
-    [XmlAttribute("range")]
-    public short range;
+namespace Action.Attack {
+    public class AttackBasic : Attack {
+        [XmlAttribute("damage")]
+        public short damage;
 
-    public override bool attack(SoftwareTool target, SoftwareTool source) {
-        if(!(source.isEnemy) && !(target.isEnemy)) {
-            return false;
+        public override bool Execute(SoftwareTool target, SoftwareTool source) {
+            if(!(source is Sentry) && !(target is Sentry))
+                return false;
+            if(source is Sentry && target is Sentry)
+                throw new ArgumentException("Traitor sentry program detected!");
+
+            target.health -= damage;
+            return true;
         }
-        if(source.isEnemy && target.isEnemy) {
-            throw new Exception("Traitor sentry program detected!");
-        }
-        target.health -= damage;
-        return true;
     }
 }
