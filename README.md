@@ -24,8 +24,10 @@ I'm currently using [Tiled](https://github.com/bjorn/tiled) to store and create 
   - ~~Programs~~
 - AI
   - ~~Movement~~ (A*)
-- Menus
-  - Main
-  - Level selection/node view
+  - ~~Turn decision making~~
 - GUI
-
+  - Single level
+    - ~~Grids~~
+    - Overlay (attack range, etc.)
+    -
+  - Level selection

@@ -13,6 +13,11 @@ namespace Level.Entity {
         public string GovernorName;
         [XmlIgnore]
         private Governor _gov;
+
+        public Sentry() {}
+
+        public Sentry(Sentry blueprint) : base(blueprint) {}
+
         [XmlIgnore]
         public Governor Governor {
             get {
@@ -22,18 +27,18 @@ namespace Level.Entity {
                     if (type != null)
                         Governor = Activator.CreateInstance(type) as Governor;
                     else
-                        Governor = new Governor();
+                        Governor = new Governor(this);
                 }
                 return _gov;
             }
             set { _gov = value; }
         }
 
-        public override void Move(Vector2 destination) {
-            Governor.Move(destination, this);
+        public override void TakeTurn() {
+            Governor.TakeTurn(this);
         }
 
-        public IEnumerator Move(Vector2 destination, bool debug) {
+        public IEnumerator TakeTurn(Vector2 destination, bool debug) {
             return Governor.DebugCalculatePath(gridPosition, destination, debug);
         }
     }

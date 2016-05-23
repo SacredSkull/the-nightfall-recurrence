@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Utility;
 using Level;
@@ -19,14 +20,50 @@ namespace Action.Movement {
     public class Governor {
         private static readonly IGridGraph Graph = ServiceLocator.GetLevelGraph();
         private readonly IGridVisualise _visualiser = new GridVisualiser();
+        private SoftwareTool slave;
+        private int turncounter = 0;
 
-        public virtual void Move(Vector2 destinationPos, SoftwareTool tool) {
+        public Governor(SoftwareTool slave) {
+            this.slave = slave;
+        }
+
+        public virtual void TakeTurn(Sentry thisTool) {
+            MapItem[] tools = ServiceLocator.GetLevelEntityGrid().Values.Where(mi => !(mi.Value is Sentry) && mi.Value is SoftwareTool).Select(st => st.Value).ToArray();
+
+            // Find the closest tool using A star
+            List<IList<Vector2>> toolPaths = new List<IList<Vector2>>();
+
+            foreach (var tool in tools) {
+                toolPaths.Add(AStarMovement(thisTool.GetPosition(), tool.GetPosition()));
+            }
+
+            List<Vector2> shortestPath = new List<Vector2>();
+
+            foreach (var path in toolPaths) {
+                if (path.Count < shortestPath.Count || shortestPath.Count == 0)
+                    shortestPath = new List<Vector2>(path);
+            }
+
+            
+            // TODO: The movement sound should be triggered in here when movement actually occurs. Currently the reference to the tool's gameobject is stored on the gridpiece, so no access from here atm.
+            // TODO: check if path intersects with other Sentries (probably in the A* function somehow...)
+
+            Move(shortestPath, thisTool);
+        }
+
+        public virtual void Move(Vector2 destinationPos, Sentry tool) {
             if (destinationPos == tool.GetPosition())
                 return;
             IList<Vector2> path = AStarMovement(tool.GetPosition(), destinationPos);
 
             IGridCollection<MapItem> entityLayer = ServiceLocator.GetLevelEntityGrid();
             entityLayer.Move(tool.GetPosition(), path[0]);
+        }
+
+        public virtual void Move(List<Vector2> path, Sentry tool) {
+            IGridCollection<MapItem> entityLayer = ServiceLocator.GetLevelEntityGrid();
+            if(path.Count != 0)
+                entityLayer.Move(tool.GetPosition(), path[0]);
         }
 
         public virtual IEnumerator DebugCalculatePath(Vector2 startPos, Vector2 destinationPos, bool debug) {
@@ -37,6 +74,7 @@ namespace Action.Movement {
             return (int)(Math.Abs(start.x - finish.x) + Math.Abs(start.y - finish.y));
         }
 
+        // TODO: Consider changing this to an all sources, all destinations algorithm, like Floyd-Warshall or Johnson's - probably a terrible idea though - this works.
         protected IList<Vector2> AStarMovement(Vector2 startPos, Vector2 destinationPos) {
             SimplePriorityQueue<Vector2> frontier = new SimplePriorityQueue<Vector2>();
             frontier.Enqueue(startPos, 1);
@@ -46,16 +84,19 @@ namespace Action.Movement {
             cameFromNode[startPos] = startPos;
             costSoFar[startPos] = 0;
 
+            bool pathable = false;
+
             while (frontier.Count > 0) {
                 Vector2 currentPos = frontier.Dequeue();
                 //Logger.UnityLog(string.Format("[AI][PATHING] Visiting [{0},{1}]", currentPos.x, currentPos.y));
 
-                // "Early exit"
+                // "Early exit" and check if the start and finish are identical
                 if (currentPos.Equals(destinationPos)) {
                     break;
                 }
 
                 foreach (Vector2 nextPos in Graph.Neighbours(currentPos)) {
+                    pathable = true;
                     int newCost = costSoFar[currentPos] + Graph.Cost(nextPos);
                     if (!costSoFar.ContainsKey(nextPos) || newCost < costSoFar[nextPos]) {
                         costSoFar[nextPos] = newCost;
@@ -71,13 +112,22 @@ namespace Action.Movement {
             }
 
             List<Vector2> path = new List<Vector2>();
+
+            // This path is not traverseable (blocked, impassible)
+            if (!pathable)
+                return path;
+
             Vector2 current = destinationPos;
 
             // Add the final vector...
             path.Add(current);
+
+            // Unravel shortest path
             while (current != startPos) {
-                if (cameFromNode.ContainsKey(current))
-                    path.Add(cameFromNode[current]);
+                if (!cameFromNode.ContainsKey(current) && current != destinationPos)
+                    break;
+
+                path.Add(cameFromNode[current]);
                 current = cameFromNode[current];
             }
 
@@ -85,8 +135,9 @@ namespace Action.Movement {
             path.Remove(startPos);
 
             path.Reverse();
-            StringBuilder stringPath = new StringBuilder();
-            path.ForEach(x => stringPath.Append(x + ", "));
+
+//            StringBuilder stringPath = new StringBuilder();
+//            path.ForEach(x => stringPath.Append(x + ", "));
 
             //Logger.UnityLog(string.Format("[AI][PATHING] Path is {0}", stringPath));
 

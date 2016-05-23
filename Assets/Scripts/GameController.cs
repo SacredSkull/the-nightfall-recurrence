@@ -24,14 +24,20 @@ public class GameController : MonoBehaviour {
 	public bool dumpEntities;
 	public bool dumpTileSets;
 	public bool dumpEntityRasters;
+    // TODO: This should really be on the GridPiece prefab (and the prefab should probably be called SoftwareTool and have the relevant object attached).
+    public AudioClip MovementClip;
 
     private static int GRID_ROWS = 12;
     private static int GRID_COLUMNS = 16;
 
-    public IEnumerable<SoftwareTool> Tools; 
+    public IEnumerable<HackTool> Tools; 
     public IEnumerable<Sentry> SentryTools; 
-    public List<SoftwareTool> AllSoftwareTools;
+    public List<SoftwareTool> AllSoftware;
     public List<MapItem> AllFeatures;
+    public List<Sentry> LevelSentries = new List<Sentry>();
+    public List<SoftwareTool> LevelSoftwareTools = new List<SoftwareTool>();
+    public event DataLoadedHandler DataLoaded;
+    public delegate void DataLoadedHandler();
 
     private Map map;
     private static readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
@@ -61,8 +67,26 @@ public class GameController : MonoBehaviour {
         InjectGeometry();
         InjectEntities();
 
-        HashSet<int> badPaths = new HashSet<int> { 0, 5 };
-        graph = new GridGraph<MapItem>(LayeredGrid, badPaths);
+        HashSet<int> goodGeoIDs = new HashSet<int>();
+
+        foreach (var pair in mapItems) {
+            if (pair.Value.string_id == MapItem.MapPath.string_id)
+                goodGeoIDs.Add(pair.Key);
+            if (pair.Value.string_id == SpawnPoint.Spawn.string_id)
+                goodGeoIDs.Add(pair.Key);
+        }
+
+        // Might allow certain programs to be phased through
+        HashSet<int> goodEntIDs = new HashSet<int>();
+
+        foreach (var pair in mapItems) {
+            if (pair.Value.string_id == MapItem.BlankTile.string_id)
+                goodEntIDs.Add(pair.Key);
+            if (pair.Value.string_id == SpawnPoint.Spawn.string_id)
+                goodEntIDs.Add(pair.Key);
+        }
+
+        graph = new GridGraph<MapItem>(LayeredGrid, goodGeoIDs, goodEntIDs);
 
         ServiceLocator.ProvideGraph(graph);
         ServiceLocator.ProvideLevelLayeredGrid(LayeredGrid);
@@ -70,15 +94,21 @@ public class GameController : MonoBehaviour {
         entityGrid.PieceChanged += HandleChangedGridEvent;
         geometryGrid.PieceChanged += HandleChangedGridEvent;
 
+        DataLoaded?.Invoke();
+
         test = (SoftwareTool)entityGrid.Get(1, 4).Value;
     }
 
     // Update is called once per frame
     private void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            test.Move(new Vector2(5, 7));
-            //Debug.Log(string.Format("New position of {0} is {1}", entityGrid.Get(test.GetPosition()).Value.name, entityGrid.Get(test.GetPosition()).Value.GetPosition()));
-        }
+//        if (Input.GetMouseButtonDown(0)) {
+//            test?.Move(new Vector2(5, 7));
+//            Debug.Log(string.Format("Attacking: {0}, Source: {1}", entityGrid.Get(1, 15).Value as Sentry, test));
+//            //Debug.Log(test.Attacks);
+//            test?.Attacks[0]?.Execute((SoftwareTool)entityGrid.Get(1, 15).Value, test);
+//
+//            //Debug.Log(string.Format("New position of {0} is {1}", entityGrid.Get(test.GetPosition()).Value.name, entityGrid.Get(test.GetPosition()).Value.GetPosition()));
+//        }
     }
 
     private void HandleChangedGridEvent(GridCollectionEventArgs<MapItem> args) {
@@ -100,6 +130,7 @@ public class GameController : MonoBehaviour {
         renderedTile.hideFlags = HideFlags.DontSave;
         renderedTile.sprite = piece.Value.sprite;
         renderedTile.name = piece.Value.name;
+        renderedTile.GetComponent<AudioSource>().clip = MovementClip;
         return go;
     }
 
@@ -126,7 +157,7 @@ public class GameController : MonoBehaviour {
 
         // Tool/Sentry XML load
 
-        XmlSerializer toolSerializer = new XmlSerializer(typeof(List<SoftwareTool>), new XmlRootAttribute("software"));
+        XmlSerializer toolSerializer = new XmlSerializer(typeof(List<HackTool>), new XmlRootAttribute("software"));
         XmlSerializer sentrySerializer = new XmlSerializer(typeof(List<Sentry>), new XmlRootAttribute("software"));
         XmlSerializer featureSerializer = new XmlSerializer(typeof(FeaturesXMLRoot), new XmlRootAttribute("features"));
 
@@ -134,9 +165,9 @@ public class GameController : MonoBehaviour {
         TextReader sentryReader = new StreamReader(@"./Assets/Entities/Sentries.xml");
         TextReader featureReader = new StreamReader(@"./Assets/Entities/Features.xml");
 
-        Tools = (List<SoftwareTool>)toolSerializer.Deserialize(toolReader);
+        Tools = (List<HackTool>)toolSerializer.Deserialize(toolReader);
         SentryTools = (List<Sentry>)sentrySerializer.Deserialize(sentryReader);
-        AllSoftwareTools = SentryTools.Cast<SoftwareTool>().Concat(Tools).ToList();
+        AllSoftware = SentryTools.Cast<SoftwareTool>().Concat(Tools.Cast<SoftwareTool>()).ToList();
         AllFeatures = ((FeaturesXMLRoot)featureSerializer.Deserialize(featureReader)).features;
 
         mapItems.Add(0, MapItem.BlankTile);
@@ -198,7 +229,7 @@ public class GameController : MonoBehaviour {
             foreach(Tile tl in ts.tiles) {
                 TileSetProperty tilePropertyStringID = tl.properties.First(x => x.name == "id");
 
-                MapItem existing = AllSoftwareTools.FirstOrDefault(x => x.string_id == tilePropertyStringID.value) ??
+                MapItem existing = AllSoftware.FirstOrDefault(x => x.string_id == tilePropertyStringID.value) ??
                                    AllFeatures.FirstOrDefault(x => x.string_id == tilePropertyStringID.value);
 
                 if(existing != null)
@@ -222,7 +253,7 @@ public class GameController : MonoBehaviour {
                     List<GridPiece<MapItem>> columnList = new List<GridPiece<MapItem>>();
                     for(int column = 0; column < l.width; column++) {
                         LayerTile tile = l.tiles[currentTile++];
-                        MapItem mi = Cloner.Clone(mapItems[tile.gid]);
+                        MapItem mi = new MapItem(mapItems[tile.gid]);
                         mi.SetPosition(row, column);
                         columnList.Add(new GridPiece<MapItem>{ID = tile.gid, Value = mi});
                     }
@@ -251,11 +282,18 @@ public class GameController : MonoBehaviour {
                     List<GridPiece<MapItem>> columnList = new List<GridPiece<MapItem>>();
                     for (int column = 0; column < l.width; column++) {
                         LayerTile tile = l.tiles[currentTile++];
-                        Attackable entity = mapItems[tile.gid] as Attackable;
+                        MapItem mi = mapItems[tile.gid];
 
-                        if (entity == null && tile.gid != 0)
+                        if (mi == null && tile.gid != 0)
                             throw new InvalidCastException(string.Format("A non-entity was found in the entity grid - '{0}'", mapItems[tile.gid].name));
-                        columnList.Add(new GridPiece<MapItem> { ID = tile.gid, Value = entity == null ? Cloner.Clone(mapItems[0]) : Cloner.Clone(entity) });
+
+                        MapItem clone = (MapItem) Activator.CreateInstance(mi.GetType(), mi);
+                        if(clone is SoftwareTool)
+                            LevelSoftwareTools.Add((SoftwareTool)clone);
+                        if(clone is Sentry)
+                            LevelSentries.Add((Sentry)clone);
+
+                        columnList.Add(new GridPiece<MapItem> { ID = tile.gid, Value =  clone});
                     }
                     entityGrid.SetRow(row, columnList);
                 }
@@ -313,7 +351,7 @@ public class GameController : MonoBehaviour {
                 if (feature.Value == null) {
                     Logger.UnityLog(string.Format("[GEOMETRY][RASTERING] A Grid Piece has a null value! ID: {0}.", feature.ID), Logger.Level.ERROR);
                 } else {
-                    GameObject newTile = DecorateGridPiece((GameObject) Instantiate(gridPiece, Vector3.zero, Quaternion.identity), feature, "Geometry", geometryContainer);
+                    GameObject newTile = DecorateGridPiece((GameObject)Instantiate(gridPiece, Vector3.zero, Quaternion.identity), feature, "Geometry", geometryContainer);
                     feature.GameObject = newTile;
                 }
             }
