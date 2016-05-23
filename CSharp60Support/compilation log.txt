@@ -1,0 +1,136 @@
+********************************************************************************
+*                      Saturday, May 21, 2016 4:23:00 AM                       *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 1.6.2.0
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: D:\Documents\GitHub\nightfall-incident-port
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 6.0
+
+- Compilation -----------------------------------------------
+
+Process: D:\Documents\GitHub\nightfall-incident-port\CSharp60Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-30ef2216a37b39d49a31d7fa54dd0b84
+Exit code: 0
+Elapsed time: 0.78 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (5 lines):
+0: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(18,30): warning CS0414: The field 'GridGraph<T>.EMPTY_ID' is assigned but its value is never used
+1: Assets\Scripts\Level\LevelController.cs(13,22): warning CS0414: The field 'LevelController.DataReady' is assigned but its value is never used
+2: Assets\Scripts\Level\LevelController.cs(10,21): warning CS0414: The field 'LevelController.TurnCount' is assigned but its value is never used
+3: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(19,30): warning CS0414: The field 'GridGraph<T>.PATH_ID' is assigned but its value is never used
+4: Assets\Scripts\Action\Movement\Governor.cs(24,21): warning CS0414: The field 'Governor.turncounter' is assigned but its value is never used
+
+- PDB to MDB conversion --------------------------------------
+
+Process: D:\Documents\GitHub\nightfall-incident-port\CSharp60Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Exit code: 0
+Elapsed time: 0.05 sec
+
+- pdb2mdb.exe output (0 lines):
+********************************************************************************
+*                      Saturday, May 21, 2016 4:23:50 AM                       *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 1.6.2.0
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: D:\Documents\GitHub\nightfall-incident-port
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 6.0
+
+- Compilation -----------------------------------------------
+
+Process: D:\Documents\GitHub\nightfall-incident-port\CSharp60Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-2f4d4b8c299e6d04bbdf4ffa734912bc
+Exit code: 0
+Elapsed time: 0.68 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (5 lines):
+0: Assets\Scripts\Action\Movement\Governor.cs(24,21): warning CS0414: The field 'Governor.turncounter' is assigned but its value is never used
+1: Assets\Scripts\Level\LevelController.cs(10,21): warning CS0414: The field 'LevelController.TurnCount' is assigned but its value is never used
+2: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(18,30): warning CS0414: The field 'GridGraph<T>.EMPTY_ID' is assigned but its value is never used
+3: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(19,30): warning CS0414: The field 'GridGraph<T>.PATH_ID' is assigned but its value is never used
+4: Assets\Scripts\Level\LevelController.cs(13,22): warning CS0414: The field 'LevelController.DataReady' is assigned but its value is never used
+
+- PDB to MDB conversion --------------------------------------
+
+Process: D:\Documents\GitHub\nightfall-incident-port\CSharp60Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Exit code: 0
+Elapsed time: 0.05 sec
+
+- pdb2mdb.exe output (0 lines):
+********************************************************************************
+*                      Saturday, May 21, 2016 4:27:48 AM                       *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 1.6.2.0
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: D:\Documents\GitHub\nightfall-incident-port
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 6.0
+
+- Compilation -----------------------------------------------
+
+Process: D:\Documents\GitHub\nightfall-incident-port\CSharp60Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-829356d6f6910d141a7afc1796bac6da
+Exit code: 0
+Elapsed time: 0.67 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (5 lines):
+0: Assets\Scripts\Level\LevelController.cs(13,22): warning CS0414: The field 'LevelController.DataReady' is assigned but its value is never used
+1: Assets\Scripts\Level\LevelController.cs(10,21): warning CS0414: The field 'LevelController.TurnCount' is assigned but its value is never used
+2: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(19,30): warning CS0414: The field 'GridGraph<T>.PATH_ID' is assigned but its value is never used
+3: Assets\Scripts\Action\Movement\Governor.cs(24,21): warning CS0414: The field 'Governor.turncounter' is assigned but its value is never used
+4: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(18,30): warning CS0414: The field 'GridGraph<T>.EMPTY_ID' is assigned but its value is never used
+
+- PDB to MDB conversion --------------------------------------
+
+Process: D:\Documents\GitHub\nightfall-incident-port\CSharp60Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Exit code: 0
+Elapsed time: 0.06 sec
+
+- pdb2mdb.exe output (0 lines):
+********************************************************************************
+*                      Saturday, May 21, 2016 4:29:51 AM                       *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 1.6.2.0
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: D:\Documents\GitHub\nightfall-incident-port
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 6.0
+
+- Compilation -----------------------------------------------
+
+Process: D:\Documents\GitHub\nightfall-incident-port\CSharp60Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-49366c7994da7e7429218da96aeac879
+Exit code: 0
+Elapsed time: 0.74 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (5 lines):
+0: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(18,30): warning CS0414: The field 'GridGraph<T>.EMPTY_ID' is assigned but its value is never used
+1: Assets\Scripts\Level\LevelController.cs(13,22): warning CS0414: The field 'LevelController.DataReady' is assigned but its value is never used
+2: Assets\Scripts\Level\LevelController.cs(10,21): warning CS0414: The field 'LevelController.TurnCount' is assigned but its value is never used
+3: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(19,30): warning CS0414: The field 'GridGraph<T>.PATH_ID' is assigned but its value is never used
+4: Assets\Scripts\Action\Movement\Governor.cs(24,21): warning CS0414: The field 'Governor.turncounter' is assigned but its value is never used
+
+- PDB to MDB conversion --------------------------------------
+
+Process: D:\Documents\GitHub\nightfall-incident-port\CSharp60Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Exit code: 0
+Elapsed time: 0.09 sec
+
+- pdb2mdb.exe output (0 lines):

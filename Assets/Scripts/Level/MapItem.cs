@@ -30,20 +30,18 @@ namespace Level {
             name = mi.name;
             description = mi.description;
             string_id = mi.string_id;
-            gridPosition = new Vector2();
+            gridPosition = mi.gridPosition;
             sprite = mi.sprite;
+            id = mi.id;
         }
 
         public int ID {
-            get
-            {
-                return this.id;
-            }
+            get { return id; }
             set { id = value; }
         }
 
         public void SetPosition(Vector2 pos) {
-            this.gridPosition = pos;
+            gridPosition = pos;
         }
 
         public Vector2 GetPosition() {
@@ -55,7 +53,7 @@ namespace Level {
         }
 
         public override string ToString() {
-            return string.Format("{0}, '{1}'", this.GetType().FullName, name);
+            return string.Format("{0}, '{1}'", GetType().FullName, name);
         }
     }
 }

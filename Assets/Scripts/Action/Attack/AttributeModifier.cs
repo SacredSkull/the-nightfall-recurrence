@@ -12,11 +12,11 @@ namespace Action.Attack {
             foreach(Attribute attribute in this.Attributes) {
                 if(attribute.name == "movement") {
                     if(attribute.value == 0)
-                        target.movement = 0;
+                        target.Movement = 0;
                     else
-                        target.movement += attribute.value;
+                        target.Movement += attribute.value;
                 } else if(attribute.name == "health") {
-                    target.health += attribute.value;
+                    target.CurrentHealth += attribute.value;
                 } else if(attribute.name == "poison") {
                     throw new NotImplementedException();
                 }
