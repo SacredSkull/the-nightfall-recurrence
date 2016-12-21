@@ -18,7 +18,7 @@ namespace Utility.Collections.Grid {
         private readonly int EMPTY_ID = 0;
         private readonly int PATH_ID = 4;
 
-        private LayeredGrid<T> LayeredGrid;
+        public LayeredGrid<T> LayeredGrid;
         private GridCollection<T> GeometryGrid;
         private GridCollection<T> EntityGrid;
         private HashSet<int> ValidPathIDs;
