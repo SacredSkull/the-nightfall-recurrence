@@ -4,6 +4,8 @@ using Action.Attack;
 using UnityEngine;
 
 namespace Level.Entity {
+    //TODO: Add the sound clip for movement in this class. It should be activated inside the move() function, which will also need a reference to the AudioQueue (via the ServiceLocator), which hasn't been made yet!
+    //renderedTile.GetComponent<AudioSource>().clip = MovementClip;
     public abstract class SoftwareTool : MapItem {
         [XmlIgnore]
         public int CurrentHealth = 1;

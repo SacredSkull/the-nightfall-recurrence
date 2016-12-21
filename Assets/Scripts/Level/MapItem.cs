@@ -20,9 +20,19 @@ namespace Level {
         public int id;
 
         [XmlIgnore]
-        public static MapItem BlankTile = new MapItem {name = "An empty tile", description = "Unused memory address sequence.", string_id = "empty", sprite = Resources.Load<Sprite>("Sprites/map_features/empty")};
+        public static MapItem BlankTile = new MapItem {
+            name = "An empty tile",
+            description = "Unused memory address sequence.",
+            string_id = "empty",
+            sprite = null
+        };
         [XmlIgnore]
-        public static MapItem MapPath = new MapItem {name = "Map Piece", description = "Traversable network pathing", string_id = "path", sprite = Resources.Load<Sprite>("Sprites/map_features/path") };
+        public static MapItem MapPath = new MapItem {
+            name = "Map Piece",
+            description = "Traversable network pathing",
+            string_id = "path",
+            sprite = null
+        };
 
         public MapItem() { }
 

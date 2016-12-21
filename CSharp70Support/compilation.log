@@ -1,0 +1,64 @@
+********************************************************************************
+*                    Tuesday, December 20, 2016 11:34:48 PM                    *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 2.0.0.0
+Platform: Windows
+Target assembly: Assembly-CSharp.dll
+Project directory: C:\Users\Peter\GitHub\nightfall-incident-port
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 7.0
+
+- Compilation -----------------------------------------------
+
+Process: C:\Users\Peter\GitHub\nightfall-incident-port\CSharp70Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-af0020ed9faa5a94cab0092c25c02cc0 
+Exit code: 0
+Elapsed time: 4.24 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (6 lines):
+0: Assets\Scripts\Models\LevelModel.cs(44,30): warning CS0809: Obsolete member 'LevelModel.Load()' overrides non-obsolete member 'Loader.Load()'
+1: Assets\Scripts\Controllers\ActiveLevel.cs(27,19): warning CS0649: Field 'ActiveLevel.levelLoaded' is never assigned to, and will always have its default value false
+2: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(19,30): warning CS0414: The field 'GridGraph<T>.PATH_ID' is assigned but its value is never used
+3: Assets\Scripts\Action\Movement\Governor.cs(24,21): warning CS0414: The field 'Governor.turncounter' is assigned but its value is never used
+4: Assets\Scripts\Utility\Collections\Grid\GridGraph.cs(18,30): warning CS0414: The field 'GridGraph<T>.EMPTY_ID' is assigned but its value is never used
+5: Assets\Scripts\Models\FakeDatabase.cs(8,18): warning CS0414: The field 'FakeDatabase.levelXML' is assigned but its value is never used
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Users\Peter\GitHub\nightfall-incident-port\CSharp70Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp.dll
+Exit code: 0
+Elapsed time: 0.22 sec
+
+- pdb2mdb.exe output (0 lines):
+********************************************************************************
+*                    Tuesday, December 20, 2016 11:34:53 PM                    *
+********************************************************************************
+CSharpCompilerWrapper.exe version: 2.0.0.0
+Platform: Windows
+Target assembly: Assembly-CSharp-Editor.dll
+Project directory: C:\Users\Peter\GitHub\nightfall-incident-port
+Unity 'Data' or 'Frameworks' directory: C:/Program Files/Unity/Editor/Data
+Compiler: Microsoft C# 7.0
+
+- Compilation -----------------------------------------------
+
+Process: C:\Users\Peter\GitHub\nightfall-incident-port\CSharp70Support\Roslyn\csc.exe
+Arguments: -nostdlib+ -noconfig -nologo -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/mscorlib.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Core.dll" -r:"C:/Program Files/Unity/Editor/Data\Mono/lib/mono/2.0/System.Xml.dll" @Temp/UnityTempFile-6fbb5df15836ce34a85a2e9fb288cc72 
+Exit code: 0
+Elapsed time: 3.61 sec
+
+- Compiler output (0 lines):
+
+- Compiler errors (0 lines):
+
+- PDB to MDB conversion --------------------------------------
+
+Process: C:\Users\Peter\GitHub\nightfall-incident-port\CSharp70Support\Roslyn\pdb2mdb.exe
+Arguments: Temp\Assembly-CSharp-Editor.dll
+Exit code: 0
+Elapsed time: 0.15 sec
+
+- pdb2mdb.exe output (0 lines):
