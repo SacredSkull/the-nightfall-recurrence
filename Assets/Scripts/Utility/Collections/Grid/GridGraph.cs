@@ -18,16 +18,18 @@ namespace Utility.Collections.Grid {
         private readonly int EMPTY_ID = 0;
         private readonly int PATH_ID = 4;
 
-        private LayeredGrid<T> LayeredGrid;
+        public LayeredGrid<T> LayeredGrid;
         private GridCollection<T> GeometryGrid;
         private GridCollection<T> EntityGrid;
-        private HashSet<int> BlockedPathIDs;
+        private HashSet<int> ValidPathIDs;
+        private HashSet<int> ValidEntityIDs;
 
-        public GridGraph(LayeredGrid<T> layered, HashSet<int> BlockedPathIDs) {
+        public GridGraph(LayeredGrid<T> layered, HashSet<int> validPathIDs, HashSet<int> validEntityIDs) {
             LayeredGrid = layered;
             GeometryGrid = layered.GetLayer("geometry");
             EntityGrid = layered.GetLayer("entity");
-            this.BlockedPathIDs = BlockedPathIDs;
+            ValidPathIDs = validPathIDs;
+            ValidEntityIDs = validEntityIDs;
 
             if (GeometryGrid == null)
                 throw new ArgumentNullException("layered", "The geometry grid is null");
@@ -46,7 +48,8 @@ namespace Utility.Collections.Grid {
             if (geomePiece == null || entPiece == null)
                 return false;
 
-            return !BlockedPathIDs.Contains(geomePiece.ID);
+
+            return ValidPathIDs.Contains(geomePiece.ID) /*&& ValidEntityIDs.Contains(entPiece.ID)*/;
         }
 
         public bool isPathable(Vector2 coord) {

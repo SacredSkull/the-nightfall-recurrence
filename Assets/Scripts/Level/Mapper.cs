@@ -4,7 +4,11 @@ using System.Xml.Serialization;
 namespace Level {
     [XmlRoot("map")]
     public class Map {
-        [XmlElement("tileset")]
+	    [XmlAttribute("width", typeof(int))]
+	    public int width;
+	    [XmlAttribute("height", typeof(int))]
+	    public int height;
+	    [XmlElement("tileset")]
         public List<TileSet> tilesets = new List<TileSet>();
         [XmlElement("layer")]
         public List<Layer> layers = new List<Layer>();

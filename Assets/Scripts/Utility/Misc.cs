@@ -18,28 +18,27 @@ namespace Utility
             ERROR
         }
 
-        public static void UnityLog(string s, Level level = Level.DEBUG)
-        {
-            switch (level)
-            {
+        public static void UnityLog(string s, Level level = Level.DEBUG) {
+            DateTime date = DateTime.Now;
+            string nicetime = date.ToString("[HH:mm:ss] ");
+            switch (level) {
                 case Level.DEBUG:
                     s = "[DEBUG] " + s;
-                    Debug.Log(s);
+                    Debug.Log(nicetime + s);
                     break;
                 case Level.INFO:
                     s = "[INFO] " + s;
-                    Debug.Log(s);
+                    Debug.Log(nicetime + s);
                     break;
                 case Level.WARNING:
                     s = "[WARNING] " + s;
-                    Debug.LogWarning(s);
+                    Debug.LogWarning(nicetime + s);
                     break;
                 case Level.ERROR:
-                    Debug.LogError(s);
                     s = "[ERROR] " + s;
+                    Debug.LogError(nicetime + s);
                     break;
                 default:
-                    s = "[DEFAULT] " + s;
                     UnityLog("I was given a log level that doesn't exist.", Level.WARNING);
                     break;
             }

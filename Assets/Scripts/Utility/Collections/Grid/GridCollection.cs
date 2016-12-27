@@ -58,16 +58,13 @@ namespace Utility.Collections.Grid {
             foreach (GridPiece<T> piece in values) {
                 if (piece.Value == null)
                     piece.Value = emptyPiece.Value;
-                if(piece.Value != null)
-                    piece.Value.SetPosition(x, y);
-//                piece.Position = new Vector2(x, y);
+                piece.Value.SetPosition(x, y);
 
                 if(!gridDictionary.ContainsKey(x))
                     gridDictionary.Add(x, new Dictionary<int, GridPiece<T>>());
 
                 gridDictionary[x][y++] = piece;
-                if (PieceChanged != null)
-                    PieceChanged(new GridCollectionEventArgs<T>(piece));
+                PieceChanged?.Invoke(new GridCollectionEventArgs<T>(piece));
             }
         }
 
@@ -84,8 +81,7 @@ namespace Utility.Collections.Grid {
             gridDictionary[x][y].Value = value;
             value.SetPosition(x, y);
 
-            if (PieceChanged != null)
-                PieceChanged(new GridCollectionEventArgs<T>(gridDictionary[x][y]));
+            PieceChanged?.Invoke(new GridCollectionEventArgs<T>(gridDictionary[x][y]));
         }
 
         public void Set(Vector2 pos, GridPiece<T> piece) {
@@ -157,8 +153,7 @@ namespace Utility.Collections.Grid {
 
         protected virtual void OnPieceChanged(GridCollectionEventArgs<T> args) {
             var handler = PieceChanged;
-            if (handler != null)
-                handler(args);
+            handler?.Invoke(args);
         }
     }
 }

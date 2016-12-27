@@ -102,4 +102,10 @@
   </properties>
   <image width="30" height="30" source="../../enemy_tiles/watchman_3.png"/>
  </tile>
+ <tile id="17">
+  <properties>
+   <property name="id" value="bug_1"/>
+  </properties>
+  <image width="30" height="30" source="../../enemy_tiles/test.png"/>
+ </tile>
 </tileset>

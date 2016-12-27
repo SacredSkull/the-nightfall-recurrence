@@ -10,7 +10,7 @@ namespace Action.Attack {
         }
         [XmlAttribute]
         public string value;
-        public void Attack(int x, int y, Attackable source) {
+        public void Attack(int x, int y, SoftwareTool source) {
             throw new NotImplementedException();
         }
     }
