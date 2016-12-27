@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Action.Attack;
 using Level;
 using Level.Entity;
 
 namespace Models {
 	public class FakeDatabase : XMLDatabase {
-		private string levelXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\t\t<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"right-down\" width=\"16\" height=\"12\" tilewidth=\"30\" tileheight=\"30\" nextobjectid=\"4\">\n\t\t<tileset firstgid=\"1\" name=\"map_features\" tilewidth=\"30\" tileheight=\"30\" tilecount=\"5\" columns=\"0\">\n\t\t<tile id=\"0\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"credit\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../map_features/credit.png\"/>\n\t\t</tile>\n\t\t<tile id=\"1\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"intel\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../map_features/intel.png\"/>\n\t\t</tile>\n\t\t<tile id=\"2\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"spawnpoint\"/>\n\t\t</properties>\n\t\t<image width=\"28\" height=\"28\" source=\"../../map_features/spawnpoint.png\"/>\n\t\t</tile>\n\t\t<tile id=\"3\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"path\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../map_features/title_moveable.png\"/>\n\t\t</tile>\n\t\t<tile id=\"4\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"wall\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../map_features/wall.png\"/>\n\t\t</tile>\n\t\t</tileset>\n\t\t<tileset firstgid=\"6\" name=\"enemies\" tilewidth=\"30\" tileheight=\"30\" tilecount=\"18\" columns=\"0\">\n\t\t<tile id=\"0\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"boss_1\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/admin_1.png\"/>\n\t\t</tile>\n\t\t<tile id=\"1\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"firewall_1\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/firewall_1.png\"/>\n\t\t</tile>\n\t\t<tile id=\"2\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"dog_1\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/guarddog_1.png\"/>\n\t\t</tile>\n\t\t<tile id=\"3\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"dog_2\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/guarddog_2.png\"/>\n\t\t</tile>\n\t\t<tile id=\"4\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"dog_3\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/guarddog_3.png\"/>\n\t\t</tile>\n\t\t<tile id=\"5\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"sensor_1\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/sensor_1.png\"/>\n\t\t</tile>\n\t\t<tile id=\"6\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"sensor_2\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/sensor_2.png\"/>\n\t\t</tile>\n\t\t<tile id=\"7\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"sensor_3\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/sensor_3.png\"/>\n\t\t</tile>\n\t\t<tile id=\"8\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"sentinel_1\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/sentinel_1.png\"/>\n\t\t</tile>\n\t\t<tile id=\"9\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"sentinel_2\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/sentinel_2.png\"/>\n\t\t</tile>\n\t\t<tile id=\"10\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"sentinel_3\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/sentinel_3.png\"/>\n\t\t</tile>\n\t\t<tile id=\"11\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"warden_1\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/warden_1.png\"/>\n\t\t</tile>\n\t\t<tile id=\"12\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"warden_2\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/warden_2.png\"/>\n\t\t</tile>\n\t\t<tile id=\"13\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"warden_3\"/>\n\t\t</properties>\n\t\t<image width=\"29\" height=\"30\" source=\"../../enemy_tiles/warden_3.png\"/>\n\t\t</tile>\n\t\t<tile id=\"14\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"watchman_1\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/watchman_1.png\"/>\n\t\t</tile>\n\t\t<tile id=\"15\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"watchman_2\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/watchman_2.png\"/>\n\t\t</tile>\n\t\t<tile id=\"16\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"watchman_3\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/watchman_3.png\"/>\n\t\t</tile>\n\t\t<tile id=\"17\">\n\t\t\t<properties>\n\t\t<property name=\"id\" value=\"bug_1\"/>\n\t\t</properties>\n\t\t<image width=\"30\" height=\"30\" source=\"../../enemy_tiles/test.png\"/>\n\t\t</tile>\n\t\t</tileset>\n\t\t<layer name=\"Geometry\" width=\"16\" height=\"12\">\n\t\t<data>\n\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"1\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"1\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"2\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"3\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"3\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"3\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"3\"/>\n\t\t\t<tile gid=\"5\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t<tile gid=\"4\"/>\n\t\t\t</data>\n\t\t</layer>\n\t\t<layer name=\"Entities\" width=\"16\" height=\"12\">\n\t\t<data>\n\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"8\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"8\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"8\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t<tile gid=\"0\"/>\n\t\t\t</data>\n\t\t</layer>\n\t\t</map>\n\t\t";
-
 		public override List<HackTool> loadHackTools() {
 			if (hackTools != null)
 				return hackTools;
 
 			return hackTools = new List<HackTool> {
-				new HackTool() {
-					Attacks = new List<Attack>() {
+				new HackTool {
+					Attacks = new List<Attack> {
 						new AttackBasic {
 							damage = 2,
 							Name = "Slice",
@@ -32,7 +31,7 @@ namespace Models {
 		}
 
 		public override void dumpHackTools() {
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public override List<Sentry> loadSentries() {
@@ -41,7 +40,7 @@ namespace Models {
 
 			return sentries = new List<Sentry> {
 				new Sentry {
-					Attacks = new List<Attack>() {
+					Attacks = new List<Attack> {
 						new AttackBasic {
 							damage = 2,
 							Name = "Nibble",
@@ -59,23 +58,1829 @@ namespace Models {
 		}
 
 		public override void dumpSentries() {
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public override List<MapItem> loadMapItems() {
-			throw new System.NotImplementedException();
+            if (mapItems != null)
+                return mapItems;
+
+            return mapItems = new List<MapItem> {
+                new MapItem {
+                    name = "Wall",
+                    string_id = "wall",
+                    description = "An impassible threshold"
+                },
+
+                new Pickup {
+                    name = "Credit",
+                    string_id = "credit",
+                    description = "You could sell this data for a pretty penny on the market",
+                    required = false
+                },
+
+                new Pickup {
+                    name = "Log Files",
+                    string_id = "intel",
+                    description = "The information in these files is vital to proceed",
+                    required = true
+                }
+            };
 		}
 
 		public override void dumpMapItems() {
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public override Map loadLevel(string path) {
-			throw new System.NotImplementedException();
-		}
+            if (map != null)
+                return map;
+            return map = getTestMap();
+        }
 
 		public override void dumpMap() {
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
-	}
+
+        private Map getTestMap() {
+            return map = new Map {
+                height = 12,
+                layers = new List<Layer> {
+                    new Layer {
+                        height = 12,
+                        name = "Geometry",
+                        tiles = new[]
+                        {
+                            new LayerTile {
+                                gid = 0
+                            },
+                            new LayerTile {
+                                gid = 1
+                            },
+                            new LayerTile {
+                                gid = 4
+                            },
+                            new LayerTile {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 1
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 2
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 3
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 3
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 3
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 3
+                            },
+                            new LayerTile
+                            {
+                                gid = 5
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            },
+                            new LayerTile
+                            {
+                                gid = 4
+                            }
+                        },
+                        width = 16
+                    },
+                    new Layer
+                    {
+                        height = 12,
+                        name = "Entities",
+                        tiles = new[]
+                        {
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 8
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 8
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 8
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            },
+                            new LayerTile
+                            {
+                                gid = 0
+                            }
+                        },
+                        width = 16
+                    }
+                },
+                tilesets = new List<TileSet> {
+                    new TileSet {
+                        firstgid = 1,
+                        name = "map_features",
+                        tiles = new List<Tile> {
+                            new Tile {
+                                id = 0,
+                                properties = new[] {
+                                    new TileSetProperty {
+                                        name = "id",
+                                        value = "credit"
+                                    }
+                                }
+                            },
+                            new Tile {
+                                id = 1,
+                                properties = new[] {
+                                    new TileSetProperty {
+                                        name = "id",
+                                        value = "intel"
+                                    }
+                                }
+                            },
+                            new Tile {
+                                id = 2,
+                                properties = new[] {
+                                    new TileSetProperty {
+                                        name = "id",
+                                        value = "spawnpoint"
+                                    }
+                                }
+                            },
+                            new Tile {
+                                id = 3,
+                                properties = new[] {
+                                    new TileSetProperty {
+                                        name = "id",
+                                        value = "path"
+                                    }
+                                }
+                            },
+                            new Tile {
+                                id = 4,
+                                properties = new[] {
+                                    new TileSetProperty {
+                                        name = "id",
+                                        value = "wall"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    new TileSet
+                    {
+                        firstgid = 6,
+                        name = "enemies",
+                        tiles = new List<Tile> {
+//                            new Tile {
+//                                id = 0,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "boss_1"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 1,
+//                                properties = new[] {
+//                                    new TileSetProperty
+//                                    {
+//                                        name = "id",
+//                                        value = "firewall_1"
+//                                    }
+//                                }
+//                            },
+                            new Tile {
+                                id = 2,
+                                properties = new[] {
+                                    new TileSetProperty {
+                                        name = "id",
+                                        value = "dog_1"
+                                    }
+                                }
+                            },
+//                            new Tile {
+//                                id = 3,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "dog_2"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 4,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "dog_3"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 5,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "sensor_1"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 6,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "sensor_2"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 7,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "sensor_3"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 8,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "sentinel_1"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 9,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "sentinel_2"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 10,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "sentinel_3"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 11,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "warden_1"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 12,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "warden_2"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 13,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "warden_3"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 14,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "watchman_1"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 15,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "watchman_2"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 16,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "watchman_3"
+//                                    }
+//                                }
+//                            },
+//                            new Tile {
+//                                id = 17,
+//                                properties = new[] {
+//                                    new TileSetProperty {
+//                                        name = "id",
+//                                        value = "bug_1"
+//                                    }
+//                                }
+//                            }
+                        }
+                    }
+                },
+                width = 16
+            };
+        }
+    }
 }

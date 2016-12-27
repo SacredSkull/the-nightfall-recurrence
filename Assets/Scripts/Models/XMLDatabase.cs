@@ -31,7 +31,6 @@ namespace Models {
                 toolSerializer.Serialize(writer, elements);
             }
             //TODO: Handle/throw necessary exceptions
-            return;
         }
 
         public virtual List<HackTool> loadHackTools() {
@@ -55,7 +54,7 @@ namespace Models {
         }
 
         public virtual void dumpMapItems() {
-            serialiseXML(new FeaturesXMLRoot() {features = this.mapItems}, "/." , "features");
+            serialiseXML(new FeaturesXMLRoot {features = this.mapItems}, "/." , "features");
         }
 
         public virtual Map loadLevel(string path) {

@@ -63,7 +63,7 @@ namespace Models {
 	        geometryGrid = LayeredGrid.Add("geometry");
 	        entityGrid = LayeredGrid.Add("entity");
 
-            mapItems.Add(0, MapItem.BlankTile);
+            mapItems[0] = MapItem.BlankTile;
 
             Logger.UnityLog("Starting to parse Tilesets", Logger.Level.INFO);
 
@@ -82,7 +82,7 @@ namespace Models {
                                        em.AllFeatures.FirstOrDefault(x => x.string_id == tilePropertyStringID.value);
 
                     if (existing != null)
-                        mapItems.Add(tl.id + tileFirstGID, existing);
+                        mapItems[tl.id + tileFirstGID] = existing;
                     else
                         Logger.UnityLog(string.Format("Could not find {0} in any of the global lists.",
 		                        tilePropertyStringID.value), Logger.Level.ERROR);
@@ -138,8 +138,8 @@ namespace Models {
                             MapItem mi = mapItems[tile.gid];
 
                             if (mi == null && tile.gid != 0)
-                                throw new InvalidCastException(string.Format(
-		                                "A non-entity was found in the entity grid - '{0}'", mapItems[tile.gid].name));
+                                throw new InvalidCastException(
+                                    $"A non-entity was found in the entity grid - '{mapItems[tile.gid].name}'");
 
                             MapItem clone = (MapItem)Activator.CreateInstance(mi.GetType(), mi);
                             if (clone is SoftwareTool)

@@ -15,8 +15,8 @@ namespace Models {
 
 		public SpriteLoader() {
 			// I'm not sure whether to laugh or cry over these double assignments:
-			loadedSprites.Add("empty", MapItem.BlankTile.sprite = Resources.Load<Sprite>("Sprites/map_features/empty"));
-			loadedSprites.Add("path", MapItem.MapPath.sprite = Resources.Load<Sprite>("Sprites/map_features/path"));
+			loadedSprites["empty"] = MapItem.BlankTile.sprite = Resources.Load<Sprite>("Sprites/map_features/empty");
+			loadedSprites["path"] = MapItem.MapPath.sprite = Resources.Load<Sprite>("Sprites/map_features/path");
 		}
 
 	    public void Load(MapItem mi) {

@@ -8,6 +8,7 @@ using Utility.Collections.Grid;
 using Logger = Utility.Logger;
 
 namespace Views {
+    [ExecuteInEditMode]
     public class LevelView : View<ActiveLevel> {
         public GameObject GridPiece;
         public GameObject GridContainer;
@@ -16,8 +17,8 @@ namespace Views {
 	    public static GridCollection<MapItem> GeometryLayer;
         public static GridCollection<MapItem> EntityLayer;
 
-        private void Awake() {
-	        if (gc) {
+        protected void Awake() {
+	        if (gc != null && gc) {
 		        gc.DataLoaded += (graph, sprites) => {
 			        Logger.UnityLog("Beginning to draw grids...", Logger.Level.INFO);
 			        GeometryLayer = graph.LayeredGrid.GetLayer("geometry");
@@ -34,7 +35,7 @@ namespace Views {
 	        }
         }
 
-        private void HandleChangedGridEvent(GridCollectionEventArgs<MapItem> args) {
+        protected void HandleChangedGridEvent(GridCollectionEventArgs<MapItem> args) {
             if (args.GridPiece.GameObject != null) {
                 //Debug.Log(string.Format("Event triggered for {0} - its new GO is {1}", args.GridPiece.Position, args.NewGO.name));
                 Decorate(args.GridPiece.GameObject, args.GridPiece);
@@ -46,6 +47,7 @@ namespace Views {
 	        geometryContainer.transform.SetParent(this.transform);
             geometryContainer.name = "Geometry Grid";
             geometryContainer.GetComponent<GridLayoutGroup>().constraintCount = GeometryLayer.Height;
+            geometryContainer.hideFlags = HideFlags.DontSave;
 
             for (int row = 0; row < GeometryLayer.Height; row++) {
                 for (int column = 0; column < GeometryLayer.GetRow(row).Count(); column++) {
@@ -67,6 +69,7 @@ namespace Views {
 	        entityContainer.transform.SetParent(this.transform);
 	        entityContainer.name = "Entity Grid";
             entityContainer.GetComponent<GridLayoutGroup>().constraintCount = EntityLayer.Height;
+            entityContainer.hideFlags = HideFlags.DontSave;
 
             for (int row = 0; row < EntityLayer.Height; row++) {
                 for (int column = 0; column < EntityLayer.GetRow(row).Count(); column++) {

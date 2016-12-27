@@ -7,6 +7,7 @@ using UnityEngine;
 using Utility.Collections.Grid;
 
 namespace Controllers {
+    [ExecuteInEditMode]
     public class ActiveLevel : BaseApplication {
         public bool dumpLevelXML;
         public bool dumpProgramXML;
@@ -24,13 +25,9 @@ namespace Controllers {
 	    public delegate void LevelLoadedHandler(GridGraph<MapItem> graph, Dictionary<string, Sprite> sprites);
 	    public event LevelLoadedHandler DataLoaded;
 
-	    private void Awake() {
+	    private void Start() {
 			ReadData();
 	    }
-
-	    protected override void Start () {
-
-        }
 
         // Update is called once per frame
         private void Update() {
@@ -50,12 +47,20 @@ namespace Controllers {
 	        LevelModel.dumpLoadedMapItems = dumpLoadedMapItems;
 	        LevelModel.dumpTileSets = dumpTileSets;
 
-	        level = new LevelModel(new XMLDatabase());
+            if(Application.isEditor && !Application.isPlaying) {
+                level = new LevelModel(new FakeDatabase());
+            } else {
+                level = new LevelModel(new XMLDatabase());
+            }
 
-	        level.LevelLoaded += () => {
-		        DataLoaded?.Invoke(level.graph, level.Sprites);
+            level.LevelLoaded += () => {
+		        DataReady(level.graph, level.Sprites);
 	        };
 	        level.Load();
+        }
+
+        protected void DataReady(GridGraph<MapItem> graph, Dictionary<string, Sprite> sprites) {
+            DataLoaded?.Invoke(graph, sprites);
         }
     }
 }
