@@ -12,9 +12,12 @@ namespace Action.Attack {
                 return false;
             if(source is Sentry && target is Sentry)
                 throw new ArgumentException("Traitor sentry program detected!");
+            if(target.ReceiveAttack(this, source)) {
+                target.CurrentHealth -= damage;
+                return true;
+            }
 
-            target.CurrentHealth -= damage;
-            return true;
+            return false;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Action.Attack;
 using UnityEngine;
@@ -23,8 +25,27 @@ namespace Level.Entity {
          XmlArrayItem(ElementName = "mapmodifier", Type = typeof(MapModifier))]
         public List<Attack> Attacks { get; set; }
 
-        public SoftwareTool(){
+        public delegate void DeathEventHandler(SoftwareTool victim, SoftwareTool killer, Attack candlestick);
+        public static event DeathEventHandler DeathEvent;
+
+        [XmlIgnore]
+        protected Trail _Trail;
+
+        [XmlIgnore]
+        public Trail Tail {
+            get {
+                return _Trail ?? (_Trail = new Trail(this));
+            }
+        }
+
+        public bool AtMaxSize => CurrentHealth == MaxHealth;
+
+        [XmlIgnore]
+        public Sprite TailSprite = null;
+
+        public SoftwareTool() {
             gridPosition = new Vector2();
+            _Trail = new Trail(this);
         }
 
         public SoftwareTool(SoftwareTool blueprint) : base(blueprint) {
@@ -34,24 +55,49 @@ namespace Level.Entity {
             CurrentHealth = blueprint.CurrentHealth;
             Movement = blueprint.Movement;
             Attacks = blueprint.Attacks;
+            TailSprite = blueprint.TailSprite;
+            _Trail = new Trail(this);
         }
 
-        public bool isEntirelyRanged() {
-            bool ranged = false;
-            foreach (var attack in Attacks) {
-                if (attack.Range > 1)
-                    ranged = true;
+        public bool Attack(Attack attack, SoftwareTool target) {
+            return Attacks.Contains(attack) && attack.Execute(target, this);
+        }
+
+        public bool IsEntirelyRanged {
+            get {
+                bool ranged = false;
+                foreach(var attack in Attacks) {
+                    if(attack.Range > 1)
+                        ranged = true;
+                }
+
+                return ranged;
             }
-
-            return ranged;
         }
 
-        public virtual void TakeTurn() {
-            
+        public IEnumerable<Attack> PotentialAttacks(int distance) {
+            return Attacks.Where(x => x.Range >= distance);
+        }
+
+        public Attack LongestRangeAttack => Attacks.OrderByDescending(x => x.Range).FirstOrDefault();
+
+        public virtual IEnumerator TakeTurn() {
+            yield return null;
         }
 
         public virtual void Move(Vector2 destination) {
-            
+            if(destination == gridPosition) return;
+
+            SetPosition(destination);
+            Tail.Move();
+        }
+
+        public virtual bool ReceiveAttack(Attack attack, SoftwareTool source) {
+            if(CurrentHealth <= 0) {
+                DeathEvent?.Invoke(this, source, attack);
+                Delete();
+            }
+            return true;
         }
     }
 }

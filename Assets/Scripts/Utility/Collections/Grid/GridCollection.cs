@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -49,6 +50,10 @@ namespace Utility.Collections.Grid {
             Set(pos, emptyPiece.ID, emptyPiece.Value);
         }
 
+        public void Clear(IGridLocator obj) {
+            Clear(obj.GetPosition());
+        }
+
         public void Clear(int x, int y) {
             Clear(new Vector2(x, y));
         }
@@ -56,15 +61,10 @@ namespace Utility.Collections.Grid {
         public void SetRow(int x, IEnumerable<GridPiece<T>> values) {
             int y = 0;
             foreach (GridPiece<T> piece in values) {
-                if (piece.Value == null)
+                if (piece.Value == null && emptyPiece != null)
                     piece.Value = emptyPiece.Value;
-                piece.Value.SetPosition(x, y);
 
-                if(!gridDictionary.ContainsKey(x))
-                    gridDictionary.Add(x, new Dictionary<int, GridPiece<T>>());
-
-                gridDictionary[x][y++] = piece;
-                PieceChanged?.Invoke(new GridCollectionEventArgs<T>(piece));
+                Set(new Vector2(x, y++), piece);
             }
         }
 
@@ -77,9 +77,14 @@ namespace Utility.Collections.Grid {
             if(!gridDictionary.ContainsKey(x))
                 gridDictionary.Add(x, new Dictionary<int, GridPiece<T>>());
 
+            value.PositionSetEvent -= Move;
+            value.PositionSetEvent += Move;
+
+            value.DeletionEvent -= Clear;
+            value.DeletionEvent += Clear;
+
             gridDictionary[x][y].ID = id;
             gridDictionary[x][y].Value = value;
-            value.SetPosition(x, y);
 
             PieceChanged?.Invoke(new GridCollectionEventArgs<T>(gridDictionary[x][y]));
         }
@@ -88,24 +93,41 @@ namespace Utility.Collections.Grid {
             Set(pos, piece.ID, piece.Value);
         }
 
-        public void Move(Vector2 currentPos, Vector2 newPos) {
-            GridPiece<T> currentRef = Get(currentPos);
-
+        public void Move(Vector2 currentPos, Vector2 newPos, bool clear = true) {
             // Now copy our stored piece into the new position (overwriting).
             Set(newPos, Get(currentPos));
 
             // Set the initial position to empty.
-            Clear(currentPos);
+            if(clear)
+                Clear(currentPos);
         }
 
-        public void Move(int x1, int y1, int x2, int y2) {
+        public void Move(IGridLocator obj, Vector2 newPos, bool clear = true) {
+            T casted;
+            if(obj is T)
+                casted = (T)obj;
+            else {
+                return;
+            }
+
+            Set(newPos, 0, casted);
+
+            if(clear)
+                Clear(obj.PreviousPosition);
+        }
+
+        public void Move(int x1, int y1, int x2, int y2, bool clear = true) {
             Move(new Vector2(x1, y1), new Vector2(x2, y2));
         }
 
         public void Swap(Vector2 first, Vector2 second) {
-            GridPiece<T> secondCopy = Get(second);
-            Set(second, Get(first));
-            Set(first, secondCopy.ID, secondCopy.Value);
+            if(first == second) return;
+
+            T valueCopy = Get(first).Value;
+            int idCopy = Get(first).ID;
+
+            Set(first, Get(second));
+            Set(second, idCopy, valueCopy);
         }
 
         public void Swap(int x1, int y1, int x2, int y2) {
@@ -134,9 +156,7 @@ namespace Utility.Collections.Grid {
             }
         }
 
-        public int Area {
-            get { return Width * Height; }
-        }
+        public int Area => Width * Height;
 
         public int Width {
             get {
@@ -147,13 +167,6 @@ namespace Utility.Collections.Grid {
             }
         }
 
-        public int Height {
-            get { return gridDictionary.Keys.Count; } 
-        }
-
-        protected virtual void OnPieceChanged(GridCollectionEventArgs<T> args) {
-            var handler = PieceChanged;
-            handler?.Invoke(args);
-        }
+        public int Height => gridDictionary.Keys.Count;
     }
 }

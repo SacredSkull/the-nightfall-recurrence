@@ -8,6 +8,6 @@ namespace Utility.Collections.Grid {
         int CountNodes();
         bool isPathable(Vector2 coord);
         bool isPathable(int x, int y);
-        List<Vector2> Neighbours(Vector2 positionVector);
+        List<Vector2> Neighbours(Vector2 positionVector, Vector2[] WhitelistedCoords = null);
     }
 }

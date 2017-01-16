@@ -18,8 +18,8 @@ namespace Utility.Collections.Grid {
         IEnumerator<T> GetEnumerator();
         IEnumerable<GridPiece<T>> GetRow(int x);
 
-        void Move(Vector2 currentPos, Vector2 newPos);
-        void Move(int x1, int y1, int x2, int y2);
+        void Move(Vector2 currentPos, Vector2 newPos, bool clear = true);
+        void Move(int x1, int y1, int x2, int y2, bool clear = true);
 
         void Set(Vector2 pos, int id, T value);
         void Set(int x, int y, int id, T value);

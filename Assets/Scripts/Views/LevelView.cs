@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Controllers;
 using Level;
+using Models;
 using thelab.mvc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,8 +44,7 @@ namespace Views {
         }
 
         public void renderGeometryLayer() {
-            GameObject geometryContainer = Instantiate(GridContainer, Vector3.zero, Quaternion.identity);
-	        geometryContainer.transform.SetParent(this.transform);
+            GameObject geometryContainer = Instantiate(GridContainer, gameObject.transform.position, Quaternion.identity, transform);
             geometryContainer.name = "Geometry Grid";
             geometryContainer.GetComponent<GridLayoutGroup>().constraintCount = GeometryLayer.Height;
             geometryContainer.hideFlags = HideFlags.DontSave;
@@ -65,8 +65,7 @@ namespace Views {
         }
 
         public void renderEntityLayer() {
-            GameObject entityContainer = Instantiate(GridContainer, Vector3.zero, Quaternion.identity);
-	        entityContainer.transform.SetParent(this.transform);
+            GameObject entityContainer = Instantiate(GridContainer, gameObject.transform.position, Quaternion.identity, transform);
 	        entityContainer.name = "Entity Grid";
             entityContainer.GetComponent<GridLayoutGroup>().constraintCount = EntityLayer.Height;
             entityContainer.hideFlags = HideFlags.DontSave;
@@ -96,9 +95,13 @@ namespace Views {
 		    if (sortingLayer != null && !sortingLayer.Equals(string.Empty))
 			    renderedTile.sortingLayerName = sortingLayer;
 
-		    //Logger.UnityLog(string.Format("[ENTITY][RASTERING] Sprite attached ID: {0}.",
-			//    piece.Value.sprite), Logger.Level.ERROR);
-
+	        TileView tileView = go.GetComponent<TileView>();
+	        if(tileView == null)
+	            Logger.UnityLog($"Couldn't access a grid piece's {typeof(TileView)}", Logger.Level.ERROR);
+	        else {
+	            tileView.MapItem = piece.Value;
+	            tileView.Sprite = piece.Value.sprite;
+	        }
 
 		    renderedTile.hideFlags = HideFlags.DontSave;
 		    renderedTile.sprite = piece.Value.sprite;

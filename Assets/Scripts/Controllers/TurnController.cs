@@ -7,7 +7,10 @@ using UnityEngine;
 using Utility.Collections.Grid;
 
 namespace Controllers {
+    [ExecuteInEditMode]
     public class TurnController : Controller<ActiveLevel> {
+        [Range(0.1f, 2f)]
+        public float timePerMove;
         private bool playerTurn;
         private bool turnWaiting;
         private int TurnCount = 1;
@@ -21,6 +24,11 @@ namespace Controllers {
 	    private void LoadingListener(GridGraph<MapItem> graph, Dictionary<string, Sprite> sprites) {
 		    DataReady = true;
 	    }
+
+        [ContextMenu("Step turn")]
+        private void StepTurn() {
+            SentriesTurn();
+        }
 	
         // Update is called once per frame
         private void Update () {
@@ -32,7 +40,9 @@ namespace Controllers {
         private IEnumerator PlayerTurn() {
             turnWaiting = true;
             Debug.Log("Starting player turn...");
-            yield return new WaitForSeconds(2);
+            if(Application.isPlaying) {
+                yield return new WaitForSeconds(2);
+            }
             Debug.Log("...player turn has ended");
             playerTurn = false;
             turnWaiting = false;
@@ -43,12 +53,10 @@ namespace Controllers {
             turnWaiting = true;
             Debug.Log("Starting sentry turn...");
             foreach (Sentry sentry in app.level.LevelSentries) {
-                // TODO: Movement noise is FAR TOO LOUD.
-                for (int i = 0; i < sentry.Movement; i++) {
-                    sentry.TakeTurn();
-                    yield return new WaitForSeconds(0.3f);
-                }
+                yield return sentry.TakeTurn(timePerMove);
+                if (Application.isPlaying) { }
             }
+
             Debug.Log("...sentry turn has ended");
             playerTurn = true;
             turnWaiting = false;

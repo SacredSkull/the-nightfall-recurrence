@@ -21,7 +21,6 @@ namespace Models {
 
 		public event DataLoadedHandler LevelLoaded;
 		public Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>();
-		public List<SoftwareTool> LevelSoftwareTools = new List<SoftwareTool>();
 	    public List<Sentry> LevelSentries = new List<Sentry>();
 	    public static readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
 	    public GridGraph<MapItem> graph;
@@ -105,7 +104,7 @@ namespace Models {
                         for (int column = 0; column < l.width; column++) {
                             LayerTile tile = l.tiles[currentTile++];
                             MapItem mi = new MapItem(mapItems[tile.gid]);
-                            mi.SetPosition(row, column);
+                            mi.SetPosition(row, column, false);
                             columnList.Add(new GridPiece<MapItem> { ID = tile.gid, Value = mi });
                         }
                         geometryGrid.SetRow(row, columnList);
@@ -135,18 +134,25 @@ namespace Models {
                         List<GridPiece<MapItem>> columnList = new List<GridPiece<MapItem>>();
                         for (int column = 0; column < l.width; column++) {
                             LayerTile tile = l.tiles[currentTile++];
-                            MapItem mi = mapItems[tile.gid];
+                            MapItem mi;
 
-                            if (mi == null && tile.gid != 0)
-                                throw new InvalidCastException(
-                                    $"A non-entity was found in the entity grid - '{mapItems[tile.gid].name}'");
+                            if(!mapItems.TryGetValue(tile.gid, out mi) && tile.gid != 0) {
+                                Logger.UnityLog(
+                                    $"Tried to access an invalid mapitem (from the global lists), #{tile.gid}",
+                                    Logger.Level.ERROR);
+                                continue;
+                            }
+                            MapItem clone;
 
-                            MapItem clone = (MapItem)Activator.CreateInstance(mi.GetType(), mi);
-                            if (clone is SoftwareTool)
-                                LevelSoftwareTools.Add((SoftwareTool)clone);
-                            if (clone is Sentry)
+                            if(mi is Sentry) {
+                                clone = new Sentry((Sentry)mi);
                                 LevelSentries.Add((Sentry)clone);
-
+                            } else if(mi is HackTool) {
+                                clone = new HackTool((HackTool)mi);
+                            } else {
+                                clone = new MapItem(mi);
+                            }
+                            clone.SetPosition(row, column);
                             columnList.Add(new GridPiece<MapItem> { ID = tile.gid, Value = clone });
                         }
                         entityGrid.SetRow(row, columnList);

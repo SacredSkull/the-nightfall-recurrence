@@ -914,7 +914,7 @@ namespace Models {
                             },
                             new LayerTile
                             {
-                                gid = 0
+                                gid = 23
                             },
                             new LayerTile
                             {
@@ -1074,7 +1074,7 @@ namespace Models {
                             },
                             new LayerTile
                             {
-                                gid = 8
+                                gid = 22
                             },
                             new LayerTile
                             {
@@ -1858,24 +1858,24 @@ namespace Models {
 //                                    }
 //                                }
 //                            },
-//                            new Tile {
-//                                id = 16,
-//                                properties = new[] {
-//                                    new TileSetProperty {
-//                                        name = "id",
-//                                        value = "watchman_3"
-//                                    }
-//                                }
-//                            },
-//                            new Tile {
-//                                id = 17,
-//                                properties = new[] {
-//                                    new TileSetProperty {
-//                                        name = "id",
-//                                        value = "bug_1"
-//                                    }
-//                                }
-//                            }
+                            new Tile {
+                                id = 16,
+                                properties = new[] {
+                                    new TileSetProperty {
+                                        name = "id",
+                                        value = "watchman_3"
+                                    }
+                                }
+                            },
+                            new Tile {
+                                id = 17,
+                                properties = new[] {
+                                    new TileSetProperty {
+                                        name = "id",
+                                        value = "bug_1"
+                                    }
+                                }
+                            }
                         }
                     }
                 },

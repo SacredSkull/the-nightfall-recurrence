@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Level.Entity;
 using UnityEngine;
 
 namespace Utility.Collections.Grid {
@@ -14,9 +15,6 @@ namespace Utility.Collections.Grid {
         readonly Vector2 DIR_UP = new Vector2(1, 0);
         readonly Vector2 DIR_LEFT = new Vector2(0, -1);
         readonly Vector2 DIR_RIGHT = new Vector2(0, 1);
-
-        private readonly int EMPTY_ID = 0;
-        private readonly int PATH_ID = 4;
 
         public LayeredGrid<T> LayeredGrid;
         private GridCollection<T> GeometryGrid;
@@ -48,8 +46,10 @@ namespace Utility.Collections.Grid {
             if (geomePiece == null || entPiece == null)
                 return false;
 
+            if(entPiece.Value is SoftwareTool || entPiece.Value is TrailTile)
+                return false;
 
-            return ValidPathIDs.Contains(geomePiece.ID) /*&& ValidEntityIDs.Contains(entPiece.ID)*/;
+            return ValidPathIDs.Contains(geomePiece.ID);
         }
 
         public bool isPathable(Vector2 coord) {
@@ -64,29 +64,32 @@ namespace Utility.Collections.Grid {
             return Cost(new Vector2(x, y));
         }
 
-        public List<Vector2> Neighbours(Vector2 positionVector) {
+        public List<Vector2> Neighbours(Vector2 positionVector, Vector2[] WhitelistedCoords) {
             int x = (int)positionVector.x;
             int y = (int)positionVector.y;
 
             List<Vector2> edges = new List<Vector2>();
 
+            if(WhitelistedCoords == null)
+                WhitelistedCoords = new Vector2[0];
+
             // Left
-            if (GeometryGrid.Contains(positionVector + DIR_LEFT) && isPathable(positionVector + DIR_LEFT)) {
+            if (GeometryGrid.Contains(positionVector + DIR_LEFT) && (WhitelistedCoords.Contains(positionVector - DIR_RIGHT) || isPathable(positionVector + DIR_LEFT))) {
                 edges.Add(positionVector + DIR_LEFT);
             }
 
             // Up
-            if (GeometryGrid.Contains(positionVector + DIR_UP) && isPathable(positionVector + DIR_UP)) {
+            if (GeometryGrid.Contains(positionVector + DIR_UP) && (WhitelistedCoords.Contains(positionVector - DIR_DOWN) || isPathable(positionVector + DIR_UP))) {
                 edges.Add(positionVector + DIR_UP);
             }
 
             // Down
-            if (GeometryGrid.Contains(positionVector + DIR_DOWN) && isPathable(positionVector + DIR_DOWN)) {
+            if (GeometryGrid.Contains(positionVector + DIR_DOWN) && (WhitelistedCoords.Contains(positionVector - DIR_UP) || isPathable(positionVector + DIR_DOWN))) {
                 edges.Add(positionVector + DIR_DOWN);
             }
 
             // Right
-            if (GeometryGrid.Contains(positionVector + DIR_RIGHT) && isPathable(positionVector + DIR_RIGHT)) {
+            if (GeometryGrid.Contains(positionVector + DIR_RIGHT) && (WhitelistedCoords.Contains(positionVector - DIR_LEFT) || isPathable(positionVector + DIR_RIGHT))) {
                 edges.Add(positionVector + DIR_RIGHT);
             }
 
