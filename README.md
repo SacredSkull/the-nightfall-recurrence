@@ -1,4 +1,4 @@
-#Unity Nightfall Incident Port
+# Unity Nightfall Incident Port
 
 If you haven't heard of The Nightfall Incident, it is an
 [excellent turn based strategy flash game](http://jayisgames.com/games/spybot-the-nightfall-incident/) 
@@ -9,9 +9,12 @@ extensibility, in terms of levels and programs/enemies. I'm also thinking about 
 
 I'm currently using [Tiled](https://github.com/bjorn/tiled) to store and create levels because it's fairly accessible (therefore allowing user created content) and is quite mature.
 
+## Progress report
+A while ago I completely overhauled the project to make it more maintainable and in doing so, I began using a MVC (Model-View-Controller for those not in the web develosphere) framework simply called [MVC](https://bitbucket.org/eduardo_costa/thelab-unity-mvc). Unfortunately I found that framework a little restrictive for my tastes and decided to change. Now I'm using, and have contributed to, a project called [Karma](https://github.com/cgarciae/karma), which was created by a web developer and is more or less exactly what I was looking for. Also, dependency injection. Nice!
 
+The bulk of the initial work I did on moving to the first MVC framework was directly useful for Karma, but inevitably I had to discard some. I last worked on this project a couple of months ago (committed, but not pushed) but have wanted to finish the code for my blog update, which is now complete, until I change my own mind again. This should be my free time programming focus but I'm going into my final year at university, so there may not be much of that (unless I can weave it into an assignment somehow).
 
-##Todo
+## Todo
 - Storage/metadata
   - ~~Programs~~ (software tools)
   - ~~Vanilla program information~~ (stats, attacks, etc.)
