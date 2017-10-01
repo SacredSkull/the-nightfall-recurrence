@@ -19,6 +19,7 @@ CSharp70Support/compilation.log
 *.pidb.meta
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
+.idea/
 
 # Project specific
 *.psd
