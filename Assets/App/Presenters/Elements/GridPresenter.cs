@@ -1,30 +1,81 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Controllers;
-using Installer;
+using System.Runtime.CompilerServices;
+using Editor;
 using JetBrains.Annotations;
 using Karma;
 using Karma.Metadata;
 using Level;
+using Level.Entity;
 using Models;
-using Presenters.Layouts;
+using UniRx.Operators;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
-using Utility;
-using Utility.Collections.Grid;
+using UnityUtilities.Collections.Grid;
+using UnityUtilities.Management;
 using Zenject;
-using ILogger = Utility.ILogger;
-using Logger = UnityUtilities.Logger;
+using ILogger = UnityUtilities.Management.ILogger;
 
 namespace Presenters {
     [Element(PrefabPath)] [ExecuteInEditMode]
     public class GridPresenter : MVCPresenter {
+	    public class GridData {
+		    public int Height => rows.Length;
+
+		    public int Width => _width;
+		    private int _width;
+		    public GridData(int height, int width) {
+			    rows = new Row[height];
+			    _width = width;
+
+			    for (int i = 0; i < height; i++) {
+				    rows[i] = new Row(width);
+			    }
+		    }
+		    
+		    public Row this[int key] {
+			    get { return rows[key]; }
+			    set { rows[key] = value; }
+		    }
+		    
+		    public class Row {
+			    public Row(int width) {
+				    data = new string[width];
+			    }
+			    
+			    public string this[int key] {
+				    get { return data[key]; }
+				    set { data[key] = value; }
+			    }
+			    public string[] data;
+		    }
+
+		    public Row[] rows;
+
+//		    public void SetData(List<List<MapItem>> grid) {
+//			    rows = new Row[grid.Count];
+//
+//			    for (int width = 0; width < grid.Count; width++) {
+//				    rows[width] = new Row();
+//				    for (int height = 0; height < grid[width].Count; height++) {
+//					    rows[width].data = grid[width].Select(x => x.name.Substring(0, 1)).ToArray();
+//				    }
+//			    }
+//		    }
+	    }
+	    
+	    [SerializeField]
+	    public GridData gridData;
+	    
         public const string PrefabPath = "Grid/GameGrid";
         public GameObject GridContainer;
 	    
 	    public IGridCollection<MapItem> GeometryLayer;
 	    public IGridCollection<MapItem> EntityLayer;
 	    public IGridCollection<MapItem> OverlayLayer;
+	    public ILayeredGrid<MapItem> LayeredGrid;
 
 	    private GridPresenter GridPresenterInstance = null;
 	    private TilePresenter.Factory TileFactory;
@@ -33,6 +84,7 @@ namespace Presenters {
 	    private GameObject entityContainer = null;
 	    private GameObject overlayContainer = null;
 	    private ILogger Logger = null;
+	    private MapItemFactory _miFactory;
 	    
 	    public delegate void GridElementSingleClickHandler(TilePresenter tile, GameObject obj);
 	    public event GridElementSingleClickHandler GridElementSingleClick;
@@ -41,9 +93,11 @@ namespace Presenters {
         // Essentially, a layout class needs to be created that stores the rootUI, etc.
 	    
 	    [Inject] [UsedImplicitly]
-	    public void Constructor(ILogger logger, TilePresenter.Factory tileFactory, ILayeredGrid<MapItem> Layers) {
+	    public void Constructor(ILogger logger, TilePresenter.Factory tileFactory, ILayeredGrid<MapItem> layers, MapItemFactory factory) {
 		    Logger = logger;
 		    TileFactory = tileFactory;
+		    _miFactory = factory;
+		    LayeredGrid = layers;
 	    }
 
 	    public void SetGrid(GridCollection<MapItem> geo, GridCollection<MapItem> ent, GridCollection<MapItem> overlay) {
@@ -52,13 +106,50 @@ namespace Presenters {
 		    OverlayLayer = overlay;
 	    }
 
-        public void Render() {
+//#if UNITY_EDITOR
+	    public void SetGridEditor() {
+		    gridData = new GridData(GeometryLayer.Height, GeometryLayer.Width);
+		    
+		    for (int width = 0; width < GeometryLayer.Width; width++) {
+			    gridData[width] = new GridData.Row(GeometryLayer.Height);
+			    for (int height = 0; height < GeometryLayer.Height; height++) {
+				    gridData[width].data = GeometryLayer.GetRow(width).Select(x => x.Value.GetType().Name.Substring(0, 1)).ToArray();
+			    }
+		    }
+		    
+//		    List<List<MapItem>> items = new List<List<MapItem>>();
+//			if(GeometryLayer != null)
+//				for (int i = 0; i < this.GeometryLayer.Width; i++) {
+//					items.Add(new List<MapItem>());
+//					for (int j = 0; j < this.GeometryLayer.Height; j++) {
+//						var result = this.LayeredGrid.GetHighestElement(i, j, LayerNames.ENTITY_LAYER);
+//						if(result.Value != null && result.Value.Value != null)
+//							items[i].Add(result.Value.Value);
+//					}
+//				}
+//		    
+//		    gridData.SetData(items);
+	    }
+	
+	    public void SetGridEditor(GridCollectionEventArgs<MapItem> _) {
+		   SetGridEditor();
+	    }
+//#endif
+
+
+	    public void Render() {
 			Logger.Log("Beginning to draw grids...");
 			renderGeometryLayer();
 			renderEntityLayer();
 			createOverlayLayer();
 
-			GeometryLayer.PieceChanged += HandleChangedGridEvent;
+#if UNITY_EDITOR
+			GeometryLayer.PieceChanged += SetGridEditor;
+			EntityLayer.PieceChanged += SetGridEditor;
+			OverlayLayer.PieceChanged += SetGridEditor;
+#endif	    
+	
+		    GeometryLayer.PieceChanged += HandleChangedGridEvent;
 			EntityLayer.PieceChanged += HandleChangedGridEvent;
 			OverlayLayer.PieceChanged += HandleChangedGridEvent;
 		}
@@ -136,7 +227,7 @@ namespace Presenters {
 			for (int row = 0; row < OverlayLayer.Height; row++) {
 				for (int column = 0; column < OverlayLayer.GetRow(row).Count(); column++) {
 					GridPiece<MapItem> piece = OverlayLayer.Get(row, column);
-					MapItem blank = MapItem.Factory.CreateBlankTile();
+					MapItem blank = _miFactory.CreateBlankTile();
 					
 					blank.SetPosition(row, column, true, false);
 

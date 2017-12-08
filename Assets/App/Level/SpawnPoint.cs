@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using Level.Entity;
-using UnityEngine;
 
 namespace Level {
     [XmlType(TypeName = "spawnpoint")]

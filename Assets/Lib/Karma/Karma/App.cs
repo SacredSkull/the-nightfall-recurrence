@@ -121,8 +121,7 @@ namespace Karma {
             if (!typeof(MonoBehaviour).IsAssignableFrom(type))
                 throw new Exception(string.Format("Type '{0}' is not a MonoBehaviour", type));
 
-            //container.Bind(type).ToPrefab(url, type);
-            container.Bind(type).FromPrefabResource(route.fullPath);
+			container.Bind(type).FromComponentInNewPrefabResource(route.fullPath).AsTransient();
             if (dict != null)
             {
                 dict[route.path] = ValuePair.New(route, type);

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Action.Attack;
+using Action.Ability;
 using Level;
 using Level.Entity;
-using UniRx;
-using UnityEngine.Networking.NetworkSystem;
+using UnityUtilities.Management;
 using Zenject;
-using Logger = UnityUtilities.Logger;
 
 namespace Models {
 	public class EntityModel : DatabaseLoader {
@@ -21,14 +18,18 @@ namespace Models {
         public List<SoftwareTool> AllSoftware;
         public List<MapItem> AllFeatures;
 
-		public delegate void EntitiesLoadedHandler();
+		public MonolithicEvent EntitiesLoaded = new MonolithicEvent();
+		protected IDispatcher MainThreadDispatcher;
+		protected SpriteLoader sprites;
 
-		public event EntitiesLoadedHandler EntitiesLoaded;
-
-        [Inject]
-        public EntityModel(IDatabase database) : base(database) { }
+		[Inject]
+		public EntityModel(IDatabase database, IDispatcher dispatcher, SpriteLoader spriteLoader) : base(database) {
+			MainThreadDispatcher = dispatcher;
+			sprites = spriteLoader;
+		}
 
         public override void Load() {
+	        EntitiesLoaded.Reset();
             Tools = db.loadHackTools();
             SentryTools = db.loadSentries();
             AllSoftware = SentryTools.Cast<SoftwareTool>().Concat(Tools.Cast<SoftwareTool>()).ToList();
@@ -36,9 +37,8 @@ namespace Models {
             AllFeatures.Add(MapItem.BlankTile);
             AllFeatures.Add(MapItem.MapPath);
             AllFeatures.Add(SpawnPoint.Spawn);
-
+			
             MainThreadDispatcher.Post(x => {
-                SpriteLoader sprites = new SpriteLoader();
                 foreach (SoftwareTool software in AllSoftware) {
                     sprites.Load(software);
                 }
@@ -47,32 +47,31 @@ namespace Models {
                     sprites.Load(feature);
                 }
                 
-                Logger.UnityLog("[SPRITE] Holding " + sprites.loadedSprites.Count + " sprites.");
-
+	            logger.Log("[SPRITE] Holding " + sprites.loadedSprites.Count + " sprites.");
                 Ready();
-            }, null);
+            });
 
             #region debug serialised SoftwareXML & Abilities
 
 	        if(dumpProgramXML || dumpProgramAbilities)
 				foreach (SoftwareTool tool in AllSoftware) {
 					if (dumpProgramXML)
-						Logger.UnityLog(tool.name);
+						logger.Log(tool.name);
 					if (!dumpProgramAbilities)
 						continue;
 
 					foreach (Attack ability in tool.Attacks) {
-						Logger.UnityLog("---->" + ability.Name);
+						logger.Log("--->" + ability.Name);
 					}
 				}
             if (dumpFeatureXML)
                 foreach (MapItem mapItem in AllFeatures) {
-                    Logger.UnityLog("[FEATURES] Found map feature " + mapItem.name);
+					logger.Log("[FEATURES] Found map feature " + mapItem.name);
                 }
 
             if (dumpEnemyXML)
                 foreach (SoftwareTool tool in SentryTools) {
-                    Logger.UnityLog(tool.name);
+					logger.Log(tool.name);
                 }
 
             if (dumpProgramXML) {
@@ -84,8 +83,9 @@ namespace Models {
         }
 
 		protected override void Ready() {
-			//throw new NotImplementedException();
-			EntitiesLoaded?.Invoke();
+			// We set the flag first, because everything will have already loaded, and listeners will already have attached themselves.
+			hasLoaded = true;
+			EntitiesLoaded.Fire();
 		}
     }
 }

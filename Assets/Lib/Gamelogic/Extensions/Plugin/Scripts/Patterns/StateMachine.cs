@@ -30,7 +30,7 @@ namespace Gamelogic.Extensions
 	/// 		</item>
 	/// 		<item>
 	/// 			<description>Set the CurrentState property on the state machine to transition.
-	/// (You can eitther set it from one of the state delegates, or from anywhere else.
+	/// (You can eitther set itÂ from one of the state delegates, or from anywhere else.
 	/// </description>
 	/// 		</item>
 	/// 	</list>

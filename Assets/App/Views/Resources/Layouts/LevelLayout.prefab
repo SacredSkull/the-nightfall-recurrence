@@ -431,6 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cfa2e64563e4cb4b90df466037e148e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridData: {fileID: 0}
   GridContainer: {fileID: 185398, guid: 5ce48bc418378dd44a20c8a50841675f, type: 2}
 --- !u!114 &114317881272409582
 MonoBehaviour:

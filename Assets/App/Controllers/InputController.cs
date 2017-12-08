@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using UnityEngine;
 using Presenters;
-using UnityEngine.UI;
+using UnityEngine;
 
 namespace Controllers {
     class InputController : MonoBehaviour {
         public bool HoverExitEvent;
 
         [Range(0.0f, 1.0f)]
-        public float Cooldown = 0.0f;
+        public float Cooldown = 0.001f;
         private float LastTime = 0;
 
         private readonly HashSet<RaycastHit2D> lastHovered = new HashSet<RaycastHit2D>();

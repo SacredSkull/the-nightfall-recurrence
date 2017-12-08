@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using JetBrains.Annotations;
-using Level;
-using Level.Entity;
 using UnityEngine;
 using Utility;
-using Utility.Collections.Grid;
-using Logger = UnityUtilities.Logger;
 
 namespace Level.Entity {
     public class TrailTile : MapItem {

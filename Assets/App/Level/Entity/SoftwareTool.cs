@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Xml.Serialization;
-using Action.Attack;
+using Action.Ability;
+using Action.AI;
 using UnityEngine;
+using Zenject;
 
 namespace Level.Entity {
     //TODO: Add the sound clip for movement in this class. It should be activated inside the move() function, which will also need a reference to the AudioQueue (via the ServiceLocator), which hasn't been made yet!
     //renderedTile.GetComponent<AudioSource>().clip = MovementClip;
-    public abstract class SoftwareTool : MapItem {
+    public class SoftwareTool : MapItem {
         [XmlIgnore]
         public int CurrentHealth = 1;
         [XmlAttribute("maxsize")]
@@ -25,6 +27,20 @@ namespace Level.Entity {
          XmlArrayItem(ElementName = "attributemodifier", Type = typeof(AttributeModifier)),
          XmlArrayItem(ElementName = "mapmodifier", Type = typeof(MapModifier))]
         public List<Attack> Attacks { get; set; }
+
+        [XmlAttribute("governor")]
+        [DefaultValue("Standard")]
+        public string GovernorName = "Standard";
+        
+        [XmlIgnore]
+        public Governor Governor {
+            get {
+                return _gov;
+            }
+            set { _gov = value; }
+        }
+        [XmlIgnore]
+        private Governor _gov;
 
         public delegate void AttackEventHandler(SoftwareTool victim, SoftwareTool perp, Attack candlestick);
         public static event AttackEventHandler DeathEvent;
@@ -50,7 +66,8 @@ namespace Level.Entity {
             _Trail = new Trail(this);
         }
 
-        public SoftwareTool(SoftwareTool blueprint) : base(blueprint) {
+        [Inject]
+        public SoftwareTool(SoftwareTool blueprint, GovernorFactory governorFactory) : base(blueprint) {
             MaxHealth = blueprint.MaxHealth;
             Cost = blueprint.Cost;
             Level = blueprint.Level;
@@ -59,6 +76,7 @@ namespace Level.Entity {
             Attacks = blueprint.Attacks;
             TailSprite = blueprint.TailSprite;
             _Trail = new Trail(this);
+            _gov = governorFactory.Create(this, GovernorNames.Find(GovernorName));
         }
 
         public bool Attack(Attack attack, SoftwareTool target) {
@@ -83,9 +101,7 @@ namespace Level.Entity {
 
         public Attack LongestRangeAttack => Attacks.OrderByDescending(x => x.Range).FirstOrDefault();
 
-        public virtual IEnumerator TakeTurn() {
-            yield return null;
-        }
+        public HashSet<TemporalStatusEffect> StatusEffects = new HashSet<TemporalStatusEffect>();
 
         public virtual void Move(Vector2 destination) {
             if(destination == gridPosition) return;

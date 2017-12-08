@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Karma;
+﻿using Karma;
+using UnityUtilities.Management;
+using Utility;
+using Zenject;
 
 namespace Presenters {
-    public class MVCPresenter2D : MVCPresenter {
+    public abstract class MVCPresenter2D : MVCPresenter {
         public virtual void OnMouseHovering() { }
 
         public virtual void OnMouseDown() { }
@@ -17,5 +16,12 @@ namespace Presenters {
         public virtual void OnMouseUp() { }
 
         public override void OnPresenterDestroy() { }
+
+        protected ILogger logger;
+        
+        [Inject]
+        protected void SetupLogger(ILogger logger) {
+            this.logger = logger;
+        }
     }
 }

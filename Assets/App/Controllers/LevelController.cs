@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using Karma;
 using Karma.Metadata;
@@ -7,12 +6,8 @@ using Level;
 using Models;
 using Presenters;
 using UnityEngine;
-using UnityEngine.UI;
-using Utility;
-using Utility.Collections.Grid;
+using UnityUtilities.Collections.Grid;
 using Zenject;
-using ILogger = Utility.ILogger;
-using Logger = UnityUtilities.Logger;
 
 namespace Controllers {
 	[Controller]
@@ -20,7 +15,6 @@ namespace Controllers {
 	public class LevelController : IController {
 		private GridPresenter _gridPresenter;
 		private SelectionPresenter _selectionPresenter;
-		[Inject]
 		private ILayeredGrid<MapItem> _layers;
 		
 		[Inject]

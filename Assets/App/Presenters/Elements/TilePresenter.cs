@@ -1,30 +1,37 @@
-﻿using Gamelogic.Extensions;
+﻿using Editor;
 using Karma.Metadata;
 using Level;
-using UnityEditor;
-using UnityEditor.Experimental.AssetImporters;
 using UnityEngine;
 using Zenject;
 
 namespace Presenters {
+    
+    
     [Element(PrefabPath)]
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(BoxCollider2D))]
     public class TilePresenter : MVCPresenter2D {
         public class TileData : ScriptableObject {
+            [ReadOnly]
             public Vector2 Position;
-            public string ToolName;
-            public string ToolDescription;
+            [ReadOnly]
+            public string Name;
+            [ReadOnly]
+            public string Description;
+            [ReadOnly]
             public string SpriteName;
+            [ReadOnly]
+            public string Type;
             
             public void SetData(MapItem mi) {
                 if (mi == null)
                     return;
 
-                ToolName = mi.name;
-                ToolDescription = mi.description;
+                Name = mi.name;
+                Description = mi.description;
                 SpriteName = mi.string_id;
                 Position = mi.GetPosition();
+                Type = mi.GetType().Name;
             }
         }
         

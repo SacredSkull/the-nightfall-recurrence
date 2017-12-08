@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Action.Attack;
-using Controllers;
+﻿using System.Collections;
+using Action.Ability;
 using Karma;
 using Level.Entity;
 using UnityEngine;

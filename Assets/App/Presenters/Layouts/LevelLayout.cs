@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Installer;
+﻿using Installers;
 using Karma;
 using Karma.Metadata;
-using Presenters;
 using UnityEngine;
 using Zenject;
 

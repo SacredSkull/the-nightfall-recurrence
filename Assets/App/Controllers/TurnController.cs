@@ -1,78 +1,93 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Gamelogic.Extensions;
-using Installer;
-using Karma;
-using Karma.Metadata;
+using Installers;
 using Level.Entity;
 using Models;
-using Utility;
+using UniRx;
+using UnityEngine;
+using UnityUtilities.Mapping;
 using Zenject;
+using ILogger = UnityUtilities.Management.ILogger;
 
 namespace Controllers {
-    public enum TurnStates {
-        PlayerTurn,
-        CPUTurn
-    }
+	public enum TurnStates {
+		PlayerTurn,
+		CPUTurn,
+	}
 
-    [Controller]
-    public class TurnController : IController, ITickable, IInitializable {
-        private int TurnCount = 1;
-        private bool DataReady;
-        public StateMachine<TurnStates> TurnSM;
+	public class TurnController : IInitializable, IDisposable {
+		private int TurnCount = 1;
+		private bool DataReady;
 
-        protected ILogger Logger { get; set; }
-        protected List<Sentry> LevelSentries;
-        protected float timePerMove;
+		protected ILogger Logger { get; set; }
+		protected List<Sentry> LevelSentries;
+		protected List<HackTool> LevelHackTools;
+		protected float timePerMove;
 
+		[Inject]
+		public TurnController(ILogger logger, LevelModel lm, EntityModel em, TurnInstaller.Settings settings) {
+			timePerMove = settings.TimePerMove;
+			lm.LoadedEvent.Subscribe(() => {
+				LevelSentries = lm.LevelSentries;
+				LevelHackTools = lm.LevelHackTools;
+			});
+			Logger = logger;
+		}
 
-        [Inject]
-        public TurnController(ILogger logger, EntityModel em, TurnInstaller.Settings settings) {
-            timePerMove = settings.TimePerMove;
-            LevelSentries = em.SentryTools.ToList();
-            Logger = logger;
-        }
+		public void Initialize() {
+		}
 
-        public void Initialize() {
-            TurnSM = new StateMachine<TurnStates>();
-            TurnSM.AddState(TurnStates.CPUTurn, SentriesTurn);
-            TurnSM.AddState(TurnStates.PlayerTurn, PlayerTurn);
-        }
-
-        //[ContextMenu("Step turn")]
-        private void StepTurn() {
-            TurnSM.CurrentState = TurnStates.CPUTurn;
-        }
+		public void Start() {
+		}
 	
-        // Update is called once per frame
-        public void Tick () {
-            TurnSM.Update();
-        }
+		public void Tick () {
+		}
 
-        private void PlayerTurn() {
-            Logger.Log("Starting player turn...");
-            Thread.Sleep(TimeSpan.FromSeconds(timePerMove));
-            Logger.Log("...player turn has ended");
-	        TurnCount++;
+		public IEnumerator CommonTurn() {
+			// TODO: Is this needed?
+			yield return null;
+		}
 
-            TurnSM.CurrentState = TurnStates.CPUTurn;
-        }
+		public IEnumerator PlayerTurn() {
+			Logger.Log("Starting player turn...");
+			yield return CommonTurn();
+			foreach (var tool in LevelHackTools) {
+				
+			}
+			yield return Observable.Timer(TimeSpan.FromSeconds(1)).ToYieldInstruction();
+			Logger.Log("...player turn has ended");				
+		}
+		
+		public IEnumerator CPUTurn() {
+			Logger.Log("Starting sentry turn...");
+			yield return CommonTurn();
+			foreach (Sentry sentry in LevelSentries) {
+				KeyValuePair<SoftwareTool, IEnumerable<Vector2>> target = sentry.Governor.SelectTarget();
+				List<Vector2> path = target.Value.ToList();
 
-        private void SentriesTurn() {
-            Logger.Log("Starting sentry turn...");
-            foreach (Sentry sentry in LevelSentries) {
-                sentry.TakeTurn(timePerMove);
-            }
-            Logger.Log("...sentry turn has ended");
-	        TurnCount++;
+				for (int i = 1; i <= sentry.Movement; i++) {
+					//TODO: If we're at max size and in range of the target, why move?
+					//TODO: If we're NOT at max size and the target is in range, do something about it!
+					if (!(sentry.AtMaxSize && Pathing.SnakeDistance(sentry, target.Key) <= sentry.LongestRangeAttack.Range)) {
+						path = sentry.Governor.Move(path);
+						yield return Observable.Timer(TimeSpan.FromMilliseconds(500)).ToYieldInstruction();
+					} else {
+						Logger.Log(
+							$"{sentry.name} is in range of {target.Key.name} with {sentry.LongestRangeAttack.Name} ({sentry.LongestRangeAttack.Range})");
+						break;
+					}
+				}
 
-            TurnSM.CurrentState = TurnStates.PlayerTurn;
-        }
+			}
+			Logger.Log("...sentry turn has ended");
+		}
 
-        public void OnDestroy() {
-            
-        }
-    }
+		public void Dispose() {
+			
+		}
+	}
 }

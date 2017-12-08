@@ -1,9 +1,8 @@
-using Utility;
+using UnityUtilities.Management;
 
 namespace Models {
-	public delegate void DataLoadedHandler();
-
 	public abstract class Loader {
+		public MonolithicEvent LoadedEvent = new MonolithicEvent();
 		public abstract void Load();
 		protected abstract void Ready();
 	}

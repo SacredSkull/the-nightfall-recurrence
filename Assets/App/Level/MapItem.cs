@@ -1,38 +1,16 @@
 ﻿using System;
 using System.Xml.Serialization;
+using Action.AI;
 using Level.Entity;
-using UnityEditor;
 using UnityEngine;
-using Utility.Collections.Grid;
-using Logger = UnityUtilities.Logger;
+using UnityUtilities.Collections.Grid;
+using Zenject;
 
 namespace Level {
     [XmlInclude(typeof(Pickup))]
     [XmlType(TypeName = "mapitem")]
     [Serializable]
     public class MapItem : IGridLocator, IEquatable<MapItem> {
-        public static class Factory {
-            public static MapItem Create(MapItem source) {
-                var tool = source as HackTool;
-                if(tool != null)
-                    return new HackTool(tool);
-                
-                var sentry = source as Sentry;
-                if(sentry != null)
-                    return new Sentry(sentry);
-                
-                return new MapItem(source);
-            }
-
-            public static MapItem CreateBlankTile() {
-                return Create(BlankTile);
-            }
-
-            public static MapItem CreateMapPath() {
-                return Create(MapPath);
-            }
-        }
-        
         public event PositionSetHandler PositionSetEvent;
         public event DeletionHandler DeletionEvent;
 
@@ -68,6 +46,7 @@ namespace Level {
 
         public MapItem() { }
 
+        [Inject]
         public MapItem(MapItem mi) {
             name = mi.name;
             description = mi.description;
