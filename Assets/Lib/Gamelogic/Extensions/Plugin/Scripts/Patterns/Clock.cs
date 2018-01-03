@@ -1,6 +1,5 @@
 ﻿// Copyright Gamelogic (c) http://www.gamelogic.co.za
 
-using System;
 using Gamelogic.Extensions.Internal;
 
 namespace Gamelogic.Extensions

@@ -1,5 +1,4 @@
 ﻿using System;
-using Gamelogic.Extensions;
 using Level.Entity;
 
 namespace Action.Ability {
@@ -14,6 +13,8 @@ namespace Action.Ability {
 		public readonly int Value;
 
 		public bool IsActive => Active;
+
+		protected TemporalStatusEffect() { }
 
 		public TemporalStatusEffect(string name, SoftwareTool source, SoftwareTool target, StatusEffectOverallType overallType, AttributeTargetType attributeTargetType, int value, int turnsActive = -1) {
 			Name = name;

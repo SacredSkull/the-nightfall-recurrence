@@ -1,5 +1,3 @@
-using System;
-
 namespace Zenject
 {
     public enum PoolExpandMethods

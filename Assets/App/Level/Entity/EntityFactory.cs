@@ -13,12 +13,11 @@ namespace Level.Entity {
 	}
 
 	[UsedImplicitly]
-	public class SentryFactory : Factory<Sentry, Sentry> {
-		
-	}
+	public class SentryFactory : Factory<Sentry, Sentry> { }
 
 	[UsedImplicitly]
-	public class HackToolFactory : Factory<HackTool, HackTool> {
-		
-	}
+	public class HackToolFactory : Factory<HackTool, HackTool> { }
+	
+	[UsedImplicitly]
+	public class TrailFactory : Factory<SoftwareTool, Trail> { }
 }

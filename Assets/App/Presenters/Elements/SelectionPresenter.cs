@@ -1,10 +1,13 @@
 ﻿using Action.Ability;
+using Controllers;
 using Karma.Metadata;
 using Level;
 using Level.Entity;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityUtilities.Management;
+using Zenject;
 
 namespace Presenters {
     [Element(PrefabPath)]
@@ -20,9 +23,20 @@ namespace Presenters {
         public GameObject AbilityPrefab;
         public Text AbilityDocumentation;
         public bool DebugSelection;
+        public Button EndTurnButton;
 
         private float timer;
-        private MapItem currentMI = null;
+        public MapItem currentMI = null;
+        private TurnController _turnController;
+        
+        [Inject]
+        private void Inject(TurnController turnController) {
+            _turnController = turnController;
+        }
+
+        private void Start() {
+            HideInfo();
+        }
         
         private void HideInfo() {
             try {
@@ -39,8 +53,7 @@ namespace Presenters {
             catch (UnassignedReferenceException){ }
         }
 
-        public void handleSelection(MapItem mi, string layerName) {
-            // TODO: This function "works", but not very well. Rather than firing the click event on everything below the cursor, an event layer should pass the event on to the relevant tile.
+        public void HandleSelection(MapItem mi, string layerName) {
             HideInfo();
             
             timer = Time.time + Cooldown;
@@ -50,17 +63,26 @@ namespace Presenters {
             if(AbilityDocumentation != null) {
                 AbilityDocumentation.GetComponent<Text>().text = "";
             }
+            currentMI = mi;
 
             SoftwareTool tool = mi as SoftwareTool;
 
-            TrailTile item = mi as TrailTile;
-            if(item != null) {
-                TrailTile trail = item;
-                tool = trail.Trail.Head;
-            } else if(mi is SoftwareTool) {
-                tool = (SoftwareTool) mi;
+            switch (mi) {
+                case TrailTile item:
+                    TrailTile trail = item;
+                    tool = trail.Trail.Head;
+                    break;
+                case SoftwareTool _:
+                    tool = (SoftwareTool) mi;
+                    break;
             }
-            bool sentry = (tool is Sentry);
+            
+            bool sentry = tool is Sentry;
+            
+            if(tool is HackTool ht)
+                _turnController.PlayerSelectedTool(ht);
+            else
+                _turnController.PlayerDeselectedTool();
 
             Icon.sprite = mi.sprite;
             Name.text = mi.name;
@@ -79,7 +101,7 @@ namespace Presenters {
                 }
 
                 buttonText.text = ability.Name;
-                button.GetComponent<Button>().onClick.AddListener(() => { abilityButtonHandler(ability, sentry); });
+                button.GetComponent<Button>().OnClickAsObservable().Subscribe(x => { abilityButtonHandler(ability, sentry); });
             }
         }
 

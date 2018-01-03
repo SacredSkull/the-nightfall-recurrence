@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using System.Reflection;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Action.AI;
-using UnityEngine;
 using Zenject;
 
 namespace Level.Entity {
     [XmlType(TypeName = "sentry")]
     public class Sentry : SoftwareTool {
         [Inject]
-        public Sentry(SoftwareTool blueprint, GovernorFactory governorFactory) : base(blueprint, governorFactory) {}
+        public Sentry(SoftwareTool blueprint, GovernorFactory governorFactory, TrailFactory trailFactory) : base(blueprint, governorFactory, trailFactory) {}
         public Sentry() : base() {}
 
 //        public override IEnumerator TakeTurn() {

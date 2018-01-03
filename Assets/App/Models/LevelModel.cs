@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.Serialization;
-using Gamelogic.Extensions;
 using Level;
 using Level.Entity;
-using NUnit.Framework.Constraints;
-using UniRx;
 using UnityEngine;
 using UnityUtilities.Collections.Grid;
 using UnityUtilities.Management;
-using Utility;
 using Zenject;
 
 namespace Models {
@@ -32,8 +27,8 @@ namespace Models {
 
 		public readonly Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>();
 	    public List<Sentry> LevelSentries = new List<Sentry>();
+	    public List<HackTool> LevelHackTools = new List<HackTool>();
 	    public static readonly Dictionary<int, MapItem> mapItems = new Dictionary<int, MapItem>();
-	    public readonly List<HackTool> LevelHackTools = new List<HackTool>();
 	    public GridGraph<MapItem> graph;
 
 	    public LayeredGrid<MapItem> LayeredGrid { get; protected set; }
@@ -44,7 +39,7 @@ namespace Models {
 	    private static readonly GridPiece<MapItem> EmptyMapItem = new GridPiece<MapItem>(
 	        0, MapItem.BlankTile, new Vector2(), 1, null
         );
-	    private string path = @"/Levels/1.tmx";
+	    private string path = @"/Levels/2.tmx";
         private EntityModel em;
         /* TODO: Stopped here 15/12/16 - stripping down ActiveLevel - moving the code for loading the map level itself into the this class, and the entities into the MapItemsModel - EntityModel sounds like a better name for that btw. Additionally, need to add wrapper bools for dumpWhatever so it appears in Unity's editor.  */
 
@@ -168,9 +163,10 @@ namespace Models {
 	                        if (mi is Sentry) {
 		                        clone = _sentFactory.Create((Sentry) mi);
 		                        LevelSentries.Add((Sentry) clone);
-	                        } else if (mi is SoftwareTool)
+	                        } else if (mi is SoftwareTool) {
 		                        clone = _htFactory.Create((HackTool) mi);
-	                        else
+		                        LevelHackTools.Add((HackTool) clone);
+	                        } else
 		                        clone = _miFactory.Create(mi);
 	                        clone.SetPosition(row, column);
                             columnList.Add(new GridPiece<MapItem> { ID = tile.gid, Value = clone });
@@ -262,6 +258,12 @@ namespace Models {
 
 		protected override void Ready() {
 			//throw new NotImplementedException();
+			SoftwareTool.DeathEvent += (victim, perp, candlestick) => {
+				if (victim is HackTool ht)
+					LevelHackTools.Remove(ht);
+				else
+					LevelSentries.Remove((Sentry) victim);
+			};
 			LoadedEvent.Fire();
 		}
 	}

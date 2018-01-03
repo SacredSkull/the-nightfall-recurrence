@@ -3,10 +3,9 @@ using Karma.Metadata;
 using Level;
 using UnityEngine;
 using Zenject;
+using ILogger = UnityUtilities.Management.ILogger;
 
 namespace Presenters {
-    
-    
     [Element(PrefabPath)]
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(BoxCollider2D))]
@@ -34,8 +33,8 @@ namespace Presenters {
                 Type = mi.GetType().Name;
             }
         }
-        
-        //public class Factory : Factory<Sprite, MapItem, TilePresenter> { }
+        [Inject]
+        public static ILogger Logger;
         public const string PrefabPath = "Grid/GridPiece";
 
         private MapItem _mapItem = null;
@@ -48,30 +47,42 @@ namespace Presenters {
             }
         }
 
+        public void ForceSprite(Sprite sprite = null) {
+            GetComponent<SpriteRenderer>().sprite = sprite ?? MapItem.BlankTile.sprite;
+        }
+
         public delegate void HoverEventHandler(TilePresenter tile, GameObject obj);
         public event HoverEventHandler HoverEvent;
+        
+        public delegate void UnhoverEventHandler(TilePresenter tile, GameObject obj);
+        public event UnhoverEventHandler UnhoverEvent;
 
-        public delegate void SingleClientEventHandler(TilePresenter tile, GameObject obj);
-        public event SingleClientEventHandler SingleClickEvent;
+        public delegate void SingleClickEventHandler(TilePresenter tile, GameObject obj);
+        public event SingleClickEventHandler SingleClickEvent;
 
         [SerializeField]
         public TileData tileData;
         private static bool hovering;
         private static bool clicking;
         private static int Counter = 0;
+        private static Vector2 currentHoverTarget = new Vector2(-1, -1);
 
         private void Awake() {
             tileData = ScriptableObject.CreateInstance<TileData>();
             tileData.SetData(MapItem);
 
             HoverEvent += (tile, obj) => {
-                //Logger.UnityLog($"Hover on {tile.MapItem.name}");
                 hovering = true;
             };
+        }
 
-//            MapItem.OnValueChange += () => {
-//                GetComponent<SpriteRenderer>().sprite = MapItem.Value.sprite;               
-//            };
+        public void ClearSingleClickHandlers() {
+            SingleClickEvent = null;
+        }
+        
+        public void ClearHoverHandlers() {
+            HoverEvent = null;
+            UnhoverEvent = null;
         }
 
         public override void OnMouseEnter() {
@@ -82,6 +93,7 @@ namespace Presenters {
 
         public override void OnMouseExit() {
             hovering = false;
+            UnhoverEvent?.Invoke(this, gameObject);
         }
 
         public override void OnMouseUp() {

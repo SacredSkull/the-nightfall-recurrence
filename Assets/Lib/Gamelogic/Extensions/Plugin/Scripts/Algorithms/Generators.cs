@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Gamelogic.Extensions.Internal;
 using UnityEngine;
-
-using Debug = UnityEngine.Debug;
 using Random = System.Random;
 
 namespace Gamelogic.Extensions.Algorithms

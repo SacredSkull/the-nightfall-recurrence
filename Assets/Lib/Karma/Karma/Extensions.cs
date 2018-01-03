@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine;
-
-using Zenject;
+﻿using UnityEngine;
 using RektTransform;
 
 namespace Karma

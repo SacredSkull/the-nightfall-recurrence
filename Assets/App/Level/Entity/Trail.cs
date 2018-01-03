@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Models;
 using UnityEngine;
-using Utility;
+using UnityUtilities.Collections.Grid;
+using Zenject;
 
 namespace Level.Entity {
     public class TrailTile : MapItem {
@@ -21,8 +23,11 @@ namespace Level.Entity {
         private List<TrailTile> Tail = new List<TrailTile>();
         public SoftwareTool Head;
         private TrailTile segmentTemplate;
+        protected Lazy<ILayeredGrid<MapItem>> _layeredGrid;
 
-        public Trail(SoftwareTool head) {
+        [Inject]
+        public Trail(SoftwareTool head, Lazy<ILayeredGrid<MapItem>> layeredGrid) {
+            _layeredGrid = layeredGrid;
             Head = head;
             segmentTemplate = new TrailTile(this) {
                 description = $"Allocated memory belonging to {Head.name}",
@@ -75,7 +80,7 @@ namespace Level.Entity {
             }
             Tail.Add(segment);
             segment.SetPosition(pos);
-            ServiceLocator.GetLevelEntityGrid().Set(pos, 0, segment);
+            _layeredGrid.Value.GetLayer(LayerNames.ENTITY_LAYER).Set(pos, 0, segment);
         }
 
         public void Shorten() {

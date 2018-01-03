@@ -1,8 +1,5 @@
 #if !NOT_UNITY3D
 
-using ModestTree;
-using ModestTree.Util;
-
 namespace Zenject
 {
     public class SceneKernel : MonoKernel

@@ -16,6 +16,8 @@ namespace Installers {
         public class Settings {
             [Range(0.1f, 2f)]
             public float TimePerMove;
+            [Range(0.1f, 2f)]
+            public float BreakBetweenCPUs;
         }
     }
 }

@@ -1,9 +1,5 @@
-﻿using Action.AI;
-using Level;
-using Level.Entity;
-using Models;
+﻿using Models;
 using UnityEngine;
-using UnityUtilities.Collections.Grid;
 using UnityUtilities.Management;
 using Zenject;
 using ILogger = UnityUtilities.Management.ILogger;

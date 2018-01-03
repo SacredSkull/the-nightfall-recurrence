@@ -1,8 +1,5 @@
-﻿using Gamelogic.Extensions;
-using Level;
-using Level.Entity;
+﻿using Level.Entity;
 using Models;
-using UnityUtilities.Collections.Grid;
 using UnityUtilities.Management;
 
 namespace Action.AI {

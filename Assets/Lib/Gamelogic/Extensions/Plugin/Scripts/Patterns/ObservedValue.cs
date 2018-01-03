@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Gamelogic.Extensions
+﻿namespace Gamelogic.Extensions
 {
 	/// <summary>
 	/// Wraps a variable in a class that triggers an

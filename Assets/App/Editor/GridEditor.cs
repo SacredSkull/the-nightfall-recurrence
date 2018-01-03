@@ -25,21 +25,24 @@ namespace Editor {
 	[CustomEditor(typeof(GridPresenter))]
 	public class GridEditor : UnityEditor.Editor {
 		private UnityEditor.Editor _editor;
+		private int counter = 0;
+		/*
 		public override void OnInspectorGUI() {
 			DrawDefaultInspector();
 			GridPresenter gp = (GridPresenter) target;
 			
-			if(gp.gridData == null || gp.gridData.rows == null)
+			if(gp.gridData?.rows == null && counter++ % 2 == 0)
 				gp.SetGridEditor();
-
-			for (int width = 0; width < gp.gridData.rows.Length; width++) {
+			
+			for (int height = gp.GeometryLayer.Height; height-- > 0;) {
 				EditorGUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
-				for (int height = 0; height < gp.gridData.rows[width].data.Length; height++) {
-					string type = gp.gridData.rows[width].data[height];
+				if (gp.gridData.rows.Length <= height) continue;
+				for (int width = gp.GeometryLayer.Width; width-- > 0;) {
+					if (gp.gridData.rows[height].data.Length <= width) continue;
+					string type = gp.gridData.rows[height].data[width];
 					GUIStyle style = new GUIStyle {
 						stretchWidth = false,
 						stretchHeight = false,
-						
 					};
 					switch (type) {
 							case "S":
@@ -53,46 +56,20 @@ namespace Editor {
 							case "M":
 								style.onNormal.textColor = Color.black;
 								break;
+							case "0":
+								style.onNormal.textColor = Color.black;
+								style.fontStyle = FontStyle.Italic;
+								break;
 							case "P":
 								style.onNormal.textColor = Color.yellow;
 								style.fontStyle = FontStyle.Bold;
 								break;
 					}
-					EditorGUILayout.TextField("", type, style, GUILayout.MaxWidth(20), GUILayout.MinWidth(20));
+					EditorGUILayout.TextField("", type, style, GUILayout.MaxWidth(15), GUILayout.MinWidth(15));
 				}
 				EditorGUILayout.EndHorizontal();
 			}
 		}
+		*/
 	}
-	
-//	[CustomPropertyDrawer(typeof(GridPresenter))]
-//	public class GridDrawer : PropertyDrawer {
-//		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-//			SerializedProperty gridData = property.FindPropertyRelative("gridProperty");
-//			
-//			EditorGUI.PrefixLabel(position, label);
-//			Rect newPosition = position;
-//			newPosition.y += 18f;
-//			
-//			for(int i=0; i < gridData.arraySize; i++)
-//			{
-//				SerializedProperty row = gridData.GetArrayElementAtIndex(i).FindPropertyRelative("row");
-//				newPosition.height = 20;
-//
-//				if (row.arraySize != 10)
-//					row.arraySize = 10;
-//
-//				newPosition.width = 70;
-//
-//				for(int j=0; j < row.arraySize; j++)
-//				{
-//					EditorGUI.PropertyField(newPosition, row.GetArrayElementAtIndex(j), GUIContent.none);
-//					newPosition.x += newPosition.width;
-//				}
-//
-//				newPosition.x = position.x;
-//				newPosition.y += 20;
-//			}
-//		}
-//	}
 }

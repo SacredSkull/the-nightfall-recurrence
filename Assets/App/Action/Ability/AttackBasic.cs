@@ -8,16 +8,16 @@ namespace Action.Ability {
         public short damage;
 
         public override bool Execute(SoftwareTool target, SoftwareTool source) {
-            if(!(source is Sentry) && !(target is Sentry))
-                return false;
-            if(source is Sentry && target is Sentry)
-                throw new ArgumentException("Traitor sentry program detected!");
-            if(target.ReceiveAttack(this, source)) {
-                target.Damage(damage);
-                return true;
+            switch (source) {
+                case HackTool _ when target is HackTool:
+                    return false;
+                case Sentry _ when target is Sentry:
+                    throw new ArgumentException("Traitor sentry program detected!");
             }
 
-            return false;
+            if (!target.ReceiveAttack(this, source)) return false;
+            return true;
+
         }
     }
 }

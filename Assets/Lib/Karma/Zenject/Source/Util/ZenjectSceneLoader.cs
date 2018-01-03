@@ -1,7 +1,6 @@
 #if !NOT_UNITY3D
 
 using System;
-using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using ModestTree;

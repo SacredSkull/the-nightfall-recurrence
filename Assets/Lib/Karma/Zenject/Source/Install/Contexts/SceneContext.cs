@@ -7,7 +7,6 @@ using ModestTree;
 using ModestTree.Util;
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.SceneManagement;
 using Zenject.Internal;
 
 namespace Zenject

@@ -13,6 +13,10 @@ namespace Controllers {
 
         private readonly HashSet<RaycastHit2D> lastHovered = new HashSet<RaycastHit2D>();
         private bool firstRun = true;
+
+        private void Start() {
+            
+        }
         
         private void Update() {
             bool onCooldown = (LastTime - Time.time) < Cooldown;

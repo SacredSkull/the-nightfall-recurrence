@@ -1,5 +1,3 @@
-using ModestTree;
-
 namespace Zenject
 {
     public class IdBinder

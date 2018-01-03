@@ -24,8 +24,6 @@ THE SOFTWARE.
 
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
-using System.Collections.Generic;
 
 /*
 This file is intended to be used to alleviate the rather obtuse nature of the RectTransform.  RectTransform

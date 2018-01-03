@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Action.AI;
 using Zenject;
 
@@ -9,6 +8,6 @@ namespace Level.Entity {
         public HackTool() {}
         
         [Inject]
-        public HackTool(SoftwareTool blueprint, GovernorFactory governorFactory) : base(blueprint, governorFactory) {}
+        public HackTool(SoftwareTool blueprint, GovernorFactory governorFactory, TrailFactory trailFactory) : base(blueprint, governorFactory, trailFactory) {}
     }
 }

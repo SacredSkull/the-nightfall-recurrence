@@ -1,4 +1,3 @@
-using ModestTree;
 namespace Zenject
 {
     public class CopyNonLazyBinder : NonLazyBinder

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using ModestTree;
-
 namespace Zenject
 {
     public class FactoryToChoiceIdBinder<TParam1, TContract> : FactoryToChoiceBinder<TParam1, TContract>

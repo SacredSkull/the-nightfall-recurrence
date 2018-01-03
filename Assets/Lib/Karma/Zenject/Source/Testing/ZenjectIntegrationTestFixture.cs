@@ -7,7 +7,6 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using ModestTree;
 #endif
 
 using Assert = ModestTree.Assert;

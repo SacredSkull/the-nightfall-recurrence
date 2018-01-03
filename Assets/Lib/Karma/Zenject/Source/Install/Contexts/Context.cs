@@ -6,8 +6,6 @@ using System.Linq;
 using ModestTree;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Zenject.Internal;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif

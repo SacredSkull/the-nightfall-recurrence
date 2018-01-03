@@ -31,14 +31,15 @@ namespace Controllers {
         public bool dumpLevelEntities;
 	    public LevelModel level;
         
-        private IObservable<Unit> loadingTask;
+        private UniRx.IObservable<Unit> loadingTask;
 
         public override void Configure(IApplication app, DiContainer container) {
             container.Bind<IMainApp>().FromInstance(this);
             ILogger logger = container.Resolve<ILogger>();
 
             level = container.Resolve<LevelModel>();
-
+            //container.Bind<Func<ILayeredGrid<MapItem>>>().FromInstance(() => level.LayeredGrid);
+            
             loadingTask = Observable.Start(() => {
                 var watch = System.Diagnostics.Stopwatch.StartNew();
                 level.Load();

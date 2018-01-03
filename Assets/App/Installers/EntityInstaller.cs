@@ -1,10 +1,6 @@
 ﻿using Action.AI;
-using Gamelogic.Extensions;
 using Level;
 using Level.Entity;
-using Models;
-using UniRx;
-using UnityUtilities.Collections.Grid;
 using Zenject;
 
 namespace Installers {
@@ -23,6 +19,7 @@ namespace Installers {
 			Container.BindFactory<MapItem, MapItem, MapItemFactory>();
 			Container.BindFactory<HackTool, HackTool, HackToolFactory>();
 			Container.BindFactory<Sentry, Sentry, SentryFactory>();
+			Container.BindFactory<SoftwareTool, Trail, TrailFactory>();
 			Container.BindFactory<SoftwareTool, GovernorNames, Governor, GovernorFactory>().FromFactory<CustomGovernorFactory>();
 		}
 	}

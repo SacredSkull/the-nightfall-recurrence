@@ -1,5 +1,3 @@
-using System;
-
 namespace Zenject
 {
     public class FactorySubContainerBinder<TParam1, TParam2, TParam3, TParam4, TParam5, TContract>

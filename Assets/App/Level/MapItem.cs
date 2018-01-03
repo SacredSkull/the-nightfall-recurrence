@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Xml.Serialization;
-using Action.AI;
-using Level.Entity;
 using UnityEngine;
 using UnityUtilities.Collections.Grid;
 using Zenject;
@@ -11,6 +9,7 @@ namespace Level {
     [XmlType(TypeName = "mapitem")]
     [Serializable]
     public class MapItem : IGridLocator, IEquatable<MapItem> {
+        // These events are for specific use (e.g. one-off tracking of a specific unit) - grid updates are handled by the GridPresenter, NOT here.
         public event PositionSetHandler PositionSetEvent;
         public event DeletionHandler DeletionEvent;
 

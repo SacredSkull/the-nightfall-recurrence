@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
@@ -28,9 +27,15 @@ namespace Level.Entity {
          XmlArrayItem(ElementName = "mapmodifier", Type = typeof(MapModifier))]
         public List<Attack> Attacks { get; set; }
 
+        private GovernorFactory _govFactoryInstance = null;
+        private TrailFactory _trailFactoryInstance = null;
+
         [XmlAttribute("governor")]
         [DefaultValue("Standard")]
         public string GovernorName = "Standard";
+
+        [XmlIgnore]
+        public int RemainingMovement;
         
         [XmlIgnore]
         public Governor Governor {
@@ -52,7 +57,7 @@ namespace Level.Entity {
         [XmlIgnore]
         public Trail Tail {
             get {
-                return _Trail ?? (_Trail = new Trail(this));
+                return _Trail ?? (_Trail = new Trail(this, null));
             }
         }
 
@@ -63,21 +68,26 @@ namespace Level.Entity {
 
         public SoftwareTool() {
             gridPosition = new Vector2();
-            _Trail = new Trail(this);
+            _Trail = _trailFactoryInstance?.Create(this);
         }
 
         [Inject]
-        public SoftwareTool(SoftwareTool blueprint, GovernorFactory governorFactory) : base(blueprint) {
+        public SoftwareTool(SoftwareTool blueprint, GovernorFactory governorFactory, TrailFactory trailFactory) : base(blueprint) {
             MaxHealth = blueprint.MaxHealth;
             Cost = blueprint.Cost;
             Level = blueprint.Level;
             CurrentHealth = blueprint.CurrentHealth;
+            RemainingMovement = blueprint.RemainingMovement;
             Movement = blueprint.Movement;
             Attacks = blueprint.Attacks;
             TailSprite = blueprint.TailSprite;
-            _Trail = new Trail(this);
-            _gov = governorFactory.Create(this, GovernorNames.Find(GovernorName));
+            
+            // YAY MORE ABUSE OF ASSIGNMENT!
+            _Trail = (_trailFactoryInstance = trailFactory).Create(this);
+            _gov = (_govFactoryInstance = governorFactory).Create(this, GovernorNames.Find(GovernorName));
         }
+
+        public void ResetMovement() => RemainingMovement = Movement;
 
         public bool Attack(Attack attack, SoftwareTool target) {
             return Attacks.Contains(attack) && attack.Execute(target, this);
@@ -103,8 +113,13 @@ namespace Level.Entity {
 
         public HashSet<TemporalStatusEffect> StatusEffects = new HashSet<TemporalStatusEffect>();
 
+        public virtual void MoveOffset(Vector2 offset) {
+            Vector2 destination = gridPosition + offset;
+            Move(destination);
+        }
+
         public virtual void Move(Vector2 destination) {
-            if(destination == gridPosition) return;
+            if(destination == gridPosition || ((this is HackTool) && RemainingMovement-- <= 0)) return;
 
             SetPosition(destination);
             Tail.Move();
@@ -113,11 +128,14 @@ namespace Level.Entity {
         public virtual void Damage(int hp) {
             CurrentHealth -= hp;
             // This is very ugly!
-            for(int i = 0; i < hp; i++)
-                Tail.Shorten();
+            if(CurrentHealth > 1)
+                for(int i = 0; i < hp; i++)
+                    Tail.Shorten();
         }
 
         public virtual bool ReceiveAttack(Attack attack, SoftwareTool source) {
+            if(attack is AttackBasic basic)
+                Damage(basic.damage);
             if (CurrentHealth <= 0) {
                 DeathEvent?.Invoke(this, source, attack);
                 Delete();

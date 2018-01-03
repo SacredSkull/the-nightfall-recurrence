@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using Editor;
+﻿using System.Linq;
 using JetBrains.Annotations;
 using Karma;
 using Karma.Metadata;
 using Level;
 using Level.Entity;
-using Models;
-using UniRx.Operators;
-using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityUtilities.Collections.Grid;
@@ -21,57 +14,8 @@ using ILogger = UnityUtilities.Management.ILogger;
 namespace Presenters {
     [Element(PrefabPath)] [ExecuteInEditMode]
     public class GridPresenter : MVCPresenter {
-	    public class GridData {
-		    public int Height => rows.Length;
-
-		    public int Width => _width;
-		    private int _width;
-		    public GridData(int height, int width) {
-			    rows = new Row[height];
-			    _width = width;
-
-			    for (int i = 0; i < height; i++) {
-				    rows[i] = new Row(width);
-			    }
-		    }
-		    
-		    public Row this[int key] {
-			    get { return rows[key]; }
-			    set { rows[key] = value; }
-		    }
-		    
-		    public class Row {
-			    public Row(int width) {
-				    data = new string[width];
-			    }
-			    
-			    public string this[int key] {
-				    get { return data[key]; }
-				    set { data[key] = value; }
-			    }
-			    public string[] data;
-		    }
-
-		    public Row[] rows;
-
-//		    public void SetData(List<List<MapItem>> grid) {
-//			    rows = new Row[grid.Count];
-//
-//			    for (int width = 0; width < grid.Count; width++) {
-//				    rows[width] = new Row();
-//				    for (int height = 0; height < grid[width].Count; height++) {
-//					    rows[width].data = grid[width].Select(x => x.name.Substring(0, 1)).ToArray();
-//				    }
-//			    }
-//		    }
-	    }
-	    
-	    [SerializeField]
-	    public GridData gridData;
-	    
         public const string PrefabPath = "Grid/GameGrid";
-        public GameObject GridContainer;
-	    
+        public GameObject GridContainer;	    
 	    public IGridCollection<MapItem> GeometryLayer;
 	    public IGridCollection<MapItem> EntityLayer;
 	    public IGridCollection<MapItem> OverlayLayer;
@@ -106,48 +50,11 @@ namespace Presenters {
 		    OverlayLayer = overlay;
 	    }
 
-//#if UNITY_EDITOR
-	    public void SetGridEditor() {
-		    gridData = new GridData(GeometryLayer.Height, GeometryLayer.Width);
-		    
-		    for (int width = 0; width < GeometryLayer.Width; width++) {
-			    gridData[width] = new GridData.Row(GeometryLayer.Height);
-			    for (int height = 0; height < GeometryLayer.Height; height++) {
-				    gridData[width].data = GeometryLayer.GetRow(width).Select(x => x.Value.GetType().Name.Substring(0, 1)).ToArray();
-			    }
-		    }
-		    
-//		    List<List<MapItem>> items = new List<List<MapItem>>();
-//			if(GeometryLayer != null)
-//				for (int i = 0; i < this.GeometryLayer.Width; i++) {
-//					items.Add(new List<MapItem>());
-//					for (int j = 0; j < this.GeometryLayer.Height; j++) {
-//						var result = this.LayeredGrid.GetHighestElement(i, j, LayerNames.ENTITY_LAYER);
-//						if(result.Value != null && result.Value.Value != null)
-//							items[i].Add(result.Value.Value);
-//					}
-//				}
-//		    
-//		    gridData.SetData(items);
-	    }
-	
-	    public void SetGridEditor(GridCollectionEventArgs<MapItem> _) {
-		   SetGridEditor();
-	    }
-//#endif
-
-
 	    public void Render() {
 			Logger.Log("Beginning to draw grids...");
 			renderGeometryLayer();
 			renderEntityLayer();
 			createOverlayLayer();
-
-#if UNITY_EDITOR
-			GeometryLayer.PieceChanged += SetGridEditor;
-			EntityLayer.PieceChanged += SetGridEditor;
-			OverlayLayer.PieceChanged += SetGridEditor;
-#endif	    
 	
 		    GeometryLayer.PieceChanged += HandleChangedGridEvent;
 			EntityLayer.PieceChanged += HandleChangedGridEvent;
@@ -175,8 +82,7 @@ namespace Presenters {
 						Logger.Log(string.Format("[GEOMETRY][RASTERING] A Grid Piece has a null value! ID: {0}.",
 							feature.ID), LogLevels.ERROR);
 					} else {
-						//feature.GameObject = Decorate(TileFactory.Create(feature.Value.sprite, feature.Value), feature.Value, "Geometry", geometryContainer).gameObject;
-						feature.GameObject = Decorate(TileFactory.Create(), feature.Value, "Geometry", geometryContainer).gameObject;
+						feature.GameObject = DecorateNew(TileFactory.Create(), feature.Value, "Geometry", geometryContainer).gameObject;
 					}
 				}
 			}
@@ -204,7 +110,7 @@ namespace Presenters {
 						if(piece.ID != 0 && piece.Value.sprite == null)
 							Logger.Log($"[ENTITY][RASTERING] An entity has no sprite attached! ID: {piece.ID}.", LogLevels.ERROR);
 						//piece.GameObject = Decorate(TileFactory.Create(piece.Value.sprite, piece.Value), piece.Value, "Entities", entityContainer).gameObject;
-						piece.GameObject = Decorate(TileFactory.Create(), piece.Value, "Entities", entityContainer).gameObject;
+						piece.GameObject = DecorateNew(TileFactory.Create(), piece.Value, "Entities", entityContainer).gameObject;
 					}
 				}
 			}
@@ -231,7 +137,7 @@ namespace Presenters {
 					
 					blank.SetPosition(row, column, true, false);
 
-					piece.GameObject = Decorate(TileFactory.Create(), blank, "Overlay", overlayContainer,
+					piece.GameObject = DecorateNew(TileFactory.Create(), blank, "Overlay", overlayContainer,
 						(tile, obj) => {
 							GridElementSingleClick?.Invoke(tile, obj);
 						}).gameObject;
@@ -240,32 +146,35 @@ namespace Presenters {
 		}
 
 	    private void HandleChangedGridEvent(object obj) {
-			GridCollectionEventArgs<MapItem> conv = obj as GridCollectionEventArgs<MapItem>;
-			if(conv != null)
+		    if(obj is GridCollectionEventArgs<MapItem> conv)
 				HandleChangedGridEvent(conv);
 		}
 
 	    private void HandleChangedGridEvent(GridCollectionEventArgs<MapItem> args) {
-			if (args.GridPiece.GameObject != null) {
-				//Logger.Log(string.Format("Event triggered for {0} - its new GO is {1}", args.GridPiece.Position, args.NewGO.name));
-				Decorate(args.GridPiece);
-			}
-		}
+		    if (args.GridPiece.GameObject == null) return;
+		    //Logger.Log($"Event triggered for {args.GridPiece.Position} - its new value is {args.GridPiece.Value}");
+		    DecorateExisting(args.GridPiece);
+	    }
 
-	    private TilePresenter Decorate(GridPiece<MapItem> piece, string sortingLayer = null, GameObject parent = null, TilePresenter.SingleClientEventHandler clickHandler = null) {
-			return Decorate(piece.GameObject.GetComponent<TilePresenter>(), piece.Value, sortingLayer, parent, clickHandler);
-		}
+	    private void DecorateExisting(GridPiece<MapItem> piece) {
+		    TilePresenter tile = piece.GameObject.GetComponent<TilePresenter>();
+		    if(tile == null) {
+			    Logger.Log($"This GridPiece has no TilePresenter attached! @{piece.GameObject.name}", LogLevels.WARNING);
+			    return;
+		    }
 
-	    private TilePresenter Decorate(TilePresenter tile, MapItem mi, string sortingLayer = null, GameObject parent = null, TilePresenter.SingleClientEventHandler clickHandler = null) {
+		    tile.MapItem = piece.Value;
+	    }
+
+	    private TilePresenter DecorateNew(TilePresenter tile, MapItem mi, string sortingLayer, GameObject parent, TilePresenter.SingleClickEventHandler clickHandler = null) {
 			tile.MapItem = mi;
-		    tile.name = mi.ToString();
 
 		    tile.transform.position = Vector3.zero;
 			tile.transform.rotation = Quaternion.identity;
 		    
 			if (parent != null)
 				tile.transform.SetParent(parent.transform, false);
-			if (sortingLayer != null && !sortingLayer.Equals(string.Empty))
+			if (!string.IsNullOrEmpty(sortingLayer))
 				tile.GetComponent<SpriteRenderer>().sortingLayerName = sortingLayer;
 		    if (clickHandler != null) {
 			    tile.SingleClickEvent -= clickHandler;
